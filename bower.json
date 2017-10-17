@@ -1,0 +1,32 @@
+{
+  "name": "kwc-share-detail",
+  "description": "To display details specific to a kano code share.",
+  "main": "kwc-share-detail.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.9.0",
+    "lazy-imports": "^2.0.0",
+    "kwc-icons": "git@github.com:KanoComponents/kwc-icons#v1.x",
+    "kwc-animations": "git@github.com:KanoComponents/kwc-animations",
+    "kwc-button": "git@github.com:KanoComponents/kwc-button#v1.x",
+    "kwc-share-player": "git@github.com:KanoComponents/kwc-share-player",
+    "kwc-social-comments": "git@github.com:KanoComponents/kwc-social-comments",
+    "kwc-style": "git@github.com:KanoComponents/kwc-style.git#v1.x"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "resolutions": {
+    "iron-component-page": "^1.0.0",
+    "polymer": "^1.9.0",
+    "iron-iconset-svg": "^2.1.0",
+    "iron-location": "1 - 2",
+    "iron-flex-layout": "1 - 2",
+    "iron-icon": "^2.0.1",
+    "webcomponentsjs": "^0.7.0",
+    "paper-button": "^1.0.0",
+    "iron-doc-viewer": "^1.0.1"
+  }
+}
