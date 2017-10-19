@@ -381,7 +381,7 @@ To display details specific to a kano code share.
                         <ul class="social-nav">
                             <li class$="[[_computeNavItemClass(_section, 'comments')]]" on-click="_showComments">
                                 <iron-icon class="nav-icon" icon="kwc-social-icons:comment"></iron-icon>
-                                <span class="nav-label">[[comments.commentCount]] Replies</span>
+                                <span class="nav-label">[[comments.count]] Replies</span>
                             </li>
                             <li class$="[[_computeNavItemClass(_section, 'likes')]]">
                                 <iron-icon class="nav-icon" icon="kwc-social-icons:like"></iron-icon>
@@ -393,7 +393,7 @@ To display details specific to a kano code share.
                                  is available -->
                         <iron-pages id="social-sections" selected="[[_section]]" attr-for-selected="section-name" fallback-selection="comments">
                             <div section-name="comments" class="social-section">
-                                <kwc-social-comments id="comments" comments="[[comments]]" default-avatar="[[_defaultCommentAvatarUrl]]" next-page="[[comments.next]]"
+                                <kwc-social-comments id="comments" comments="[[comments.entries]]" default-avatar="[[_defaultCommentAvatarUrl]]" next-page="[[comments.page]]"
                                     item-id="[[shareData.id]]" tombstone$="[[!shareData]]" user="[[currentUser]]">
                                 </kwc-social-comments>
                             </div>
