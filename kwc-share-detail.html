@@ -63,7 +63,7 @@ To display details specific to a kano code share.
 
             .share-content {
                 @apply --layout-flex;
-                background: var(--kw-share-detail-share-background, --color-chateau);
+                background: var(--kw-share-detail-share-background, var(--color-chateau));
                 width: 100%;
                 padding: 0px 16px;
                 min-height: var(--kw-share-detail-player-height, 480px);
@@ -107,6 +107,10 @@ To display details specific to a kano code share.
                 margin: 20px auto;
                 max-width: 600px;
                 width: 100%;
+            }
+            #share-container kwc-share-player{
+                height: 350px;
+                margin-top:45px;
             }
 
             @media all and (max-width: 680px) {
@@ -261,7 +265,7 @@ To display details specific to a kano code share.
                 @apply --layout-start-justified;
                 list-style: none;
                 margin: 0;
-                padding: 32px 0 0 0;
+                padding: 10px 0 0 0;
             }
 
             .social-action {
@@ -398,6 +402,7 @@ To display details specific to a kano code share.
                 </div>
                 <div class="supplementary-details">
                     <slot name='actions'></slot>
+                    <div class="social-actions-header">SHARE</div>
                     <ul class="social-actions">
                         <li class="social-action">
                             <button class="social-button facebook" on-tap="_onFacebookTapped">
@@ -547,11 +552,9 @@ To display details specific to a kano code share.
                     });
 
                     this.$['share-container'].appendChild(this.instance.root);
+                    this.$['share-container'].firstChild.share = this.shareData;
+                    this.$['share-container'].firstChild.displayCode = this.displayCode;
                     this.toggleClass('loaded', true);
-                    // this.$$(tagName).addEventListener(
-                    //     'hide-code',
-                    //     this._toggleCodeView.bind(this)
-                    // );
                 },
                 _displayCodeChanged(displayCode) {
                     if (this.shareData){
