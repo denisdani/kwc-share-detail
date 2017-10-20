@@ -762,7 +762,16 @@ To display details specific to a kano code share.
                 },
 
                 /** Event listeners */
-                _onLikeTapped (e) {
+                _onFeatureTapped () {
+                    this.dispatchEvent(new CustomEvent('action-click', {
+                        detail: {
+                            action: "feature",
+                            feature: !this.selectedShare.featured,
+                            id: this.selectedShare.id
+                        }
+                    }));
+                },
+                _onLikeTapped () {
                     if (this._sharedByUser) {
                         return;
                     }
@@ -774,17 +783,23 @@ To display details specific to a kano code share.
                             window.setTimeout(() => burst.triggerParticles(), 250);
                         })
                     }
-                    this.dispatchEvent(new CustomEvent('like-action', {
-                        detail: !this.liked
+                    this.dispatchEvent(new CustomEvent('action-click', {
+                        detail: {
+                            action: "like",
+                            liked: !this.liked
+                        }
                     }));
                 },
                 _onRemixTapped () {
                     let item = this.shareData;
-                    this.dispatchEvent(new CustomEvent('remix-action', {
-                        detail: {
-                            id: item.id,
-                            slug: item.slug,
-                            type: item.app
+                    this.dispatchEvent(new CustomEvent('action-click', {
+                        detail:{
+                            action: "remix",
+                            share: {
+                                id: item.id,
+                                slug: item.slug,
+                                type: item.app
+                            }
                         }
                     }));
                 },
@@ -798,22 +813,28 @@ To display details specific to a kano code share.
                     return `${baseClass} ${activeClass}`;
                 },
                 _onEmailTapped() {
-                    this.fire('social-share', {
-                        action: 'email',
-                        share: this.shareData
-                    });
+                    this.dispatchEvent(new CustomEvent('social-share', {
+                        detail: {
+                            action: 'email',
+                            share: this.shareData
+                        }
+                    }));
                 },
                 _onFacebookTapped() {
-                    this.fire('social-share', {
-                        action: 'facebook',
-                        share: this.shareData
-                    });
+                    this.dispatchEvent(new CustomEvent('social-share', {
+                        detail: {
+                            action: 'facebook',
+                            share: this.shareData
+                        }
+                    }));
                 },
                 _onTwitterTapped() {
-                    this.fire('social-share', {
-                        action: 'twitter',
-                        share: this.shareData
-                    });
+                    this.dispatchEvent(new CustomEvent('social-share', {
+                        detail: {
+                            action: 'twitter',
+                            share: this.shareData
+                        }
+                    }));
                 }
 
             });
