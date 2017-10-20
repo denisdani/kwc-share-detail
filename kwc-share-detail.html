@@ -3,6 +3,9 @@
 <link rel="import" href="../iron-image/iron-image.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../lazy-imports/lazy-imports-behavior.html">
+
+<link rel="import" href="../kwc-animations/kwc-particle-burst.html">
+<link rel="import" href="../kwc-button/kwc-mega-button.html">
 <link rel="import" href="../kwc-social-comments/kwc-social-comments.html">
 <link rel="import" href="../kwc-style/kwc-style.html">
 <link rel="import" href="../kwc-icons/kwc-icons.html">
@@ -259,7 +262,55 @@ To display details specific to a kano code share.
                 color: var(--color-grey);
                 padding: 32px 8px 32px 40px;
             }
+            kwc-mega-button {
+                width: 65%;
+            }
+            .actions {
+                @apply --layout-justified;
+                margin-bottom: 36px;
+            }
+            .action {
+                flex: 1 0 auto;
+                box-sizing: border-box;
+                margin-bottom: 10px;
+            }
+            .action-button.view-code{
+                --kwc-mega-button-color: var(--color-dodger-blue);
+            }
+            .action-button.like{
+                --kwc-mega-button-color: var(--color-carnation);
+            }
 
+            .like.liked {
+                background-color: var(--color-carnation);
+                color: white;
+                --kwc-mega-button-color: white;
+            }
+            .like.liked:hover {
+                background-color: var(--color-cinnabar);
+                color: white;
+            }
+
+            .action-button.feature {
+                color: white;
+                margin-top: 32px;
+                width: 100%;
+            } 
+            .action-button.feature.default {
+                background-color: var(--color-chateau);
+            }
+
+            .action-button.feature.featured {
+                background-color: var(--color-kano-orange);
+            }
+
+            .action-button.feature.default:hover {
+                background-color: var(--color-orange);
+            }
+
+            .action-button.feature.featured:hover {
+                background-color: var(--color-flame);
+            }
             .social-actions {
                 @apply --layout-horizontal;
                 @apply --layout-start-justified;
@@ -401,7 +452,54 @@ To display details specific to a kano code share.
                     </div>
                 </div>
                 <div class="supplementary-details">
-                    <slot name='actions'></slot>
+                    <div class="actions">
+                        <slot name='actions::before'></slot>
+                        <template is="dom-if" if="[[!_sharedByUser]]">
+                            <div class="action">
+                                <kwc-mega-button icon-id="kwc-social-icons:like"
+                                                 class$="[[_computeLikeClass(liked)]]"
+                                                 on-tap="_onLikeTapped">
+                                    <kwc-particle-burst number-particles="40"
+                                                        gravity="0.5"
+                                                        particle-decay="0.04"
+                                                        max-particle-size="13">
+                                        [[_computedLikeButtonText(liked)]]
+                                    </kwc-particle-burst>
+                                </kwc-mega-button>
+                            </div>
+                        </template>
+                        <slot name='actions::one'></slot>                        
+                        <template is="dom-if" if="[[_showRemixButton(shareData)]]">
+                            <div class="action">
+                                <kwc-mega-button icon-id="kwc-social-icons:code"
+                                            class="action-button remix"
+                                            on-tap="_onRemixTapped">
+                                    Remix
+                                </kwc-mega-button>
+                            </div>
+                        </template>
+                        <slot name='actions::two'></slot>                                                
+                        <template is="dom-if" if="[[_showCodeButton]]">
+                            <div class="action">
+                                <kwc-mega-button icon-id="kwc-social-icons:code"
+                                                 class="action-button view-code"
+                                                 on-tap="_toggleCodeView">
+                                    View Code
+                                </kwc-mega-button>
+                            </div>
+                        </template>
+                        <slot name='actions::three'></slot>                        
+                        <template is="dom-if" if="[[_showFeaturedButton(share, currentUser.adminLevel)]]">
+                            <div class="action">
+                                <kwc-mega-button icon-id="kwc-social-icons:staff"
+                                                 class$="[[_computeFeatureClass(shareData.featured)]]"
+                                                 on-tap="_onFeatureTapped">
+                                    Staff Pick
+                                </kwc-mega-button>
+                            <div>
+                        </template>
+                        <slot name='actions::after'></slot>                                                
+                    </div>
                     <div class="social-actions-header">SHARE</div>
                     <ul class="social-actions">
                         <li class="social-action">
@@ -501,6 +599,24 @@ To display details specific to a kano code share.
                     _section: {
                         type: String,
                         value: "comments"
+                    },
+                    likes: {
+                        type: Array,
+                        value: () => {
+                            return [];
+                        }
+                    },
+                    liked: {
+                        type: Boolean,
+                        computed: '_computeLiked(likes, currentUser)'
+                    },
+                    _sharedByUser: {
+                        type: Boolean,
+                        computed: '_computeSharedByUser(shareData, currentUser)'
+                    },
+                    displayCode: {
+                        type: Boolean,
+                        value: false
                     }
                 },
                 observers: [
@@ -599,6 +715,87 @@ To display details specific to a kano code share.
                 },
                 _userTapped() {
                     this.fire('view-user', { id: this.shareData.userId });
+                },
+                /** Computed values*/
+                _computeSharedByUser (shareData, currentUser) {
+                    if (!shareData || !currentUser) {
+                        return false;
+                    }
+                    return shareData.userId === currentUser.id;
+                },
+                _computeLiked (likes, currentUser) {
+                    if (likes) {
+                        if (currentUser) {
+                            let liked = likes.some((like) => {
+                                return like.user === currentUser.id;
+                            });
+                            return liked;
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                },
+                _showCodeButton (shareData) {
+                    const appType = shareData.app;
+                    return appType === 'kano-draw'
+                        || appType === 'make-apps'
+                        || appType === 'lightboard';
+                },
+                /** Check whether this share can be remixed (or not) */
+                _showRemixButton (share) {
+                    if (share){
+                        return true;
+                    }
+                },
+                _showFeaturedButton (share, isAdmin){
+                    return share && isAdmin;
+                },
+                _computeLikeClass (liked) {
+                    let baseClass = 'action-button like',
+                        activeClass = liked ? 'liked' : 'not-liked';
+                    return `${baseClass} ${activeClass}`;
+                },
+                _computedLikeButtonText (liked) {
+                    return liked ? "liked" : "like";
+                },
+
+                /** Event listeners */
+                _onLikeTapped (e) {
+                    if (this._sharedByUser) {
+                        return;
+                    }
+                    if (!this.liked) {
+                        let particleBursts = Polymer.dom(this.root)
+                                .querySelectorAll('kwc-particle-burst');
+                        particleBursts.forEach((burst) => {
+                            burst.triggerParticles();
+                            window.setTimeout(() => burst.triggerParticles(), 250);
+                        })
+                    }
+                    this.dispatchEvent(new CustomEvent('like-action', {
+                        detail: !this.liked
+                    }));
+                },
+                _onRemixTapped () {
+                    let item = this.shareData;
+                    this.dispatchEvent(new CustomEvent('remix-action', {
+                        detail: {
+                            id: item.id,
+                            slug: item.slug,
+                            type: item.app
+                        }
+                    }));
+                },
+                _toggleCodeView() {
+                    let newValue = !this.displayCode;
+                    this.set('displayCode', newValue);
+                },
+                _computeFeatureClass (featured) {
+                    let baseClass = 'action-button feature',
+                        activeClass = featured ? 'featured' : 'default';
+                    return `${baseClass} ${activeClass}`;
                 },
                 _onEmailTapped() {
                     this.fire('social-share', {
