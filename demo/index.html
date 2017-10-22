@@ -20,75 +20,6 @@
             .share-detail {
                 min-width: 90%
             }
-            .actions {
-                @apply --layout-horizontal;
-                @apply --layout-justified;
-                list-style: none;
-                margin: 0;
-                padding: 0;
-            }
-
-            .action {
-                flex: 1 0 auto;
-                box-sizing: border-box;
-                margin-right: 16px;
-            }
-
-            .action:last-of-type,
-            .action:only-child {
-                margin-right: 0;
-            }
-
-            .action-button {
-                background-color: rgba(41, 47, 53, 0.3);
-                border: 0;
-                border-radius: 3px;
-                color: rgba(255, 255, 255, 0.6);
-                cursor: pointer;
-                font-family: var(--font-body);
-                font-size: 16px;
-                padding: 16px;
-                position: relative;
-                text-transform: uppercase;
-                transition: 0.3s ease;
-                width: 100%;
-            }
-
-            .action-button:focus {
-                outline: 0;
-            }
-
-            .action-button:hover {
-                background-color: rgba(41, 47, 53, 0.6);
-                color: rgba(255, 255, 255, 1);
-            }
-
-            .action-button.remix {
-                background-color: var(--color-chateau);
-                color: white;
-                margin-bottom: 32px;
-                width: 100%;
-            }
-
-            .action-button.remix:hover {
-                background-color: var(--color-black);
-            }
-
-            .like.liked {
-                background-color: var(--color-carnation);
-                color: white;
-            }
-
-            .like.liked:hover {
-                background-color: var(--color-cinnabar);
-                color: white;
-            }
-
-            .action-button.feature {
-                color: white;
-                margin-top: 32px;
-                width: 100%;
-            }
         </style>
     </custom-style>
 </head>
@@ -99,176 +30,115 @@
         <demo-snippet>
             <template>
                 <kwc-share-detail id="share-detail">
-
-                    <ul class="actions" slot="actions">
-                        <li class="action">
-                            <button class$="active" on-tap="_onLikeTapped">
-                                <kwc-particle-burst number-particles="40" gravity="0.5" particle-decay="0.04" max-particle-size="13">
-                                    <iron-icon class="action-icon" icon="kwc-social-icons:like"></iron-icon>
-                                </kwc-particle-burst>
-                            </button>
-                        </li>
-                        <li class="action">
-                            <button class="action-button view-code" on-tap="_toggleCodeView">
-                                <iron-icon class="action-icon" icon="kwc-social-icons:code"></iron-icon>
-                            </button>
-                        </li>
-                    </ul>
-
                 </kwc-share-detail>
                 <script>
                     document.addEventListener('WebComponentsReady', function () {
                         const detail = document.querySelector('#share-detail');
                         detail.shareData = SHAREDATA;
                         detail.comments = COMMENTS;
+                        detail.likes = SHAREDATA.likes;
+                        detail.currentUser = USER;
+                        detail.addEventListener('view-user', function(e){
+                            alert(`View user ${e.detail.id}`);
+                        });
+                        detail.addEventListener('action-click', function(e){
+                            alert(`Someone clicked on ${e.detail.action}`);
+                        });
+                        detail.addEventListener('social-share', function(e){
+                            alert(`Someone clicked on ${e.detail.action}`);
+                        });
                     });
                 </script>
             </template>
         </demo-snippet>
     </div>
     <script>
-        const COMMENTS = [
-            {
-                "id": "58262de8ad13b7c061ecd390",
+        const COMMENTS = {
+            "entries": [{
+                "id": "597705341ad1b7228593511c",
                 "author": {
-                    "username": "kittytacoLOL",
+                    "id": "59402bb7c511000a713e2d45",
+                    "username": "jonas12345",
+                    "admin_level": 0,
+                    "joined": "2017-06-13T18:15:19.035Z",
                     "avatar": {
                         "urls": {
-                            "circle": "https://s3-eu-west-1.amazonaws.com/world.kano.me/users/avatars/581fb7aead13b7c061e68fd6/avatar-circle.png"
-                        }
-                    }
-                },
-                "text": "B)",
-                "date_created": "2016-11-11T20:45:28.546Z",
-                "spam": false
-            },
-            {
-                "author": {
-                    "username": "SuperFlatNinja",
-                    "avatar": {
-                        "urls": {
-                            "circle": "https://s3-eu-west-1.amazonaws.com/world.kano.me/users/avatars/5683bf2b6d7d9c5a322a93b9/avatar-circle.png"
-                        }
+                            "circle": null,
+                            "landscape": null,
+                            "character": null
+                        },
+                        "generator": null
                     },
+                    "kanoClub": null,
+                    "birthDate": null,
+                    "buckets": []
                 },
-                "text": "cool",
-                "date_created": "2016-11-11T15:10:18.553Z",
-                "spam": false
-            },
-            {
+                "text": "This is a another really long comment, This is a another really long comment, This is a another really long comment, This is a another really long comment, This is a another really long comment, ",
+                "date_created": "2017-07-25T08:45:40.812Z",
+                "flags": [],
+                "spam": false,
+                "meta": {}
+            }, {
+                "id": "597703d71ad1b72285935108",
                 "author": {
-                    "username": "mav1o1",
+                    "id": "59402bb7c511000a713e2d45",
+                    "username": "jonas12345",
+                    "admin_level": 0,
+                    "joined": "2017-06-13T18:15:19.035Z",
                     "avatar": {
                         "urls": {
-                            "circle": "https://s3-eu-west-1.amazonaws.com/world.kano.me/users/avatars/5771a2049d86d5394c931a9e/avatar-circle.png"
-                        }
-                    }
+                            "circle": null,
+                            "landscape": null,
+                            "character": null
+                        },
+                        "generator": null
+                    },
+                    "kanoClub": null,
+                    "birthDate": null,
+                    "buckets": []
                 },
-                "text": "plz staff pick or like my art",
-                "date_created": "2016-11-08T23:45:44.915Z",
-                "spam": false
-            },
-            {
+                "text": "fun with comments",
+                "date_created": "2017-07-25T08:39:51.349Z",
+                "flags": [],
+                "spam": false,
+                "meta": {}
+            }, {
+                "id": "597703a994e3ff22866cd79c",
                 "author": {
-                    "username": "kittytacoLOL",
+                    "id": "59402bb7c511000a713e2d45",
+                    "username": "jonas12345",
+                    "admin_level": 0,
+                    "joined": "2017-06-13T18:15:19.035Z",
                     "avatar": {
                         "urls": {
-                            "circle": "https://s3-eu-west-1.amazonaws.com/world.kano.me/users/avatars/581fb7aead13b7c061e68fd6/avatar-circle.png"
-                        }
-                    }
+                            "circle": null,
+                            "landscape": null,
+                            "character": null
+                        },
+                        "generator": null
+                    },
+                    "kanoClub": null,
+                    "birthDate": null,
+                    "buckets": []
                 },
-                "text": "SO CUTE ;p",
-                "date_created": "2016-11-07T23:06:36.243Z",
-                "spam": false
-            },
-            {
-                "author": {
-                    "username": "henaudyey",
-                    "joined": "2016-08-22T22:50:56.172Z",
-                    "avatar": {
-                        "urls": {
-                            "circle": "https://s3-eu-west-1.amazonaws.com/world.kano.me/users/avatars/57bb81d07263fcc22fb56e12/avatar-circle.png"
-                        }
-                    }
-                },
-                "text": "dumb!",
-                "date_created": "2016-11-07T00:06:51.686Z",
-                "spam": false
-            },
-            {
-                "author": {
-                    "username": "schitwood",
-                    "joined": "2016-10-24T16:40:43.962Z",
-                    "avatar": {
-                        "urls": {
-                            "circle": null
-                        }
-                    }
-                },
-                "text": "hi",
-                "date_created": "2016-11-03T16:44:59.561Z",
-                "spam": false
-            },
-            {
-                "author": {
-                    "username": "schitwood",
-                    "joined": "2016-10-24T16:40:43.962Z",
-                    "avatar": {
-                        "urls": {
-                            "circle": null
-                        }
-                    }
-                },
-                "text": "cool",
-                "date_created": "2016-11-03T16:44:51.792Z",
-                "spam": false
-            },
-            {
-                "author": {
-                    "username": "Rumple-stilt-skins",
-                    "joined": "2016-04-06T08:44:37.570Z",
-                    "avatar": {
-                        "urls": {
-                            "circle": "https://s3-eu-west-1.amazonaws.com/world.kano.me/users/avatars/5704cc75bd4317c66e7c8ed7/avatar-circle.png"
-                        }
-                    }
-                },
-                "text": "Ohhhh!!!!!!!!!!!!!!!!!!!!!:)",
-                "date_created": "2016-11-03T16:20:05.768Z",
-                "spam": false
-            }
-        ],
+                "text": "testing comments",
+                "date_created": "2017-07-25T08:39:05.119Z",
+                "flags": [],
+                "spam": false,
+                "meta": {}
+            }],
+            "page": null,
+            "limit": 3,
+            "count": 3
+        },
         SHAREDATA = {
             "id": "595cf747bf1189649f1bdd57",
-            "user": {
-                "id": "59402bb7c511000a713e2d45",
-                "username": "jonas12345",
-                "admin_level": 0,
-                "joined": "2017-06-13T18:15:19.035Z",
-                "avatar": {
-                    "urls": {
-                        "circle": null,
-                        "landscape": null,
-                        "character": null
-                    },
-                    "generator": null
-                },
-                "kanoClub": null,
-                "birthDate": null,
-                "buckets": []
-            },
+            "username": "jonas12345",
             "app": "kano-draw",
             "title": "x*x",
             "slug": "xx_10",
             "likes": [],
-            "flags": [
-                {
-                    "reason": "Inappropriate language",
-                    "_id": "595cf748bf1189649f1bdd58",
-                    "author": null
-                }
-            ],
-            "description": "",
+            "description": "This share is like very very coolio, init. I like it because it is what it is a nothing more or less.",
             "date_created": "2017-07-05T14:27:19.257Z",
             "attachments": {
                 "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595cf747bf1189649f1bdd57.png",
@@ -279,24 +149,13 @@
                 "lightboard_spritesheet_url": null,
                 "animation_url": null
             },
-            "hardware": [],
-            "featured": false,
-            "comments_count": 1,
-            "launch_count": 0,
-            "views_count": 14,
-            "campaign_ref": {
-                "challengeId": "sunnyday",
-                "code": "basic"
-            },
-            "hw_ref": {},
-            "remixAncestry": [],
-            "challengeRef": null,
-            "is_private": false,
-            "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595cf747bf1189649f1bdd57.png",
-            "attachment_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/attachments/595cf747bf1189649f1bdd57.draw",
-            "resource_url": null,
-            "sample_url": null,
-            "workspace_info_url": null
+            "featured": true,
+            "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595cf747bf1189649f1bdd57.png"
+        },
+        USER = {
+            "username": "nectarsoft",
+            "id": "5970adcc1ad1b72285933ef5",
+            "avatar": "/assets/images/default-avatar.svg"
         }
     </script>
 </body>

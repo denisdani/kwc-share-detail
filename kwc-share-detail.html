@@ -38,6 +38,7 @@ To display details specific to a kano code share.
                 border-radius: 3px;
                 display: block;
                 overflow: hidden;
+                font-family: var(--font-body);
                 @apply --kw-share-detail;
             }
 
@@ -153,7 +154,7 @@ To display details specific to a kano code share.
             }
 
             .avatar-wrapper {
-                transform: translateZ(0);
+                flex: none;
                 overflow: hidden;
                 width: 40px;
                 height: 40px;
@@ -165,10 +166,9 @@ To display details specific to a kano code share.
             .avatar {
                 background-color: var(--color-sky);
                 cursor: pointer;
-                height: 80px;
+                height: 45px;
                 position: absolute;
-                top: 5px;
-                transform: translateZ(0);
+                top: -2px;
                 width: 40px;
             }
 
@@ -196,11 +196,14 @@ To display details specific to a kano code share.
             }
 
             .description {
+                color: var(--color-chateau);
+                line-height: 20px;
                 margin: 0;
             }
 
             .description:not(:empty) {
-                padding-bottom: 24px;
+                font-size: 16px;
+                padding: 5px 0 24px 0;
             }
 
             .description:empty {
@@ -415,7 +418,12 @@ To display details specific to a kano code share.
                 <div class="main-details">
                     <div class="header">
                         <div class="avatar-wrapper">
-                            <iron-image class="avatar" src$="[[_avatarUrl]]" sizing="cover" on-tap="_userTapped" preload fade></iron-image>
+                            <iron-image class="avatar" 
+                                         src$="[[_avatarUrl]]"
+                                         sizing="cover"
+                                         on-tap="_userTapped"
+                                         preload fade>
+                                        </iron-image>
                         </div>
                         <div class="detail">
                             <h3 class="title">
@@ -489,7 +497,8 @@ To display details specific to a kano code share.
                             </div>
                         </template>
                         <slot name='actions::three'></slot>                        
-                        <template is="dom-if" if="[[_showFeaturedButton(share, currentUser.adminLevel)]]">
+                        <template is="dom-if"
+                                  if="[[_showFeaturedButton(shareData, currentUser.adminLevel)]]">
                             <div class="action">
                                 <kwc-mega-button icon-id="kwc-social-icons:staff"
                                                  class$="[[_computeFeatureClass(shareData.featured)]]"
@@ -714,7 +723,11 @@ To display details specific to a kano code share.
                     this.set('_section', 'likes');
                 },
                 _userTapped() {
-                    this.fire('view-user', { id: this.shareData.userId });
+                    this.dispatchEvent(new CustomEvent('view-user', {
+                        detail: {
+                            id: this.shareData.username
+                        }
+                    }));
                 },
                 /** Computed values*/
                 _computeSharedByUser (shareData, currentUser) {
