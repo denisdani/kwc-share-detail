@@ -2,10 +2,10 @@
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-image/iron-image.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
-<link rel="import" href="../lazy-imports/lazy-imports-behavior.html">
 
 <link rel="import" href="../kwc-animations/kwc-particle-burst.html">
 <link rel="import" href="../kwc-button/kwc-mega-button.html">
+<link rel="import" href="../kwc-share-player/kwc-share-player.html">
 <link rel="import" href="../kwc-social-comments/kwc-social-comments.html">
 <link rel="import" href="../kwc-style/kwc-style.html">
 <link rel="import" href="../kwc-icons/kwc-icons.html">
@@ -20,8 +20,6 @@ To display details specific to a kano code share.
 -->
 
 <dom-module id="kwc-share-detail">
-    <link rel="lazy-import" href="../kwc-share-player/kwc-art-player.html" group="kw-art-player">
-    <link rel="lazy-import" href="../kwc-share-player/kwc-share-player.html" group="kwc-share-player">
     <template>
         <style>
             @keyframes fade-in {
@@ -411,7 +409,11 @@ To display details specific to a kano code share.
                     <div class="featured" hidden$="[[!featured]]">
                         <iron-image class="featured-icon" src$="[[_featuredIconUrl]]" sizing="contain" preload fade></iron-image>
                     </div>
-                    <div id="share-container"></div>
+                    <div id="share-container">
+                        <kwc-share-player share="[[shareData]]"
+                                          display-code="{{displayCode}}">
+                                          </kwc-share-player>
+                    </div>
                 </div>
             </div>
             <div class="share-detail">
@@ -487,7 +489,7 @@ To display details specific to a kano code share.
                             </div>
                         </template>
                         <slot name='actions::two'></slot>                                                
-                        <template is="dom-if" if="[[_showCodeButton]]">
+                        <template is="dom-if" if="[[_showCodeButton(shareData)]]">
                             <div class="action">
                                 <kwc-mega-button icon-id="kwc-social-icons:code"
                                                  class="action-button view-code"
@@ -534,29 +536,9 @@ To display details specific to a kano code share.
 
     <script>
         (function () {
-            const appMapping = {
-                'make-music': 'kwc-music-player',
-                'kano-draw': 'kwc-art-player',
-                'make-apps': 'kwc-app-player',
-                'lightboard': 'kwc-app-player'
-            };
-
-            const appLabels = {
-                'kano-draw': 'Make Art',
-                'make-music': 'Make Music',
-                'make-apps': 'Kano Code',
-                'lightboard': 'Kano Code',
-            }
-
-            const loadedImports = {};
-
             Polymer({
 
                 is: 'kwc-share-detail',
-                behaviors: [
-                    Polymer.Templatizer,
-                    Polymer.LazyImportsBehavior
-                ],
                 properties: {
                     shareData: {
                         type: Object
@@ -622,15 +604,10 @@ To display details specific to a kano code share.
                     _sharedByUser: {
                         type: Boolean,
                         computed: '_computeSharedByUser(shareData, currentUser)'
-                    },
-                    displayCode: {
-                        type: Boolean,
-                        value: false
                     }
                 },
                 observers: [
-                    '_shareChanged(shareData)',
-                    '_displayCodeChanged(displayCode)'
+                    '_shareDataChanged(shareData.*)'
                 ],
                 _computeAvatarUrl(shareData) {
                     if (shareData) {
@@ -657,64 +634,8 @@ To display details specific to a kano code share.
                         activeClass = section === id ? 'active' : 'inactive';
                     return `${baseClass} ${activeClass}`;
                 },
-                _clearShareContainer() {
-                    let container = this.$['share-container'];
-                    while (container.firstChild) {
-                        container.removeChild(container.firstChild);
-                    }
-                },
-                _insertShareView(tagName) {
-                    let templateString = `<${tagName} display-code="[[displayCode]]" share="[[shareData]]"></${tagName}>`,
-                        template = document.createElement('template');
-
-                    template.innerHTML = templateString;
-
-                    this.templatize(template);
-
-                    this.instance = this.stamp({
-                        displayCode: false,
-                        shareData: this.shareData
-                    });
-
-                    this.$['share-container'].appendChild(this.instance.root);
-                    this.$['share-container'].firstChild.share = this.shareData;
-                    this.$['share-container'].firstChild.displayCode = this.displayCode;
-                    this.toggleClass('loaded', true);
-                },
-                _displayCodeChanged(displayCode) {
-                    if (this.shareData){
-                        let tagName = appMapping[this.shareData.app] || 'kwc-share-player',
-                        playerElm = this.$$(tagName);
-                        if (playerElm) {
-                            playerElm.displayCode = displayCode;
-                        }
-                    }
-                },
-                _shareChanged(shareData) {
-                    let tagName, templateString, template;
-                    this._clearShareContainer();
-                    if (!shareData) {
-                        return;
-                    }
-
-                    this.featured = shareData.featured;
-
-                    // tagName = appMapping[shareData.app] || 'kw-share';
-                    //For first iteration
-                    tagName = 'kwc-share-player';
-
-                    if (loadedImports[tagName]) {
-                        this._insertShareView(tagName);
-                        this.set('loaded', true);
-                    } else {
-                        this.async(() => {
-                            this.importLazyGroup(tagName).then(() => {
-                                loadedImports[tagName] = true;
-                                this._insertShareView(tagName);
-                                this.set('loaded', true);
-                            });
-                        });
-                    }
+                _shareDataChanged(shareData) {
+                    return;
                 },
                 _showComments() {
                     this.set('_section', 'comments');
@@ -751,10 +672,8 @@ To display details specific to a kano code share.
                     }
                 },
                 _showCodeButton (shareData) {
-                    const appType = shareData.app;
-                    return appType === 'kano-draw'
-                        || appType === 'make-apps'
-                        || appType === 'lightboard';
+                    return shareData.attachments &&
+                        shareData.attachments.attachment_url;
                 },
                 /** Check whether this share can be remixed (or not) */
                 _showRemixButton (share) {
