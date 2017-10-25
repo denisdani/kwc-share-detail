@@ -111,8 +111,7 @@ To display details specific to a kano code share.
                 width: 100%;
             }
             #share-container kwc-share-player{
-                height: 350px;
-                margin-top:45px;
+                --kwc-share-player-height: 480px;
             }
 
             @media all and (max-width: 680px) {
@@ -395,7 +394,7 @@ To display details specific to a kano code share.
         <div id="share" class="share">
             <div class="share-content">
                 <div class="loading">
-                    <iron-image src="[[shareData.coverUrl]]" sizing="contain"></iron-image>
+                    <iron-image src="[[shareData.cover_url]]" sizing="contain"></iron-image>
                     <div class="overlay">
                         <h2>Loading</h2>
                     </div>
@@ -647,8 +646,11 @@ To display details specific to a kano code share.
                         activeClass = section === id ? 'active' : 'inactive';
                     return `${baseClass} ${activeClass}`;
                 },
-                _shareDataChanged(shareData) {
-                    return;
+                _shareDataChanged(shareDataChangeObj) {
+                    let shareData = shareDataChangeObj.base;
+                    if (shareData.id){
+                        return this.toggleClass('loaded', true);
+                    }
                 },
                 _showComments() {
                     this.set('_section', 'comments');
