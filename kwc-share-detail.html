@@ -417,7 +417,7 @@ To display details specific to a kano code share.
                             <iron-image class="avatar" 
                                          src$="[[_avatarUrl]]"
                                          sizing="cover"
-                                         on-tap="_userTapped"
+                                         on-tap="_onUserTapped"
                                          preload fade>
                                         </iron-image>
                         </div>
@@ -427,7 +427,7 @@ To display details specific to a kano code share.
                                 [[shareData.title]]
                             </h3>
                             <h4 class="attribution">by
-                                <a class="author" on-tap="_userTapped">[[shareData.username]]</a>
+                                <a class="author" on-tap="_onUserTapped">[[shareData.username]]</a>
                             </h4>
                             <p class="description">[[shareData.description]]</p>
                         </div>
@@ -624,6 +624,11 @@ To display details specific to a kano code share.
                         ? KwcShareDetail.assets.featured
                         : ''; //Valid URI
                 },
+                _computeFeatureClass (featured) {
+                    let baseClass = 'action-button feature',
+                        activeClass = featured ? 'featured' : 'default';
+                    return `${baseClass} ${activeClass}`;
+                },
                 _computeSharedByUser (shareData, currentUser) {
                     if (!shareData || !currentUser) {
                         return false;
@@ -640,6 +645,14 @@ To display details specific to a kano code share.
                     } else {
                         return false;
                     }
+                },
+                _computeLikeClass (liked) {
+                    let baseClass = 'action-button like',
+                        activeClass = liked ? 'liked' : 'not-liked';
+                    return `${baseClass} ${activeClass}`;
+                },
+                _computedLikeButtonText (liked) {
+                    return liked ? "liked" : "like";
                 },
                 _computeNavItemClass(section, id) {
                     let baseClass = 'nav-item',
@@ -658,13 +671,6 @@ To display details specific to a kano code share.
                 _showLikes() {
                     this.set('_section', 'likes');
                 },
-                _userTapped() {
-                    this.dispatchEvent(new CustomEvent('view-user', {
-                        detail: {
-                            id: this.shareData.username
-                        }
-                    }));
-                },
                 _showCodeButton (shareData) {
                     return shareData.attachments &&
                         shareData.attachments.attachment_url;
@@ -677,14 +683,6 @@ To display details specific to a kano code share.
                 },
                 _showFeaturedButton (share, isAdmin){
                     return share && isAdmin;
-                },
-                _computeLikeClass (liked) {
-                    let baseClass = 'action-button like',
-                        activeClass = liked ? 'liked' : 'not-liked';
-                    return `${baseClass} ${activeClass}`;
-                },
-                _computedLikeButtonText (liked) {
-                    return liked ? "liked" : "like";
                 },
 
                 /** Event listeners */
@@ -736,10 +734,12 @@ To display details specific to a kano code share.
                     let newValue = !this.displayCode;
                     this.set('displayCode', newValue);
                 },
-                _computeFeatureClass (featured) {
-                    let baseClass = 'action-button feature',
-                        activeClass = featured ? 'featured' : 'default';
-                    return `${baseClass} ${activeClass}`;
+                _onUserTapped() {
+                    this.dispatchEvent(new CustomEvent('view-user', {
+                        detail: {
+                            id: this.shareData.username
+                        }
+                    }));
                 },
                 _onEmailTapped() {
                     this.dispatchEvent(new CustomEvent('social-share', {
