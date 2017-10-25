@@ -283,13 +283,8 @@ To display details specific to a kano code share.
             }
 
             .like.liked {
-                background-color: var(--color-carnation);
-                color: white;
-                --kwc-mega-button-color: white;
-            }
-            .like.liked:hover {
-                background-color: var(--color-cinnabar);
-                color: white;
+                --kwc-mega-button-color: rgba(255, 255, 255, 1);
+                --kwc-mega-button-bg-color: var(--color-carnation);
             }
 
             .action-button.feature {
@@ -599,7 +594,7 @@ To display details specific to a kano code share.
                     },
                     liked: {
                         type: Boolean,
-                        computed: '_computeLiked(likes, currentUser)'
+                        computed: '_computeLiked(likes.*, currentUser)'
                     },
                     _sharedByUser: {
                         type: Boolean,
@@ -609,6 +604,7 @@ To display details specific to a kano code share.
                 observers: [
                     '_shareDataChanged(shareData.*)'
                 ],
+                /** Computed values*/
                 _computeAvatarUrl(shareData) {
                     if (shareData) {
                         if (shareData.userAvatar) {
@@ -628,6 +624,23 @@ To display details specific to a kano code share.
                     return (KwcShareDetail && KwcShareDetail.assets)
                         ? KwcShareDetail.assets.featured
                         : ''; //Valid URI
+                },
+                _computeSharedByUser (shareData, currentUser) {
+                    if (!shareData || !currentUser) {
+                        return false;
+                    }
+                    return shareData.userId === currentUser.id;
+                },
+                _computeLiked (likeChangeObj, currentUser) {
+                    let likes = likeChangeObj.base;
+                    if (likes.length && currentUser) {
+                        let liked = likes.some((like) => {
+                            return like.user === currentUser.id;
+                        });
+                        return liked;
+                    } else {
+                        return false;
+                    }
                 },
                 _computeNavItemClass(section, id) {
                     let baseClass = 'nav-item',
@@ -649,27 +662,6 @@ To display details specific to a kano code share.
                             id: this.shareData.username
                         }
                     }));
-                },
-                /** Computed values*/
-                _computeSharedByUser (shareData, currentUser) {
-                    if (!shareData || !currentUser) {
-                        return false;
-                    }
-                    return shareData.userId === currentUser.id;
-                },
-                _computeLiked (likes, currentUser) {
-                    if (likes) {
-                        if (currentUser) {
-                            let liked = likes.some((like) => {
-                                return like.user === currentUser.id;
-                            });
-                            return liked;
-                        } else {
-                            return false;
-                        }
-                    } else {
-                        return false;
-                    }
                 },
                 _showCodeButton (shareData) {
                     return shareData.attachments &&
@@ -718,7 +710,10 @@ To display details specific to a kano code share.
                     this.dispatchEvent(new CustomEvent('action-click', {
                         detail: {
                             action: "like",
-                            liked: !this.liked
+                            liked: !this.liked,
+                            shareId: this.shareData ? this.shareData.id : null,
+                            shareUserId: this.shareData ? this.shareData.userId : null,
+                            userId: this.currentUser ? this.currentUser.id : null
                         }
                     }));
                 },
