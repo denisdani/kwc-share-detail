@@ -10,7 +10,8 @@
     "kwc-button": "git@github.com:KanoComponents/kwc-button#v1.x",
     "kwc-share-player": "git@github.com:KanoComponents/kwc-share-player",
     "kwc-social-comments": "git@github.com:KanoComponents/kwc-social-comments#v1.x",
-    "kwc-style": "git@github.com:KanoComponents/kwc-style.git#v1.x"
+    "kwc-style": "git@github.com:KanoComponents/kwc-style#v1.x",
+    "paper-spinner": "^2.0.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",

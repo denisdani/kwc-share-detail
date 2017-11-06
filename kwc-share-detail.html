@@ -2,6 +2,7 @@
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-image/iron-image.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../paper-spinner/paper-spinner-lite.html">
 
 <link rel="import" href="../kwc-animations/kwc-particle-burst.html">
 <link rel="import" href="../kwc-button/kwc-mega-button.html">
@@ -285,7 +286,12 @@ To display details specific to a kano code share.
                 --kwc-mega-button-color: rgba(255, 255, 255, 1);
                 --kwc-mega-button-bg-color: var(--color-carnation);
             }
-
+            paper-spinner-lite {
+                display: block;
+                margin: auto;
+                color: black;
+                bottom: 39px;
+            }
             .action-button.feature {
                 color: white;
                 margin-top: 32px;
@@ -440,7 +446,7 @@ To display details specific to a kano code share.
                             </li>
                             <li class$="[[_computeNavItemClass(_section, 'likes')]]">
                                 <iron-icon class="nav-icon" icon="kwc-social-icons:like"></iron-icon>
-                                <span class="nav-label">[[shareData.likeCount]] Likes</span>
+                                <span class="nav-label">[[likes.length]] Likes</span>
                             </li>
                         </ul>
                         <!-- Set up with support for showing lists of
@@ -467,8 +473,10 @@ To display details specific to a kano code share.
                                                         gravity="0.5"
                                                         particle-decay="0.04"
                                                         max-particle-size="13">
-                                        [[_computedLikeButtonText(liked)]]
+                                            [[_computedLikeButtonText(liked)]]
                                     </kwc-particle-burst>
+                                    <paper-spinner-lite active="[[submitingLike]]">
+                                    </paper-spinner-lite>
                                 </kwc-mega-button>
                             </div>
                         </template>
@@ -595,6 +603,11 @@ To display details specific to a kano code share.
                         type: Boolean,
                         computed: '_computeLiked(likes.*, currentUser)'
                     },
+                    /* Property to indicate whether we are currently submiting a like request*/
+                    submitingLike: {
+                        type: Boolean,
+                        value: false
+                    },
                     _sharedByUser: {
                         type: Boolean,
                         computed: '_computeSharedByUser(shareData, currentUser)'
@@ -696,7 +709,7 @@ To display details specific to a kano code share.
                     }));
                 },
                 _onLikeTapped () {
-                    if (this._sharedByUser) {
+                    if (this._sharedByUser || this.submitingLike) {
                         return;
                     }
                     if (!this.liked) {
@@ -722,11 +735,9 @@ To display details specific to a kano code share.
                     this.dispatchEvent(new CustomEvent('action-click', {
                         detail:{
                             action: "remix",
-                            share: {
-                                id: item.id,
-                                slug: item.slug,
-                                type: item.app
-                            }
+                            shareId: item.id,
+                            shareSlug: item.slug,
+                            shareType: item.app
                         }
                     }));
                 },
