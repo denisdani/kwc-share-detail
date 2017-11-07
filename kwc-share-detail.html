@@ -466,6 +466,8 @@ To display details specific to a kano code share.
                                                      item-id="[[shareData.id]]"
                                                      tombstone$="[[!shareData]]"
                                                      user="[[currentUser]]"
+                                                     loader-status="[[commentLoaderStatus]]"
+                                                     on-load-comment="_handleLoadComment"
                                                      on-post-comment="_handlePostComment"
                                                      on-flag-comment="_handleFlagComment"
                                                      on-view-user="_handleViewUser">
@@ -577,6 +579,10 @@ To display details specific to a kano code share.
                             return {};
                         }
                     },
+                    commentLoaderStatus: {
+                        type: String,
+                        computed: "_computeLoaderStatus(comments.*)"
+                    },
                     _defaultCommentAvatarUrl: {
                         type: String,
                         value: () => {
@@ -641,6 +647,10 @@ To display details specific to a kano code share.
                         /** No share provided, don't set the avatar */
                         return ''; //Valid URI
                     }
+                },
+                _computeLoaderStatus(commentChangeObj){
+                    let comments = commentChangeObj.base;
+                    return comments.page ? "on" : "off";
                 },
                 _computeFeaturedIconUrl() {
                     if (this.featuredIconUrl) {
@@ -791,6 +801,11 @@ To display details specific to a kano code share.
                 },
                 _handlePostComment (e) {
                     this.dispatchEvent(new CustomEvent('post-comment', {
+                        detail: e.detail
+                    }));
+                },
+                _handleLoadComment (e) {
+                    this.dispatchEvent(new CustomEvent('load-comment', {
                         detail: e.detail
                     }));
                 },
