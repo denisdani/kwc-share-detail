@@ -433,7 +433,9 @@ To display details specific to a kano code share.
                                 [[shareData.title]]
                             </h3>
                             <h4 class="attribution">by
-                                <a class="author" on-tap="_onUserTapped">[[shareData.username]]</a>
+                                <a class="author"
+                                   on-tap="_onUserTapped">[[shareData.username]]
+                                   </a>
                             </h4>
                             <p class="description">[[shareData.description]]</p>
                         </div>
@@ -452,11 +454,22 @@ To display details specific to a kano code share.
                         <!-- Set up with support for showing lists of
                                  likes and remixes in future, when the API support
                                  is available -->
-                        <iron-pages id="social-sections" selected="[[_section]]" attr-for-selected="section-name" fallback-selection="comments">
+                        <iron-pages id="social-sections"
+                                    selected="[[_section]]"
+                                    attr-for-selected="section-name"
+                                    fallback-selection="comments">
                             <div section-name="comments" class="social-section">
-                                <kwc-social-comments id="comments" comments="[[comments.entries]]" default-avatar="[[_defaultCommentAvatarUrl]]" next-page="[[comments.page]]"
-                                    item-id="[[shareData.id]]" tombstone$="[[!shareData]]" user="[[currentUser]]">
-                                </kwc-social-comments>
+                                <kwc-social-comments id="comments"
+                                                     comments="[[comments.entries]]"
+                                                     default-avatar="[[_defaultCommentAvatarUrl]]"
+                                                     next-page="[[comments.page]]"
+                                                     item-id="[[shareData.id]]"
+                                                     tombstone$="[[!shareData]]"
+                                                     user="[[currentUser]]"
+                                                     on-post-comment="_handlePostComment"
+                                                     on-flag-comment="_handleFlagComment"
+                                                     on-view-user="_handleViewUser">
+                                                     </kwc-social-comments>
                             </div>
                         </iron-pages>
                     </div>
@@ -748,7 +761,7 @@ To display details specific to a kano code share.
                 _onUserTapped() {
                     this.dispatchEvent(new CustomEvent('view-user', {
                         detail: {
-                            id: this.shareData.username
+                            id: this.shareData.userId
                         }
                     }));
                 },
@@ -774,6 +787,21 @@ To display details specific to a kano code share.
                             action: 'twitter',
                             share: this.shareData
                         }
+                    }));
+                },
+                _handlePostComment (e) {
+                    this.dispatchEvent(new CustomEvent('post-comment', {
+                        detail: e.detail
+                    }));
+                },
+                _handleFlagComment (e) {
+                    this.dispatchEvent(new CustomEvent('flag-comment', {
+                        detail: e.detail
+                    }));
+                },
+                _handleViewUser (e) {
+                    this.dispatchEvent(new CustomEvent('view-user', {
+                        detail: e.detail
                     }));
                 }
 
