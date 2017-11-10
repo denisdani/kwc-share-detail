@@ -412,7 +412,8 @@ To display details specific to a kano code share.
                     <div id="share-container">
                         <kwc-share-player share="[[shareData]]"
                                           display-code="{{displayCode}}">
-                                          </kwc-share-player>
+                            <slot slot="hardware-list" name="share-hardware"></slot>
+                        </kwc-share-player>
                     </div>
                 </div>
             </div>
