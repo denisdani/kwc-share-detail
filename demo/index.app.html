@@ -11,6 +11,7 @@
 
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../../bower_components/kwc-button/kwc-button.html">    
     <link rel="import" href="../../kwc-animations/kwc-particle-burst.html">
     <link rel="import" href="../kwc-share-detail.html">
 
@@ -19,6 +20,25 @@
         <style>
             .share-detail {
                 min-width: 90%
+            }
+            .cta {
+                position: relative;
+                top:20px;
+                height: 60px;
+                max-width: 430px;
+                margin:auto;
+                border-radius: 8px;
+                background-color: #ffffff;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 15px;
+
+            }
+            .cta-text {
+                display: inline-block;
+                font-family: var(--font-body);
+                font-weight: bold;
             }
         </style>
     </custom-style>
@@ -30,6 +50,14 @@
         <demo-snippet>
             <template>
                 <kwc-share-detail id="share-detail">
+                    <div slot="player::before" class="cta">
+                        <div class="cta-text">Why learn code?</div>
+                        <kwc-button class="cta-button"
+                                    size="small"
+                                    on-tap="_handleCTATap">
+                            Start
+                        </kwc-button>
+                    </div>
                 </kwc-share-detail>
                 <script>
                     document.addEventListener('WebComponentsReady', function () {
@@ -93,21 +121,24 @@
             "count": 3
         },
         SHAREDATA = {
-            "id": "595cf747bf1189649f1bdd57",
-            "username": "jonas12345",
-            "app": "kano-draw",
-            "title": "x*x",
-            "slug": "xx_10",
-            "likes": [],
-            "description": "This share is like very very coolio, init. I like it because it is what it is a nothing more or less.",
-            "date_created": "2017-07-05T14:27:19.257Z",
+            "id": "595a6c169f797577bd72bd70",
+            "app": "make-apps",
             "attachments": {
-                "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595cf747bf1189649f1bdd57.png",
-                "attachment_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/attachments/595cf747bf1189649f1bdd57.draw"
+                "attachment_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/attachments/595a6c169f797577bd72bd70.html",
+                "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595a6c169f797577bd72bd70.png",
+                "lightboard_spritesheet_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/lightboard-spritesheets/595a6c169f797577bd72bd70.png",
+                "workspace_info_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/workspace-info/595a6c169f797577bd72bd70.json"
             },
-            "featured": true,
-            "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595cf747bf1189649f1bdd57.png"
-        },
+            "slug": "mr-jump-man_1",
+            "hardware": [
+                {
+                    "product": "lightboard"
+                }
+            ],
+            "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595a6c169f797577bd72bd70.png",
+            "attachment_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/attachments/595a6c169f797577bd72bd70.html",
+            "workspace_info_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/workspace-info/595a6c169f797577bd72bd70.json"
+        }
         USER = {
             "username": "nectarsoft",
             "id": "5970adcc1ad1b72285933ef5",

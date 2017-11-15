@@ -104,16 +104,22 @@ To display details specific to a kano code share.
             }
 
             .share-content .content .featured,
-            #share-container>* {
+            kwc-share-player {
                 background-color: transparent;
                 height: 100%;
                 margin: 20px auto;
-                max-width: 600px;
+                max-width: 800px;
                 width: 100%;
             }
-            #share-container kwc-share-player{
+            kwc-share-player{
                 --kwc-share-player-height: 480px;
+                position: relative;
+                top:50px;
             }
+            /* ::slotted(share-hardware) {
+               position: absolute;
+               bottom: 0;
+            } */
 
             @media all and (max-width: 680px) {
                 .share-content .content .featured,
@@ -126,7 +132,7 @@ To display details specific to a kano code share.
             @media all and (min-width: 681px) {
                 .share-content .content .featured,
                 #share-container>* {
-                    max-height: calc(100% - 40px);
+                    max-height: calc(100% - 100px);
                 }
             }
 
@@ -410,10 +416,12 @@ To display details specific to a kano code share.
                         <iron-image class="featured-icon" src$="[[_featuredIconUrl]]" sizing="contain" preload fade></iron-image>
                     </div>
                     <div id="share-container">
+                        <slot name="player::before"></slot>
                         <kwc-share-player share="[[shareData]]"
                                           display-code="{{displayCode}}">
-                            <slot slot="hardware-list" name="share-hardware"></slot>
                         </kwc-share-player>
+                        <slot name="player::after"></slot>
+                        <slot name="share-hardware"></slot>
                     </div>
                 </div>
             </div>
