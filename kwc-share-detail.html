@@ -659,7 +659,11 @@ To display details specific to a kano code share.
                 },
                 _computeLoaderStatus(commentChangeObj){
                     let comments = commentChangeObj.base;
-                    return comments.page ? "on" : "off";
+                    if (comments){
+                        return comments.page ? "on" : "off";
+                    } else {
+                        return "off";
+                    }
                 },
                 _computeFeaturedIconUrl() {
                     if (this.featuredIconUrl) {
@@ -682,7 +686,7 @@ To display details specific to a kano code share.
                 },
                 _computeLiked (likeChangeObj, currentUser) {
                     let likes = likeChangeObj.base;
-                    if (likes.length && currentUser) {
+                    if (likes && likes.length && currentUser) {
                         let liked = likes.some((like) => {
                             return like.user === currentUser.id;
                         });
@@ -706,7 +710,7 @@ To display details specific to a kano code share.
                 },
                 _shareDataChanged(shareDataChangeObj) {
                     let shareData = shareDataChangeObj.base;
-                    if (shareData.id){
+                    if (shareData && shareData.id){
                         return this.toggleClass('loaded', true);
                     }
                 },
