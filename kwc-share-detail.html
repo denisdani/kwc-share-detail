@@ -721,8 +721,13 @@ To display details specific to a kano code share.
                     this.set('_section', 'likes');
                 },
                 _showCodeButton (shareData) {
-                    return shareData.attachments &&
-                        shareData.attachments.attachment_url;
+                    if(shareData && shareData.attachments &&
+                        shareData.attachments.attachment_url)
+                    {
+                        return true
+                    } else {
+                        return false;
+                    }
                 },
                 /** Check whether this share can be remixed (or not) */
                 _showRemixButton (share) {
@@ -768,6 +773,8 @@ To display details specific to a kano code share.
                 },
                 _onRemixTapped () {
                     let item = this.shareData;
+                    if (!item){return;}
+
                     this.dispatchEvent(new CustomEvent('action-click', {
                         detail:{
                             action: "remix",
@@ -782,6 +789,8 @@ To display details specific to a kano code share.
                     this.set('displayCode', newValue);
                 },
                 _onUserTapped() {
+                    let share = this.shareData;
+                    if (!share){return;}
                     this.dispatchEvent(new CustomEvent('view-user', {
                         detail: {
                             id: this.shareData.userId
