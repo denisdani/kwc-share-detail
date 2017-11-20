@@ -793,7 +793,8 @@ To display details specific to a kano code share.
                     if (!share){return;}
                     this.dispatchEvent(new CustomEvent('view-user', {
                         detail: {
-                            id: this.shareData.userId
+                            id: this.shareData.userId,
+                            username: this.shareData.username
                         }
                     }));
                 },
