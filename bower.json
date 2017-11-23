@@ -28,6 +28,7 @@
     "iron-icon": "^2.0.1",
     "webcomponentsjs": "^0.7.0",
     "paper-button": "^1.0.0",
-    "iron-doc-viewer": "^1.0.1"
+    "iron-doc-viewer": "^1.0.1",
+    "prism-element": "^2.0.0"
   }
 }

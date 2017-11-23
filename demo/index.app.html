@@ -11,9 +11,13 @@
 
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="../../bower_components/kwc-button/kwc-button.html">    
+    <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+    <link rel="import" href="../../kwc-button/kwc-button.html">    
     <link rel="import" href="../../kwc-animations/kwc-particle-burst.html">
+    <link rel="import" href="../../kwc-icons/kwc-icons.html">
     <link rel="import" href="../kwc-share-detail.html">
+    <link rel="import" href="../../kwc-style/kwc-style.html">
+    
 
     <custom-style>
         <style is="custom-style" include="demo-pages-shared-styles"></style>
@@ -40,6 +44,34 @@
                 font-family: var(--font-body);
                 font-weight: bold;
             }
+            .hardware {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: row;
+                padding: 16px 0;
+                width: 100%;
+                position: absolute;
+                bottom: 0;
+                background-color: #292f35;
+            }
+
+            .hardware-item {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 15px;
+            }
+
+            .hardware-icon {
+                color: #9fa4a8;
+            }
+
+            .hardware-label {
+                color: #f5f5f5;
+                font-weight: bold;
+                padding-left: 10px;
+            }
         </style>
     </custom-style>
 </head>
@@ -49,16 +81,8 @@
         <h3>Basic kwc-share-detail demo</h3>
         <demo-snippet>
             <template>
-                <kwc-share-detail id="share-detail">
-                    <div slot="player::before" class="cta">
-                        <div class="cta-text">Why learn code?</div>
-                        <kwc-button class="cta-button"
-                                    size="small"
-                                    on-tap="_handleCTATap">
-                            Start
-                        </kwc-button>
-                    </div>
-                </kwc-share-detail>
+                    <kwc-share-detail id="share-detail">
+                    </kwc-share-detail>
                 <script>
                     document.addEventListener('WebComponentsReady', function () {
                         const detail = document.querySelector('#share-detail');
@@ -80,8 +104,130 @@
                 </script>
             </template>
         </demo-snippet>
+        <h3>Hardware list demo</h3>
+        <demo-snippet>
+            <template>
+                    <kwc-share-detail id="share-detail-2">
+                        <!-- <div slot="player::before" class="cta">
+                            <div class="cta-text">Why learn code?</div>
+                            <kwc-button class="cta-button"
+                                        size="small"
+                                        on-tap="_handleCTATap">
+                                Start
+                            </kwc-button>
+                        </div> -->
+                        <div slot="share-hardware" class="hardware">
+                            <div class="hardware-item">
+                                <a href="https://kano.me/store/row/products/pixel-kit">
+                                    <iron-icon class="hardware-icon" icon="kwc-part-icons:lightboard"></iron-icon>
+                                    <span class="hardware-label">Pixel Kit</span>
+                                </a>
+                            </div>
+                            <div class="hardware-item">
+                                <a href="https://kano.me/store/row/products/motion-sensor-kit">
+                                    <iron-icon class="hardware-icon" icon="kwc-part-icons:motion-sensor"></iron-icon>
+                                    <span class="hardware-label">Motion Sensor</span>
+                                </a>
+                            </div>
+                        </div>
+                    </kwc-share-detail>
+                <script>
+                    document.addEventListener('WebComponentsReady', function () {
+                        const detail = document.querySelector('#share-detail-2');
+                        detail.shareData = SHAREDATA;
+                        detail.comments = COMMENTS;
+                        detail.likes = SHAREDATA.likes;
+                        detail.currentUser = USER;
+                        detail.featured = SHAREDATA.featured;
+                        detail.addEventListener('view-user', function(e){
+                            alert(`View user ${e.detail.id}`);
+                        });
+                        detail.addEventListener('action-click', function(e){
+                            alert(`Someone clicked on ${e.detail.action}`);
+                        });
+                        detail.addEventListener('social-share', function(e){
+                            alert(`Someone clicked on ${e.detail.action}`);
+                        });
+                    });
+                </script>
+            </template>
+        </demo-snippet>
+        <h3>CAll To Action demo</h3>
+        <demo-snippet>
+            <template>
+                    <kwc-share-detail id="share-detail-cta">
+                        <div slot="player::before" class="cta">
+                            <div class="cta-text">Why learn code?</div>
+                            <kwc-button class="cta-button"
+                                        size="small"
+                                        on-tap="_handleCTATap">
+                                Start
+                            </kwc-button>
+                        </div>
+                        <div slot="share-hardware" class="hardware">
+                            <div class="hardware-item">
+                                <a href="https://kano.me/store/row/products/pixel-kit">
+                                    <iron-icon class="hardware-icon" icon="kwc-part-icons:lightboard"></iron-icon>
+                                    <span class="hardware-label">Pixel Kit</span>
+                                </a>
+                            </div>
+                            <div class="hardware-item">
+                                <a href="https://kano.me/store/row/products/motion-sensor-kit">
+                                    <iron-icon class="hardware-icon" icon="kwc-part-icons:motion-sensor"></iron-icon>
+                                    <span class="hardware-label">Motion Sensor</span>
+                                </a>
+                            </div>
+                        </div>
+                    </kwc-share-detail>
+                <script>
+                    document.addEventListener('WebComponentsReady', function () {
+                        const detail = document.querySelector('#share-detail-cta');
+                        detail.shareData = SHAREDATA;
+                        detail.comments = COMMENTS;
+                        detail.likes = SHAREDATA.likes;
+                        detail.currentUser = USER;
+                        detail.featured = SHAREDATA.featured;
+                        detail.addEventListener('view-user', function(e){
+                            alert(`View user ${e.detail.id}`);
+                        });
+                        detail.addEventListener('action-click', function(e){
+                            alert(`Someone clicked on ${e.detail.action}`);
+                        });
+                        detail.addEventListener('social-share', function(e){
+                            alert(`Someone clicked on ${e.detail.action}`);
+                        });
+                    });
+                </script>
+            </template>
+        </demo-snippet>
     </div>
     <script>
+        function _computeHardware (share) {
+            if (!share || !share.hardware || !share.hardware.length) {
+                return null;
+            }
+            let labelMapping = {
+                'gyro-accelerometer': 'Tilt Sensor',
+                'lightboard': 'Pixel Kit',
+                'microphone': 'Microphone',
+                'motion-sensor': 'Motion Sensor',
+                'speaker': 'Speaker'
+            };
+            let linkMapping = {
+                'gyro-accelerometer': '#',
+                'lightboard': 'https://kano.me/store/row/products/pixel-kit',
+                'microphone': '#',
+                'motion-sensor': 'https://kano.me/store/row/products/motion-sensor-kit',
+                'speaker': '#'
+            };
+            return share.hardware.map(item => {
+                    return {
+                        label: labelMapping[item.product],
+                        id: item.product,
+                        link: linkMapping[item.product]
+                    }
+            });
+        }
         const COMMENTS = {
             "entries": [{
                 "id": "597705341ad1b7228593511c",
@@ -105,6 +251,17 @@
                 "date_created": "2017-07-25T08:39:51.349Z",
                 "flags": []
             }, {
+                "id": "597703d71ad1b72285935108",
+                "author": {
+                    "id": "59402bb7c511000a713e2d45",
+                    "username": "jonas12345",
+                    "admin_level": 0,
+                    "joined": "2017-06-13T18:15:19.035Z"
+                },
+                "text": "@codebadger omg stop! That's SUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUPER annoying!",
+                "date_created": "2017-07-25T08:39:51.349Z",
+                "flags": []
+            },{
                 "id": "597703a994e3ff22866cd79c",
                 "author": {
                     "id": "59402bb7c511000a713e2d45",
@@ -133,6 +290,9 @@
             "hardware": [
                 {
                     "product": "lightboard"
+                },
+                {
+                    "product": "motion-sensor"
                 }
             ],
             "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595a6c169f797577bd72bd70.png",
@@ -143,7 +303,8 @@
             "username": "nectarsoft",
             "id": "5970adcc1ad1b72285933ef5",
             "avatar": "https://s3.amazonaws.com/kano-avatars/default-avatar.svg"
-        }
+        },
+        HARDWARE = _computeHardware(SHAREDATA);
     </script>
 </body>
 
