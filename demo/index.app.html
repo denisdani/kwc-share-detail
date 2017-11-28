@@ -87,6 +87,7 @@
                     document.addEventListener('WebComponentsReady', function () {
                         const detail = document.querySelector('#share-detail');
                         detail.shareData = SHAREDATA;
+                        detail.canRemix = true;
                         detail.comments = COMMENTS;
                         detail.likes = SHAREDATA.likes;
                         detail.currentUser = USER;
@@ -135,6 +136,7 @@
                     document.addEventListener('WebComponentsReady', function () {
                         const detail = document.querySelector('#share-detail-2');
                         detail.shareData = SHAREDATA;
+                        detail.canRemix = true;
                         detail.comments = COMMENTS;
                         detail.likes = SHAREDATA.likes;
                         detail.currentUser = USER;
@@ -183,6 +185,7 @@
                     document.addEventListener('WebComponentsReady', function () {
                         const detail = document.querySelector('#share-detail-cta');
                         detail.shareData = SHAREDATA;
+                        detail.canRemix = true;
                         detail.comments = COMMENTS;
                         detail.likes = SHAREDATA.likes;
                         detail.currentUser = USER;

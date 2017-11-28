@@ -52,6 +52,33 @@
                 </script>
             </template>
         </demo-snippet>
+        <h3>Remix kwc-share-detail demo</h3>
+        <demo-snippet>
+            <template>
+                <kwc-share-detail id="share-detail-remix">
+                </kwc-share-detail>
+                <script>
+                    document.addEventListener('WebComponentsReady', function () {
+                        const detail = document.querySelector('#share-detail-remix');
+                        detail.shareData = SHAREDATA;
+                        detail.canRemix = true;
+                        detail.comments = COMMENTS;
+                        detail.likes = SHAREDATA.likes;
+                        detail.currentUser = USER;
+                        detail.featured = SHAREDATA.featured;
+                        detail.addEventListener('view-user', function(e){
+                            alert(`View user ${e.detail.id}`);
+                        });
+                        detail.addEventListener('action-click', function(e){
+                            alert(`Someone clicked on ${e.detail.action}`);
+                        });
+                        detail.addEventListener('social-share', function(e){
+                            alert(`Someone clicked on ${e.detail.action}`);
+                        });
+                    });
+                </script>
+            </template>
+        </demo-snippet>
     </div>
     <script>
         const COMMENTS = {
