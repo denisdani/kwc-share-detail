@@ -265,6 +265,13 @@ To display details specific to a kano code share.
                 color: var(--color-grey);
                 padding: 32px 8px 32px 40px;
             }
+            kwc-particle-burst {
+                display: inline;
+                z-index: 10;
+                position: relative;
+                left: 35%;
+                bottom: 5px;
+            }
             kwc-mega-button {
                 width: 65%;
             }
@@ -282,6 +289,9 @@ To display details specific to a kano code share.
             }
             .action-button.like{
                 --kwc-mega-button-color: var(--color-carnation);
+                position: relative;
+                left: -35%;
+                bottom: -5px;
             }
 
             .like.liked {
@@ -491,18 +501,18 @@ To display details specific to a kano code share.
                         <slot name='actions::before'></slot>
                         <template is="dom-if" if="[[!_sharedByUser]]">
                             <div class="action">
-                                <kwc-mega-button icon-id="kwc-social-icons:like"
-                                                 class$="[[_computeLikeClass(liked)]]"
-                                                 on-tap="_onLikeTapped">
-                                    <kwc-particle-burst number-particles="40"
-                                                        gravity="0.5"
-                                                        particle-decay="0.04"
-                                                        max-particle-size="13">
-                                            [[_computedLikeButtonText(liked)]]
-                                    </kwc-particle-burst>
-                                    <paper-spinner-lite active="[[submitingLike]]">
-                                    </paper-spinner-lite>
-                                </kwc-mega-button>
+                                <kwc-particle-burst number-particles="40"
+                                                    gravity="0.5"
+                                                    particle-decay="0.04"
+                                                    max-particle-size="13">
+                                    <kwc-mega-button icon-id="kwc-social-icons:like"
+                                                     class$="[[_computeLikeClass(liked)]]"
+                                                     on-tap="_onLikeTapped">
+                                        [[_computedLikeButtonText(liked)]]
+                                        <paper-spinner-lite active="[[submitingLike]]">
+                                        </paper-spinner-lite>
+                                    </kwc-mega-button>
+                                </kwc-particle-burst>
                             </div>
                         </template>
                         <slot name='actions::one'></slot>                        
