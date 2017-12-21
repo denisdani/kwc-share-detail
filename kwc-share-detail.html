@@ -56,14 +56,6 @@ To display details specific to a kano code share.
                 width: 100%;
             }
 
-            .share>iron-image {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-            }
-
             .share-content {
                 @apply --layout-flex;
                 background: var(--kw-share-detail-share-background, var(--color-chateau));
@@ -92,7 +84,6 @@ To display details specific to a kano code share.
             .share-content .loading,
             .share-content .content,
             .share-content .content .featured,
-            .share-content .loading iron-image,
             .share-content .loading .overlay {
                 @apply --layout-fit;
             }
@@ -412,9 +403,8 @@ To display details specific to a kano code share.
         <div id="share" class="share">
             <div class="share-content">
                 <div class="loading">
-                    <iron-image src="[[shareData.cover_url]]" sizing="contain"></iron-image>
                     <div class="overlay">
-                        <h2>Loading</h2>
+                        <paper-spinner-lite class="spinner" active></paper-spinner-lite>
                     </div>
                 </div>
                 <div class="content">
