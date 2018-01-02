@@ -14,7 +14,7 @@
 <link rel="import" href="assets.html">
 
 <!--
-`kwc-share-detail` 
+`kwc-share-detail`
 To display details specific to a kano code share.
 
 @demo demo/index.html
@@ -31,7 +31,6 @@ To display details specific to a kano code share.
                     opacity: 1;
                 }
             }
-
             :host {
                 background-color: white;
                 border-radius: 3px;
@@ -40,22 +39,18 @@ To display details specific to a kano code share.
                 font-family: var(--font-body);
                 @apply --kw-share-detail;
             }
-
             :host * {
                 box-sizing: border-box;
             }
-
             :host *[hidden] {
                 display: none !important;
             }
-
             .share {
                 @apply --layout-vertical;
                 @apply --layout-center;
                 display: flex;
                 width: 100%;
             }
-
             .share-content {
                 @apply --layout-flex;
                 background: var(--kw-share-detail-share-background, var(--color-chateau));
@@ -66,20 +61,16 @@ To display details specific to a kano code share.
                 box-sizing: border-box;
                 position: relative;
             }
-
             .share-content .loading {
                 color: white;
                 transition: opacity 200ms linear;
             }
-
             :host(.loaded) .share-content .loading {
                 opacity: 0;
             }
-
             #share-container {
                 animation: fade-in 200ms linear;
             }
-
             #share-container,
             .share-content .loading,
             .share-content .content,
@@ -87,13 +78,11 @@ To display details specific to a kano code share.
             .share-content .loading .overlay {
                 @apply --layout-fit;
             }
-
             .share-content .loading .overlay {
                 @apply --layout-vertical;
                 @apply --layout-center;
                 @apply --layout-center-justified;
             }
-
             .share-content .content .featured,
             kwc-share-player {
                 background-color: transparent;
@@ -107,7 +96,6 @@ To display details specific to a kano code share.
                 position: relative;
                 top:50px;
             }
-
             @media all and (max-width: 680px) {
                 .share-content .content .featured,
                 #share-container>* {
@@ -115,127 +103,103 @@ To display details specific to a kano code share.
                     padding: 0 20px;
                 }
             }
-
             @media all and (min-width: 681px) {
                 .share-content .content .featured,
                 #share-container>* {
                     max-height: calc(100% - 100px);
                 }
             }
-
             .featured-icon {
                 height: 44px;
                 margin-top: 7%;
                 width: 44px;
             }
-
             .share-detail {
                 @apply --layout-horizontal;
                 max-width: var(--content-width);
                 width: 100%;
             }
-
             .main-details {
                 @apply --layout-flex-8;
                 padding: 32px 40px 32px 8px;
             }
-
             .header {
                 @apply --layout-horizontal;
             }
-
             .avatar-wrapper {
                 flex: none;
                 overflow: hidden;
-                width: 40px;
-                height: 40px;
+                width: 48px;
+                height: 48px;
                 border-radius: 50%;
                 position: relative;
-                background-color: var(--color-sky);
+                margin: 0 20px;
             }
-
             .avatar {
-                background-color: var(--color-sky);
+                border-radius: 50%;
                 cursor: pointer;
-                height: 45px;
-                position: absolute;
-                top: -2px;
-                width: 40px;
+                height: 48px;
+                overflow: hidden;
+                width: 48px;
             }
-
             .title {
+                font-size: 24px;
+                line-height: 28px;
                 margin: 0;
-                padding-bottom: 5px;
             }
-
             .title ::slotted(iron-icon) {
                 height: 28px;
                 margin-top: -10px;
                 width: 28px;
             }
-
             .attribution {
                 font-weight: normal;
                 margin: 0;
-                padding-bottom: 8px;
             }
-
             .author {
                 color: var(--color-carnation);
                 cursor: pointer;
                 font-weight: bold;
             }
-
             .description {
                 color: var(--color-chateau);
                 line-height: 20px;
                 margin: 0;
             }
-
             .description:not(:empty) {
                 font-size: 16px;
-                padding: 5px 0 24px 0;
+                margin: 8px 0 0 0;
             }
-
-            .description:empty {
-                padding-bottom: 16px;
-            }
-
             .social-nav {
                 @apply --layout-horizontal;
                 border-bottom: 1px solid var(--color-porcelain);
                 color: var(--color-grey);
                 list-style: none;
                 margin: 0;
-                padding: 0 0 32px 60px;
+                padding: 24px 0 24px 88px;
             }
-
             .social-nav .nav-item {
                 cursor: pointer;
                 font-weight: bold;
                 margin-right: 20px;
                 position: relative;
             }
-
             .social-nav .nav-icon {
                 margin-right: 8px;
                 width: 16px;
             }
-
             .nav-item.active {
                 color: black;
             }
-
             .nav-item.active .nav-icon {
                 color: var(--color-sky);
             }
-
             .nav-item.active::after {
                 background-color: white;
                 border-left: 1px solid var(--color-porcelain);
                 border-radius: 3px 0 0 0;
                 border-top: 1px solid var(--color-porcelain);
-                bottom: -40px;
+                bottom: -32px;
                 content: "";
                 height: 16px;
                 left: 0;
@@ -245,11 +209,9 @@ To display details specific to a kano code share.
                 transform: rotate(45deg);
                 width: 16px;
             }
-
             kw-social-comment {
                 width: 100%;
             }
-
             .supplementary-details {
                 @apply --layout-flex-4;
                 border-left: 1px solid var(--color-porcelain);
@@ -273,7 +235,7 @@ To display details specific to a kano code share.
             .action {
                 flex: 1 0 auto;
                 box-sizing: border-box;
-                margin-bottom: 10px;
+                margin-bottom: 16px;
             }
             .action-button.view-code{
                 --kwc-mega-button-color: var(--color-dodger-blue);
@@ -284,7 +246,6 @@ To display details specific to a kano code share.
                 left: -35%;
                 bottom: -5px;
             }
-
             .like.liked {
                 --kwc-mega-button-color: rgba(255, 255, 255, 1);
                 --kwc-mega-button-bg-color: var(--color-carnation);
@@ -299,19 +260,16 @@ To display details specific to a kano code share.
                 color: white;
                 margin-top: 32px;
                 width: 100%;
-            } 
+            }
             .action-button.feature.default {
                 background-color: var(--color-chateau);
             }
-
             .action-button.feature.featured {
                 background-color: var(--color-kano-orange);
             }
-
             .action-button.feature.default:hover {
                 background-color: var(--color-orange);
             }
-
             .action-button.feature.featured:hover {
                 background-color: var(--color-flame);
             }
@@ -322,12 +280,10 @@ To display details specific to a kano code share.
                 margin: 0;
                 padding: 10px 0 0 0;
             }
-
             .social-action {
                 box-sizing: border-box;
                 margin-right: 16px;
             }
-
             .social-button {
                 border: 0;
                 border-radius: 3px;
@@ -337,41 +293,37 @@ To display details specific to a kano code share.
                 text-transform: uppercase;
                 transition: 0.3s ease;
             }
-
             .social-button:focus {
                 outline: 0;
             }
-
             .social-button.facebook {
                 background-color: var(--color-facebook);
             }
-
             .social-button.twitter {
                 background-color: var(--color-twitter);
             }
-
             .social-button.email {
                 background-color: var(--color-kano-orange);
             }
-
             .social-button .action-icon {
                 height: 16px;
                 width: 16px;
             }
-
+            .social-actions-header {
+                font-weight: bold;
+                text-transform: uppercase;
+            }
             :host([tombstone]) .avatar,
             :host([tombstone]) .avatar-wrapper {
                 background: var(--color-grey-lightest);
                 color: transparent;
             }
-
             :host([tombstone]) .title {
                 width: 200px;
                 height: 22px;
                 background: var(--color-grey-lightest);
                 color: transparent;
             }
-
             :host([tombstone]) .attribution {
                 position: relative;
                 width: 100px;
@@ -380,7 +332,6 @@ To display details specific to a kano code share.
                 color: transparent;
                 margin-top: 6px;
             }
-
             :host([tombstone]) .description {
                 width: 100%;
                 height: 36px;
@@ -389,15 +340,10 @@ To display details specific to a kano code share.
                 margin-top: 6px;
                 margin-bottom: 12px;
             }
-
             :host([tombstone]) .supplementary-details,
             :host([tombstone]) #share-container,
             :host([tombstone]) .social {
                 opacity: 0.3;
-            }
-
-            .detail {
-                margin-left: 10px;
             }
         </style>
         <div id="share" class="share">
@@ -409,7 +355,7 @@ To display details specific to a kano code share.
                 </div>
                 <div class="content">
                     <div class="featured" hidden$="[[!featured]]">
-                        <iron-image 
+                        <iron-image
                             class="featured-icon"
                             src$="[[_featuredIconUrl]]"
                             sizing="contain"
@@ -430,7 +376,7 @@ To display details specific to a kano code share.
                 <div class="main-details">
                     <div class="header">
                         <div class="avatar-wrapper">
-                            <iron-image class="avatar" 
+                            <iron-image class="avatar"
                                          src$="[[_avatarUrl]]"
                                          sizing="cover"
                                          on-tap="_onUserTapped"
@@ -505,7 +451,7 @@ To display details specific to a kano code share.
                                 </kwc-particle-burst>
                             </div>
                         </template>
-                        <slot name='actions::one'></slot>                        
+                        <slot name='actions::one'></slot>
                         <template is="dom-if" if="[[_showRemixButton(shareData, canRemix)]]">
                             <div class="action">
                                 <kwc-mega-button icon-id="kwc-social-icons:code"
@@ -515,7 +461,7 @@ To display details specific to a kano code share.
                                 </kwc-mega-button>
                             </div>
                         </template>
-                        <slot name='actions::two'></slot>                                                
+                        <slot name='actions::two'></slot>
                         <template is="dom-if" if="[[_showCodeButton(shareData)]]">
                             <div class="action">
                                 <kwc-mega-button icon-id="kwc-social-icons:code"
@@ -525,7 +471,7 @@ To display details specific to a kano code share.
                                 </kwc-mega-button>
                             </div>
                         </template>
-                        <slot name='actions::three'></slot>                        
+                        <slot name='actions::three'></slot>
                         <template is="dom-if"
                                   if="[[_showFeaturedButton(shareData, currentUser.adminLevel)]]">
                             <div class="action">
@@ -536,9 +482,9 @@ To display details specific to a kano code share.
                                 </kwc-mega-button>
                             <div>
                         </template>
-                        <slot name='actions::after'></slot>                                                
+                        <slot name='actions::after'></slot>
                     </div>
-                    <div class="social-actions-header">SHARE</div>
+                    <div class="social-actions-header">Share</div>
                     <ul class="social-actions">
                         <li class="social-action">
                             <button class="social-button facebook" on-tap="_onFacebookTapped">
@@ -649,7 +595,7 @@ To display details specific to a kano code share.
                         computed: "_computeLoaderStatus(comments.*)"
                     },
                     /**
-                     * A url to use as the default avatar for the comments component to use 
+                     * A url to use as the default avatar for the comments component to use
                      * when a comment author does not have one set.
                      * @type {String}
                      */
@@ -669,7 +615,7 @@ To display details specific to a kano code share.
                         reflectToAtrribute: true
                     },
                     /**
-                     * Allow the icon to display for a featured share to be set from 
+                     * Allow the icon to display for a featured share to be set from
                      * outside the component
                      * @type {String}
                      */
@@ -716,7 +662,7 @@ To display details specific to a kano code share.
                         }
                     },
                     /**
-                     * Computed property that watches the liked list and returns true is 
+                     * Computed property that watches the liked list and returns true is
                      * it contains a like with the current user id.
                      * @type {Boolean}
                      */
@@ -844,7 +790,7 @@ To display details specific to a kano code share.
                     }
                 },
                 /**
-                 * Check whether the current user is admin. Used to hide or show the 
+                 * Check whether the current user is admin. Used to hide or show the
                  * fetured button.
                  * @param {Object} share Current share data
                  * @param {Boolean} isAdmin Flag this user as admin
