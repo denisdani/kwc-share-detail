@@ -768,13 +768,14 @@ To display details specific to a kano code share.
                     this.set('_section', 'likes');
                 },
                 _showCodeButton (shareData) {
-                    if(shareData && shareData.attachment_url &&
-                        shareData.attachment_url.split('.').pop() !== 'xml')
-                    {
-                        return true
-                    } else {
-                        return false;
+                    let attachmentExt;
+                    if(shareData && shareData.attachment_url){
+                        attachmentExt = shareData.attachment_url.split('.').pop();
+                        if(['html', 'draw', 'lightcode'].indexOf(attachmentExt) !== -1){
+                            return true
+                        }
                     }
+                    return false;
                 },
                 /**
                  * Check whether this share can be remixed (or not)
