@@ -769,10 +769,10 @@ To display details specific to a kano code share.
                 },
                 _showCodeButton (shareData) {
                     let attachmentExt;
-                    if(shareData && shareData.attachment_url){
+                    if (shareData && shareData.attachment_url) {
                         attachmentExt = shareData.attachment_url.split('.').pop();
-                        if(['html', 'draw', 'lightcode'].indexOf(attachmentExt) !== -1){
-                            return true
+                        if (['html', 'draw', 'lightcode'].indexOf(attachmentExt) !== -1) {
+                            return true;
                         }
                     }
                     return false;
