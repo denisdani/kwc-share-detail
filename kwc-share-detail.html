@@ -2,6 +2,7 @@
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-image/iron-image.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../paper-spinner/paper-spinner-lite.html">
 
 <link rel="import" href="../kwc-animations/kwc-particle-burst.html">
@@ -222,29 +223,46 @@ To display details specific to a kano code share.
                 display: inline;
                 z-index: 10;
                 position: relative;
-                left: 35%;
-                bottom: 5px;
+                width: 100%;
             }
             kwc-mega-button {
-                width: 65%;
+                width: 100%;
             }
             .actions {
                 @apply --layout-justified;
                 margin-bottom: 36px;
             }
             .action {
-                flex: 1 0 auto;
+                @apply --layout-flex-auto;
+                @apply --layout-horizontal;
+                @apply --layout-center;
+                @apply --layout-center-justified;
                 box-sizing: border-box;
+                color: var(--color-abbey);
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: bold;
                 margin-bottom: 16px;
+                position: relative;
+                text-align: center;
+                text-transform: uppercase;
+                transition: 0.3s ease;
             }
-            .action-button.view-code{
+            .action > iron-icon {
+                color: var(--color-grey);
+                margin: -5px 8px 0 0;
+                transition: 0.3s ease;
+            }
+            .action.delete:hover,
+            .action.delete:hover > iron-icon {
+                color: var(--color-carnation);
+            }
+            .action-button.view-code {
                 --kwc-mega-button-color: var(--color-dodger-blue);
             }
-            .action-button.like{
+            .action-button.like {
                 --kwc-mega-button-color: var(--color-carnation);
                 position: relative;
-                left: -35%;
-                bottom: -5px;
             }
             .like.liked {
                 --kwc-mega-button-color: rgba(255, 255, 255, 1);
@@ -256,22 +274,18 @@ To display details specific to a kano code share.
                 color: black;
                 bottom: 39px;
             }
-            .action-button.feature {
-                color: white;
-                margin-top: 32px;
-                width: 100%;
-            }
             .action-button.feature.default {
-                background-color: var(--color-chateau);
+                --kwc-mega-button-color: var(--color-kano-orange);
             }
             .action-button.feature.featured {
-                background-color: var(--color-kano-orange);
+                --kwc-mega-button-color: white;
+                --kwc-mega-button-bg-color: var(--color-kano-orange);
             }
-            .action-button.feature.default:hover {
-                background-color: var(--color-orange);
-            }
-            .action-button.feature.featured:hover {
-                background-color: var(--color-flame);
+            .meta-actions {
+                border-bottom: 1px solid var(--color-stone);
+                border-top: 1px solid var(--color-stone);
+                margin-bottom: 36px;
+                padding-top: 16px;
             }
             .social-actions {
                 @apply --layout-horizontal;
@@ -423,6 +437,7 @@ To display details specific to a kano code share.
                                                      tombstone$="[[!shareData]]"
                                                      user="[[currentUser]]"
                                                      loader-status="[[commentLoaderStatus]]"
+                                                     on-delete-comment="_handleDeleteComment"
                                                      on-load-comment="_handleLoadComment"
                                                      on-post-comment="_handlePostComment"
                                                      on-flag-comment="_handleFlagComment"
@@ -473,9 +488,9 @@ To display details specific to a kano code share.
                         </template>
                         <slot name='actions::three'></slot>
                         <template is="dom-if"
-                                  if="[[_showFeaturedButton(shareData, currentUser.adminLevel)]]">
+                                  if="[[_showFeaturedButton(shareData, currentUser.admin_level)]]">
                             <div class="action">
-                                <kwc-mega-button icon-id="kwc-social-icons:staff"
+                                <kwc-mega-button icon-id="kwc-ui-icons:rosette"
                                                  class$="[[_computeFeatureClass(shareData.featured)]]"
                                                  on-tap="_onFeatureTapped">
                                     Staff Pick
@@ -484,6 +499,14 @@ To display details specific to a kano code share.
                         </template>
                         <slot name='actions::after'></slot>
                     </div>
+                    <template is="dom-if" if="[[_displayMetaActions]]">
+                        <div class="meta-actions">
+                            <div class="action delete" on-tap="_onDeleteTapped">
+                                <iron-icon icon="kwc-ui-icons:rubbish-bin"></iron-icon>
+                                <span>Delete Creation</span>
+                            </div>
+                        </div>
+                    </template>
                     <div class="social-actions-header">Share</div>
                     <ul class="social-actions">
                         <li class="social-action">
@@ -606,6 +629,15 @@ To display details specific to a kano code share.
                         }
                     },
                     /**
+                     * Convenience flag to indicate whether the controls for the
+                     * share – delete button etc – should be displayed
+                     * @type {Boolean}
+                     */
+                    _displayMetaActions: {
+                        type: Boolean,
+                        computed: '_computeMetaActionDisplay(_sharedByUser, _userIsAdmin)'
+                    },
+                    /**
                      * Flag whether the share is featured on not.
                      * @type {Boolean}
                      */
@@ -686,6 +718,15 @@ To display details specific to a kano code share.
                     _sharedByUser: {
                         type: Boolean,
                         computed: '_computeSharedByUser(shareData, currentUser)'
+                    },
+                    /**
+                     * Convenience flag to indicate whether the current user
+                     * is an admin
+                     * @type {Boolean}
+                     */
+                    _userIsAdmin: {
+                        type: Boolean,
+                        computed: '_computeUserIsAdmin(currentUser.admin_level)'
                     }
                 },
                 observers: [
@@ -755,6 +796,24 @@ To display details specific to a kano code share.
                         activeClass = section === id ? 'active' : 'inactive';
                     return `${baseClass} ${activeClass}`;
                 },
+                /**
+                 * Compute whether share controls – delete button etc – should
+                 * display
+                 * @param {Boolean} sharedByUser
+                 * @param {Boolean} userIsAdmin
+                 * @returns {Boolean}
+                 */
+                _computeMetaActionDisplay(sharedByUser, userIsAdmin) {
+                    return sharedByUser || userIsAdmin;
+                },
+                /**
+                 * Compute whether the current user is an adminstrator
+                 * @param {Number} adminLevel
+                 * @returns {Boolean}
+                 */
+                _computeUserIsAdmin(adminLevel) {
+                    return adminLevel && adminLevel > 0;
+                },
                 _shareDataChanged(shareDataChangeObj) {
                     let shareData = shareDataChangeObj.base;
                     if (shareData && shareData.id){
@@ -800,14 +859,22 @@ To display details specific to a kano code share.
                 _showFeaturedButton (share, isAdmin){
                     return share && isAdmin;
                 },
-
+                _onDeleteTapped () {
+                    this.dispatchEvent(new CustomEvent('action-click', {
+                        detail: {
+                            action: 'delete',
+                            id: this.shareData ? this.shareData.id : null,
+                            slug: this.shareData ? this.shareData.slug : null
+                        }
+                    }));
+                },
                 /** Event listeners */
                 _onFeatureTapped () {
                     this.dispatchEvent(new CustomEvent('action-click', {
                         detail: {
-                            action: "feature",
-                            feature: !this.selectedShare.featured,
-                            id: this.selectedShare.id
+                            action: 'feature',
+                            feature: !this.shareData.featured,
+                            id: this.shareData.id
                         }
                     }));
                 },
@@ -882,6 +949,11 @@ To display details specific to a kano code share.
                             action: 'twitter',
                             share: this.shareData
                         }
+                    }));
+                },
+                _handleDeleteComment (e) {
+                    this.dispatchEvent(new CustomEvent('delete-comment', {
+                        detail: e.detail
                     }));
                 },
                 _handlePostComment (e) {
