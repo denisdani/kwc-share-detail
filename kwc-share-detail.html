@@ -250,7 +250,7 @@ To display details specific to a kano code share.
             }
             .action > iron-icon {
                 color: var(--color-grey);
-                margin: -5px 5px 0 0;
+                margin: -5px 8px 0 0;
                 transition: 0.3s ease;
             }
             .action.delete:hover,
@@ -863,7 +863,8 @@ To display details specific to a kano code share.
                     this.dispatchEvent(new CustomEvent('action-click', {
                         detail: {
                             action: 'delete',
-                            id: this.shareData ? this.shareData.id : null
+                            id: this.shareData ? this.shareData.id : null,
+                            slug: this.shareData ? this.shareData.slug : null
                         }
                     }));
                 },
