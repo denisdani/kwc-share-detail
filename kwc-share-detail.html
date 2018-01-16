@@ -52,13 +52,13 @@ To display details specific to a kano code share.
                 display: flex;
                 width: 100%;
             }
-            .share-content {
-                @apply --layout-flex;
+            .content-prefix {
                 background: var(--kw-share-detail-share-background, var(--color-chateau));
                 width: 100%;
-                padding: 0px 16px;
-                min-height: var(--kw-share-detail-player-height, 480px);
-                height: var(--kw-share-detail-player-height, 480px);
+            }
+            .share-content {
+                background: var(--kw-share-detail-share-background, var(--color-chateau));
+                width: 100%;
                 box-sizing: border-box;
                 position: relative;
             }
@@ -71,10 +71,15 @@ To display details specific to a kano code share.
             }
             #share-container {
                 animation: fade-in 200ms linear;
+                z-index: 10;
+            }
+            .share-content .content {
+                min-height: var(--kw-share-detail-player-height, 480px);
+                height: var(--kw-share-detail-player-height, 480px);
+                position: relative;
             }
             #share-container,
             .share-content .loading,
-            .share-content .content,
             .share-content .content .featured,
             .share-content .loading .overlay {
                 @apply --layout-fit;
@@ -88,9 +93,13 @@ To display details specific to a kano code share.
             kwc-share-player {
                 background-color: transparent;
                 height: 100%;
-                margin: 20px auto;
+                margin: 0 auto;
                 max-width: 800px;
                 width: 100%;
+            }
+            .share-content .content .featured {
+                padding: 0 8px;
+                z-index: 20;
             }
             kwc-share-player{
                 --kwc-share-player-height: 480px;
@@ -116,13 +125,10 @@ To display details specific to a kano code share.
                 width: 44px;
             }
             .share-detail {
-                @apply --layout-horizontal;
                 max-width: var(--content-width);
+                position: relative;
                 width: 100%;
-            }
-            .main-details {
-                @apply --layout-flex-8;
-                padding: 32px 40px 32px 8px;
+                z-index: 0;
             }
             .header {
                 @apply --layout-horizontal;
@@ -213,12 +219,6 @@ To display details specific to a kano code share.
             kw-social-comment {
                 width: 100%;
             }
-            .supplementary-details {
-                @apply --layout-flex-4;
-                border-left: 1px solid var(--color-porcelain);
-                color: var(--color-grey);
-                padding: 32px 8px 32px 40px;
-            }
             kwc-particle-burst {
                 display: inline;
                 z-index: 10;
@@ -230,7 +230,6 @@ To display details specific to a kano code share.
             }
             .actions {
                 @apply --layout-justified;
-                margin-bottom: 36px;
             }
             .action {
                 @apply --layout-flex-auto;
@@ -359,8 +358,57 @@ To display details specific to a kano code share.
             :host([tombstone]) .social {
                 opacity: 0.3;
             }
+            @media all and (max-width: 780px) {
+                .share-detail {
+                    @apply --layout-vertical;
+                    padding: 16px 16px;
+                }
+                .supplementary-details {
+                    @apply --layout-vertical;
+                    padding: 36px 0 0 0;
+                }
+                .actions {
+                    margin: 0 0 36px 0;
+                }
+            }
+            @media all and (min-width: 581px) and (max-width: 780px) {
+                .supplementary-details {
+                    @apply --layout-horizontal;
+                }
+                .actions,
+                .social {
+                    @apply --layout-flex-auto;
+                }
+                .social {
+                    padding: 0 0 0 36px;
+                }
+            }
+            @media all and (min-width: 781px) {
+                #share-container {
+                    padding: 0 60px;
+                }
+                .share-detail {
+                    @apply --layout-horizontal;
+                }
+                .main-details {
+                    @apply --layout-flex-8;
+                    padding: 32px 40px 32px 8px;
+                }
+                .supplementary-details {
+                    @apply --layout-flex-4;
+                    border-left: 1px solid var(--color-porcelain);
+                    color: var(--color-grey);
+                    padding: 32px 40px;
+                }
+                .actions {
+                    margin: 0 0 36px 0;
+                }
+            }
         </style>
         <div id="share" class="share">
+            <div class="content-prefix">
+                <slot name="content::before"></slot>
+            </div>
             <div class="share-content">
                 <div class="loading">
                     <div class="overlay">
@@ -382,9 +430,12 @@ To display details specific to a kano code share.
                                           display-code="{{displayCode}}">
                         </kwc-share-player>
                         <slot name="player::after"></slot>
-                        <slot name="share-hardware"></slot>
                     </div>
                 </div>
+                <slot name="share-hardware"></slot>
+            </div>
+            <div class="content-suffix">
+                <slot name="content::after"></slot>
             </div>
             <div class="share-detail">
                 <div class="main-details">
@@ -507,24 +558,26 @@ To display details specific to a kano code share.
                             </div>
                         </div>
                     </template>
-                    <div class="social-actions-header">Share</div>
-                    <ul class="social-actions">
-                        <li class="social-action">
-                            <button class="social-button facebook" on-tap="_onFacebookTapped">
-                                <iron-icon class="action-icon" icon="kwc-social-icons:facebook"></iron-icon>
-                            </button>
-                        </li>
-                        <li class="social-action">
-                            <button class="social-button twitter" on-tap="_onTwitterTapped">
-                                <iron-icon class="action-icon" icon="kwc-social-icons:twitter"></iron-icon>
-                            </button>
-                        </li>
-                        <li class="social-action">
-                            <button class="social-button email" on-tap="_onEmailTapped">
-                                <iron-icon class="action-icon" icon="kwc-social-icons:share"></iron-icon>
-                            </button>
-                        </li>
-                    </ul>
+                    <div class="social">
+                        <div class="social-actions-header">Share</div>
+                        <ul class="social-actions">
+                            <li class="social-action">
+                                <button class="social-button facebook" on-tap="_onFacebookTapped">
+                                    <iron-icon class="action-icon" icon="kwc-social-icons:facebook"></iron-icon>
+                                </button>
+                            </li>
+                            <li class="social-action">
+                                <button class="social-button twitter" on-tap="_onTwitterTapped">
+                                    <iron-icon class="action-icon" icon="kwc-social-icons:twitter"></iron-icon>
+                                </button>
+                            </li>
+                            <li class="social-action">
+                                <button class="social-button email" on-tap="_onEmailTapped">
+                                    <iron-icon class="action-icon" icon="kwc-social-icons:share"></iron-icon>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
