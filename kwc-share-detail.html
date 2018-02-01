@@ -89,7 +89,7 @@ To display details specific to a kano code share.
                 @apply --layout-center;
                 @apply --layout-center-justified;
             }
-            .share-content .content .featured,
+            .share-content .content,
             kwc-share-player {
                 background-color: transparent;
                 height: 100%;
@@ -100,6 +100,12 @@ To display details specific to a kano code share.
             .share-content .content .featured {
                 padding: 0 8px;
                 z-index: 20;
+            }
+            .featured {
+                background-color: transparent;
+                height: 125px;
+                width: 125px;
+                margin: 0;
             }
             kwc-share-player{
                 --kwc-share-player-height: 480px;
@@ -121,7 +127,7 @@ To display details specific to a kano code share.
             }
             .featured-icon {
                 height: 44px;
-                margin-top: 7%;
+                margin-top: 40%;
                 width: 44px;
             }
             .share-detail {
