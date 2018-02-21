@@ -503,10 +503,11 @@ To display details specific to a kano code share.
                         <slot name='actions::before'></slot>
                         <template is="dom-if" if="[[!_sharedByUser]]">
                             <div class="action">
-                                <kwc-particle-burst number-particles="40"
+                                <!-- TEMPORARILY REMOVED ANIMATION -->
+                                <!-- <kwc-particle-burst number-particles="40"
                                                     gravity="0.5"
                                                     particle-decay="0.04"
-                                                    max-particle-size="13">
+                                                    max-particle-size="13"> -->
                                     <kwc-mega-button icon-id="kwc-social-icons:like"
                                                      class$="[[_computeLikeClass(liked)]]"
                                                      on-tap="_onLikeTapped">
@@ -514,7 +515,7 @@ To display details specific to a kano code share.
                                         <paper-spinner-lite active="[[submitingLike]]">
                                         </paper-spinner-lite>
                                     </kwc-mega-button>
-                                </kwc-particle-burst>
+                                <!-- </kwc-particle-burst> -->
                             </div>
                         </template>
                         <slot name='actions::one'></slot>
