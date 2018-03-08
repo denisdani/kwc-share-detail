@@ -5,7 +5,6 @@
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../paper-spinner/paper-spinner-lite.html">
 
-<link rel="import" href="../kwc-animations/kwc-particle-burst.html">
 <link rel="import" href="../kwc-button/kwc-mega-button.html">
 <link rel="import" href="../kwc-share-player/kwc-share-player.html">
 <link rel="import" href="../kwc-social-comments/kwc-social-comments.html">
@@ -223,12 +222,6 @@ To display details specific to a kano code share.
                 width: 16px;
             }
             kw-social-comment {
-                width: 100%;
-            }
-            kwc-particle-burst {
-                display: inline;
-                z-index: 10;
-                position: relative;
                 width: 100%;
             }
             kwc-mega-button {
@@ -509,18 +502,13 @@ To display details specific to a kano code share.
                         <slot name='actions::before'></slot>
                         <template is="dom-if" if="[[!_sharedByUser]]">
                             <div class="action">
-                                <kwc-particle-burst number-particles="40"
-                                                    gravity="0.5"
-                                                    particle-decay="0.04"
-                                                    max-particle-size="13">
-                                    <kwc-mega-button icon-id="kwc-social-icons:like"
-                                                     class$="[[_computeLikeClass(liked)]]"
-                                                     on-tap="_onLikeTapped">
-                                        [[_computedLikeButtonText(liked)]]
-                                        <paper-spinner-lite active="[[submitingLike]]">
-                                        </paper-spinner-lite>
-                                    </kwc-mega-button>
-                                </kwc-particle-burst>
+                                <kwc-mega-button icon-id="kwc-social-icons:like"
+                                                 class$="[[_computeLikeClass(liked)]]"
+                                                 on-tap="_onLikeTapped">
+                                    [[_computedLikeButtonText(liked)]]
+                                    <paper-spinner-lite active="[[submitingLike]]">
+                                    </paper-spinner-lite>
+                                </kwc-mega-button>
                             </div>
                         </template>
                         <slot name='actions::one'></slot>
@@ -940,14 +928,6 @@ To display details specific to a kano code share.
                 _onLikeTapped () {
                     if (this._sharedByUser || this.submitingLike) {
                         return;
-                    }
-                    if (!this.liked) {
-                        let particleBursts = Polymer.dom(this.root)
-                                .querySelectorAll('kwc-particle-burst');
-                        particleBursts.forEach((burst) => {
-                            burst.triggerParticles();
-                            window.setTimeout(() => burst.triggerParticles(), 250);
-                        })
                     }
                     this.dispatchEvent(new CustomEvent('action-click', {
                         detail: {
