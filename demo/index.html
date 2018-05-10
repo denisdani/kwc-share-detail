@@ -63,9 +63,37 @@
                         detail.shareData = SHAREDATA;
                         detail.canRemix = true;
                         detail.comments = COMMENTS;
-                        detail.likes = SHAREDATA.likes;
-                        detail.currentUser = USER;
+                        detail.likes = [];
+                        detail.currentUser = ADMIN;
                         detail.featured = SHAREDATA.featured;
+                        detail.addEventListener('view-user', function(e){
+                            alert(`View user ${e.detail.id}`);
+                        });
+                        detail.addEventListener('action-click', function(e){
+                            alert(`Someone clicked on ${e.detail.action}`);
+                        });
+                        detail.addEventListener('social-share', function(e){
+                            alert(`Someone clicked on ${e.detail.action}`);
+                        });
+                    });
+                </script>
+            </template>
+        </demo-snippet>
+        <h3>kwc-share-detail demo viewed by author</h3>
+        <demo-snippet>
+            <template>
+                <kwc-share-detail id="share-detail-author">
+                </kwc-share-detail>
+                <script>
+                    document.addEventListener('WebComponentsReady', function () {
+                        const detail = document.querySelector('#share-detail-author');
+                        detail.shareData = SHAREDATA;
+                        detail.canRemix = true;
+                        detail.comments = COMMENTS;
+                        detail.likes = SHAREDATA.likes;
+                        detail.currentUser = AUTHOR;
+                        detail.featured = SHAREDATA.featured;
+                        detail.related = RELATED_SHARES;
                         detail.addEventListener('view-user', function(e){
                             alert(`View user ${e.detail.id}`);
                         });
@@ -122,10 +150,11 @@
         SHAREDATA = {
             "id": "595cf747bf1189649f1bdd57",
             "username": "jonas12345",
+            "userId": "5970adcc1ad1b72285933e25",
             "app": "kano-draw",
             "title": "x*x",
             "slug": "xx_10",
-            "likes": [],
+            "likes": [ {"user": "5970adcc1ad1b72285933ef5"} ],
             "description": "This share is like very very coolio, init. I like it because it is what it is a nothing more or less.",
             "date_created": "2017-07-05T14:27:19.257Z",
             "attachments": {
@@ -133,13 +162,55 @@
                 "attachment_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/attachments/595cf747bf1189649f1bdd57.draw"
             },
             "featured": true,
-            "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595cf747bf1189649f1bdd57.png"
+            "views_count": 123,
+            "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595cf747bf1189649f1bdd57.png",
+            "hardware": [
+                {
+                    "product": "motion-sensor"
+                },
+                {
+                    "product": "lightboard"
+                },
+                {
+                    "product": "speaker"
+                }
+            ]
         },
         USER = {
             "username": "nectarsoft",
             "id": "5970adcc1ad1b72285933ef5",
             "avatar": "https://s3.amazonaws.com/kano-avatars/default-avatar.svg"
-        }
+        },
+        ADMIN = {
+            "username": "admin",
+            "id": "5970adcc1ad1b72285933ef7",
+            "avatar": "https://s3.amazonaws.com/kano-avatars/default-avatar.svg",
+            "admin_level": 99
+        },
+        AUTHOR = {
+            "username": "jonas12345",
+            "id": "5970adcc1ad1b72285933e25",
+            "avatar": "https://s3.amazonaws.com/kano-avatars/default-avatar.svg"
+        },
+        RELATED_SHARES = [
+            {
+                "targetUrl": "https://world.kano.me/creations/sunny-day",
+                "imageUrl": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595cf747bf1189649f1bdd57.png",
+            },
+            {
+                "targetUrl": "https://world.kano.me/creations/sunny-day",
+                "imageUrl": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/5ac60900163a5764d4d252e1.gif"
+            },
+            {
+                "targetUrl": "https://world.kano.me/creations/sunny-day",
+                "imageUrl": "https://s3-us-west-1.amazonaws.com/assets.kano.me/community/make_music.jpg"
+            },
+            {
+                "targetUrl": "https://world.kano.me/creations/sunny-day",
+                "imageUrl": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595cf747bf1189649f1bdd57.png",
+                "spritesheetUrl": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/lightboard-spritesheets/592413756152f967284f1b23.png"
+            },
+        ];
     </script>
 </body>
 

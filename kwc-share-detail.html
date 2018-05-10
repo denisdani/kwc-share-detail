@@ -7,6 +7,10 @@
 
 <link rel="import" href="../kwc-button/kwc-mega-button.html">
 <link rel="import" href="../kwc-share-player/kwc-share-player.html">
+<link rel="import" href="../kwc-share-card/kwc-share-action.html">
+<link rel="import" href="../kwc-share-card/kwc-share-cover.html">
+<link rel="import" href="../kwc-drop-down/kwc-drop-down.html">
+<link rel="import" href="../kwc-drop-down/kwc-drop-down-item.html">
 <link rel="import" href="../kwc-social-comments/kwc-social-comments.html">
 <link rel="import" href="../kwc-style/kwc-style.html">
 <link rel="import" href="../kwc-icons/kwc-icons.html">
@@ -180,115 +184,72 @@ To display details specific to a kano code share.
                 font-size: 16px;
                 margin: 8px 0 0 0;
             }
-            .social-nav {
-                @apply --layout-horizontal;
-                border-bottom: 1px solid var(--color-porcelain);
-                color: var(--color-grey);
-                list-style: none;
-                margin: 0;
-                padding: 24px 0 24px 88px;
-            }
-            .social-nav .nav-item {
-                cursor: pointer;
-                font-weight: bold;
-                margin-right: 20px;
-                position: relative;
-            }
-            .social-nav .nav-icon {
-                margin-right: 8px;
-                width: 16px;
-            }
-            .nav-item.active {
-                color: black;
-            }
-            .nav-item.active .nav-icon {
-                color: var(--color-sky);
-            }
-            .nav-item.active::after {
-                background-color: white;
-                border-left: 1px solid var(--color-porcelain);
-                border-radius: 3px 0 0 0;
+            .social-section {
                 border-top: 1px solid var(--color-porcelain);
-                bottom: -32px;
-                content: "";
-                height: 16px;
-                left: 0;
-                margin: auto;
-                position: absolute;
-                right: 0;
-                transform: rotate(45deg);
-                width: 16px;
             }
             kw-social-comment {
                 width: 100%;
             }
-            kwc-mega-button {
-                width: 100%;
-            }
             .actions {
-                @apply --layout-justified;
-            }
-            .action {
-                @apply --layout-flex-auto;
                 @apply --layout-horizontal;
-                @apply --layout-center;
-                @apply --layout-center-justified;
-                box-sizing: border-box;
-                color: var(--color-abbey);
-                cursor: pointer;
-                font-size: 16px;
-                font-weight: bold;
-                margin-bottom: 16px;
-                position: relative;
-                text-align: center;
-                text-transform: uppercase;
-                transition: 0.3s ease;
+                @apply --layout-start-justified;
+                @apply --layout-wrap;
+                margin-top: 15px;
             }
-            .action > iron-icon {
-                color: var(--color-grey);
-                margin: -5px 8px 0 0;
-                transition: 0.3s ease;
-            }
-            .action.delete:hover,
-            .action.delete:hover > iron-icon {
-                color: var(--color-carnation);
-            }
-            .action-button.view-code {
-                --kwc-mega-button-color: var(--color-dodger-blue);
-            }
-            .action-button.like {
-                --kwc-mega-button-color: var(--color-carnation);
+            .actions kwc-share-action {
+                margin: 5px 0px;
+                margin-right: 10px;
                 position: relative;
             }
-            .like.liked {
-                --kwc-mega-button-color: rgba(255, 255, 255, 1);
-                --kwc-mega-button-bg-color: var(--color-carnation);
+            .actions kwc-share-action:last-child {
+                margin-right: 0px;
             }
-            paper-spinner-lite {
+            .actions kwc-share-action paper-spinner-lite {
+                height: 18px;
+                width: 18px;
+                position: absolute;
+                top: 9px;
                 display: block;
                 margin: auto;
-                color: black;
-                bottom: 39px;
             }
-            .action-button.feature.default {
-                --kwc-mega-button-color: var(--color-kano-orange);
+            kwc-share-action.like {
+                --kwc-share-action-wrapper-color: var(--color-carnation);
+                --kwc-share-action-wrapper-hover: var(--color-carnation);
+                --kwc-share-action-label-color: #fff;
+                --kwc-share-action-icon-color: #fff;
             }
-            .action-button.feature.featured {
-                --kwc-mega-button-color: white;
-                --kwc-mega-button-bg-color: var(--color-kano-orange);
+            kwc-share-action.remix {
+                --kwc-share-action-icon-color: var(--color-kano-orange);
             }
-            .meta-actions {
-                border-bottom: 1px solid var(--color-stone);
-                border-top: 1px solid var(--color-stone);
-                margin-bottom: 36px;
-                padding-top: 16px;
+            kwc-share-action.view-code {
+                --kwc-share-action-icon-color: var(--color-dodger-blue);
+            }
+            #more-actions-button {
+                --kwc-share-action-wrapper-color: #e5e8eC;
+            }
+            #more-actions-button .ellipsis {
+                width: 21px;
+                height: 21px;
+                overflow: hidden;
+            }
+            #more-actions-button .ellipsis iron-icon {
+                width: 30px;
+                height: 30px;
+                margin-top: -4px;
+                margin-left: -4px;
+            }
+            #more-actions-menu {
+                transform: translate(-64px, 10px);
+            }
+            #more-actions-menu kwc-drop-down-item {
+                min-width: 150px;
             }
             .social-actions {
                 @apply --layout-horizontal;
                 @apply --layout-start-justified;
                 list-style: none;
                 margin: 0;
-                padding: 10px 0 0 0;
+                padding: 0;
             }
             .social-action {
                 box-sizing: border-box;
@@ -319,9 +280,61 @@ To display details specific to a kano code share.
                 height: 16px;
                 width: 16px;
             }
-            .social-actions-header {
+            .sidebar-section-header {
                 font-weight: bold;
-                text-transform: uppercase;
+                margin-bottom: 10px
+            }
+            .parts-used-list {
+                @apply --layout-horizontal;
+                @apply --layout-start-justified;
+                @apply --layout-wrap;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+            .parts-used-list li {
+                margin: 3px;
+                padding: 5px 10px 5px 8px;
+                border-radius: 5px;
+                background-color: #f6f7f9;
+                color: var(--color-chateau);
+                @apply --layout-flex-none;
+                @apply --layout-horizontal;
+                @apply --layout-center-justified
+            }
+            .parts-used-list iron-icon {
+                color: var(--color-grey);
+                width: 24px;
+                height: 24px;
+                margin-right: 3px;
+            }
+            .parts-used-list .label {
+                line-height: 24px;
+            }
+            .social,
+            .related-shares,
+            .parts-used-list {
+                margin-bottom: 30px;
+            }
+            .stats {
+                margin: 10px 0px 25px 0px;
+                color: var(--color-grey);
+            }
+            .stats span {
+                margin-right: 15px;
+            }
+            .related-shares-list {
+                @apply --layout-horizontal;
+                @apply --layout-wrap;
+                margin-top: -5px;
+                margin-left: -5px;
+                margin-bottom: -5px;
+                min-width: 250px;
+            }
+            .related-shares-cover {
+                width: 114px;
+                max-height: 57px;
+                margin: 5px;
             }
             :host([tombstone]) .avatar,
             :host([tombstone]) .avatar-wrapper {
@@ -364,20 +377,20 @@ To display details specific to a kano code share.
                     @apply --layout-vertical;
                     padding: 36px 0 0 0;
                 }
-                .actions {
+                .supplementary-details .actions {
                     margin: 0 0 36px 0;
                 }
             }
             @media all and (min-width: 581px) and (max-width: 780px) {
                 .supplementary-details {
-                    @apply --layout-horizontal;
+                    padding: 0 0 0 36px;
                 }
                 .actions,
                 .social {
                     @apply --layout-flex-auto;
                 }
-                .social {
-                    padding: 0 0 0 36px;
+                .supplementary-details > * {
+                    margin-right: 18px;
                 }
             }
             @media all and (min-width: 781px) {
@@ -396,9 +409,6 @@ To display details specific to a kano code share.
                     border-left: 1px solid var(--color-porcelain);
                     color: var(--color-grey);
                     padding: 32px 40px;
-                }
-                .actions {
-                    margin: 0 0 36px 0;
                 }
             }
         </style>
@@ -456,19 +466,42 @@ To display details specific to a kano code share.
                                    </a>
                             </h4>
                             <p class="description">[[shareData.description]]</p>
+                            <div class="actions">
+                                <template is="dom-if" if="[[!_sharedByUser]]">
+                                    <kwc-share-action class="like" icon-id="kwc-ui-icons:like" on-tap="_onLikeTapped" active="[[liked]]">
+                                        [[_computedLikeButtonText(liked)]]
+                                        <paper-spinner-lite active="[[submitingLike]]">
+                                        </paper-spinner-lite>
+                                    </kwc-share-action>
+                                </template>
+                                <template is="dom-if" if="[[_showRemixButton(shareData, canRemix)]]">
+                                    <kwc-share-action class="remix" icon-id="kwc-social-icons:remix" on-tap="_onRemixTapped">Remix</kwc-share-action>
+                                </template>
+                                <template is="dom-if" if="[[_showCodeButton(shareData)]]">
+                                    <kwc-share-action class="view-code" icon-id="kwc-social-icons:code" on-tap="_toggleCodeView">View&nbsp;code</kwc-share-action>
+                                </template>
+                                <kwc-share-action id="more-actions-button" on-tap="_onMoreActionsTapped" hidden$="[[!_showMoreActions(shareData, currentUser.admin_level, _displayMetaActions)]]">
+                                    <div class="ellipsis">
+                                        <iron-icon icon="kwc-ui-icons:ellipsis"></iron-icon>
+                                    </div>
+                                    <kwc-drop-down id="more-actions-menu" caret-position="center">
+                                        <template is="dom-if" if="[[_showFeaturedButton(shareData, currentUser.admin_level)]]">
+                                            <kwc-drop-down-item icon="kwc-ui-icons:rosette" on-tap="_onFeatureTapped">Staff pick</kwc-drop-down-item>
+                                        </template>
+                                        <template is="dom-if" if="[[_displayMetaActions]]">
+                                            <kwc-drop-down-item icon="kwc-ui-icons:rubbish-bin" on-tap="_onDeleteTapped">Delete</kwc-drop-down-item>
+                                        </template>
+                                    </kwc-drop-down>
+                                </kwc-share-action>
+                            </div>
+                            <div class="stats">
+                                <span>[[likes.length]] Likes</span>
+                                <span>[[comments.count]] Comments</span>
+                                <span>[[shareData.views_count]] Views</span>
+                            </div>
                         </div>
                     </div>
                     <div class="social">
-                        <ul class="social-nav">
-                            <li class$="[[_computeNavItemClass(_section, 'comments')]]" on-click="_showComments">
-                                <iron-icon class="nav-icon" icon="kwc-social-icons:comment"></iron-icon>
-                                <span class="nav-label">[[comments.count]] Replies</span>
-                            </li>
-                            <li class$="[[_computeNavItemClass(_section, 'likes')]]">
-                                <iron-icon class="nav-icon" icon="kwc-social-icons:like"></iron-icon>
-                                <span class="nav-label">[[likes.length]] Likes</span>
-                            </li>
-                        </ul>
                         <!-- Set up with support for showing lists of
                                  likes and remixes in future, when the API support
                                  is available -->
@@ -496,62 +529,34 @@ To display details specific to a kano code share.
                     </div>
                 </div>
                 <div class="supplementary-details">
-                    <div class="actions">
-                        <slot name='actions::before'></slot>
-                        <template is="dom-if" if="[[!_sharedByUser]]">
-                            <div class="action">
-                                <kwc-mega-button icon-id="kwc-social-icons:like"
-                                                 class$="[[_computeLikeClass(liked)]]"
-                                                 on-tap="_onLikeTapped">
-                                    [[_computedLikeButtonText(liked)]]
-                                    <paper-spinner-lite active="[[submitingLike]]">
-                                    </paper-spinner-lite>
-                                </kwc-mega-button>
-                            </div>
-                        </template>
-                        <slot name='actions::one'></slot>
-                        <template is="dom-if" if="[[_showRemixButton(shareData, canRemix)]]">
-                            <div class="action">
-                                <kwc-mega-button icon-id="kwc-social-icons:code"
-                                            class="action-button remix"
-                                            on-tap="_onRemixTapped">
-                                    Remix
-                                </kwc-mega-button>
-                            </div>
-                        </template>
-                        <slot name='actions::two'></slot>
-                        <template is="dom-if" if="[[_showCodeButton(shareData)]]">
-                            <div class="action">
-                                <kwc-mega-button icon-id="kwc-social-icons:code"
-                                                 class="action-button view-code"
-                                                 on-tap="_toggleCodeView">
-                                    View Code
-                                </kwc-mega-button>
-                            </div>
-                        </template>
-                        <slot name='actions::three'></slot>
-                        <template is="dom-if"
-                                  if="[[_showFeaturedButton(shareData, currentUser.admin_level)]]">
-                            <div class="action">
-                                <kwc-mega-button icon-id="kwc-ui-icons:rosette"
-                                                 class$="[[_computeFeatureClass(shareData.featured)]]"
-                                                 on-tap="_onFeatureTapped">
-                                    Staff Pick
-                                </kwc-mega-button>
-                            <div>
-                        </template>
-                        <slot name='actions::after'></slot>
-                    </div>
-                    <template is="dom-if" if="[[_displayMetaActions]]">
-                        <div class="meta-actions">
-                            <div class="action delete" on-tap="_onDeleteTapped">
-                                <iron-icon icon="kwc-ui-icons:rubbish-bin"></iron-icon>
-                                <span>Delete Creation</span>
+                    <template is="dom-if" if="[[related]]">
+                        <div class="related-shares">
+                            <div class="sidebar-section-header">More from [[shareData.username]]</div>
+                            <div class="related-shares-list">
+                                <template is="dom-repeat" items="[[related]]">
+                                    <a href="[[item.targetUrl]]">
+                                        <kwc-share-cover
+                                            class="related-shares-cover"
+                                            image-url="[[item.imageUrl]]"
+                                            spritesheet-url="[[item.spritesheetUrl]]">
+                                        </kwc-share-cover>
+                                    </a>
+                                </template>
                             </div>
                         </div>
                     </template>
+                    <template is="dom-if" if="[[_anyHardwareUsed(shareData.hardware)]]">
+                        <div class="parts-used">
+                            <div class="sidebar-section-header">Parts Used</div>
+                            <ul class="parts-used-list">
+                                <template is="dom-repeat" items="[[shareData.hardware]]">
+                                    <li><iron-icon icon="kwc-part-icons:[[item.product]]"></iron-icon><div class="label">[[_getLabelForPartId(item.product)]]</div></li>
+                                </template>
+                            </ul>
+                        </div>
+                    </template>
                     <div class="social">
-                        <div class="social-actions-header">Share</div>
+                        <div class="sidebar-section-header">Share</div>
                         <ul class="social-actions">
                             <li class="social-action">
                                 <button class="social-button facebook" on-tap="_onFacebookTapped">
@@ -772,6 +777,36 @@ To display details specific to a kano code share.
                     _userIsAdmin: {
                         type: Boolean,
                         computed: '_computeUserIsAdmin(currentUser.admin_level)'
+                    },
+                    knownParts: {
+                        type: Object,
+                        value: () => {
+                            return {
+                                'motion-sensor': 'Motion sensor',
+                                'lightboard': 'Pixel kit',
+                                'speaker': 'Speaker',
+                                'gyro-accelerometer': 'Tilt sensor'
+                            };
+                        }
+                    },
+                    /** An array of related shares (four is the recommended number).
+                     *
+                     *  Expected format of each entry:
+                     *
+                     *  {
+                     *      targetUrl: String,
+                     *
+                     *      imageUrl: String,
+                     *      spritesheetUrl: String
+                     *  }
+                     *
+                     *  For entries with both imageUrl and spritesheetUrl,
+                     *  the later takes priority.
+                     *
+                     * @type {Array}
+                     */
+                    related: {
+                        type: Array
                     }
                 },
                 observers: [
@@ -834,7 +869,7 @@ To display details specific to a kano code share.
                     return `${baseClass} ${activeClass}`;
                 },
                 _computedLikeButtonText (liked) {
-                    return liked ? "liked" : "like";
+                    return liked ? "Liked" : "Like";
                 },
                 _computeNavItemClass(section, id) {
                     let baseClass = 'nav-item',
@@ -904,6 +939,9 @@ To display details specific to a kano code share.
                 _showFeaturedButton (share, isAdmin){
                     return share && isAdmin;
                 },
+                _showMoreActions (shareData, userAdminLevel, displayMetaActions) {
+                    return this._showFeaturedButton(shareData, userAdminLevel) || displayMetaActions;
+                },
                 _onDeleteTapped () {
                     this.dispatchEvent(new CustomEvent('action-click', {
                         detail: {
@@ -949,6 +987,10 @@ To display details specific to a kano code share.
                             shareType: item.app
                         }
                     }));
+                },
+                _onMoreActionsTapped (e) {
+                    this.$['more-actions-menu'].toggle();
+                    this.$['more-actions-button'].toggleActive();
                 },
                 _toggleCodeView() {
                     let newValue = !this.displayCode;
@@ -1012,8 +1054,17 @@ To display details specific to a kano code share.
                     this.dispatchEvent(new CustomEvent('view-user', {
                         detail: e.detail
                     }));
-                }
+                },
+                _getLabelForPartId (partId) {
+                    if (this.knownParts && this.knownParts[partId]) {
+                        return this.knownParts[partId];
+                    }
 
+                    return partId;
+                },
+                _anyHardwareUsed (hardware) {
+                    return hardware.length > 0;
+                }
             });
         })();
     </script>
