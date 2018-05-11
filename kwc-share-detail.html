@@ -292,15 +292,23 @@ To display details specific to a kano code share.
                 margin: 0;
                 padding: 0;
             }
-            .parts-used-list li {
+            .parts-used-list a {
                 margin: 3px;
                 padding: 5px 10px 5px 8px;
                 border-radius: 5px;
-                background-color: #f6f7f9;
                 color: var(--color-chateau);
+                background-color: #f6f7f9;
+                text-decoration: none;
                 @apply --layout-flex-none;
                 @apply --layout-horizontal;
-                @apply --layout-center-justified
+                @apply --layout-center-justified;
+            }
+            .parts-used-list a:hover {
+                background-color: #e5e8eC;
+            }
+            .parts-used-list a.inactive:hover {
+                background-color: #f6f7f9;
+                cursor: not-allowed;
             }
             .parts-used-list iron-icon {
                 color: var(--color-grey);
@@ -550,7 +558,13 @@ To display details specific to a kano code share.
                             <div class="sidebar-section-header">Parts Used</div>
                             <ul class="parts-used-list">
                                 <template is="dom-repeat" items="[[shareData.hardware]]">
-                                    <li><iron-icon icon="kwc-part-icons:[[item.product]]"></iron-icon><div class="label">[[_getLabelForPartId(item.product)]]</div></li>
+                                    <li>
+                                        <a href$="[[_getLinkForPartId(item.product)]]"
+                                           class$="[[_computePartsLinkClass(item.product)]]">
+                                            <iron-icon icon="kwc-part-icons:[[item.product]]"></iron-icon>
+                                            <div class="label">[[_getLabelForPartId(item.product)]]</div>
+                                        </a>
+                                    </li>
                                 </template>
                             </ul>
                         </div>
@@ -778,14 +792,29 @@ To display details specific to a kano code share.
                         type: Boolean,
                         computed: '_computeUserIsAdmin(currentUser.admin_level)'
                     },
+                    /**
+                     * A map of part ids to labels and links.
+                     *
+                     * @type {Object}
+                     */
                     knownParts: {
                         type: Object,
                         value: () => {
                             return {
-                                'motion-sensor': 'Motion sensor',
-                                'lightboard': 'Pixel kit',
-                                'speaker': 'Speaker',
-                                'gyro-accelerometer': 'Tilt sensor'
+                                'motion-sensor': {
+                                    label: 'Motion sensor',
+                                    link: 'https://kano.me/store/products/motion-sensor-kit'
+                                },
+                                'lightboard': {
+                                    label: 'Pixel kit',
+                                    link: 'https://kano.me/store/products/pixel-kit'
+                                },
+                                'speaker': {
+                                    label: 'Speaker'
+                                },
+                                'gyro-accelerometer': {
+                                    label: 'Tilt sensor'
+                                }
                             };
                         }
                     },
@@ -893,6 +922,11 @@ To display details specific to a kano code share.
                  */
                 _computeUserIsAdmin(adminLevel) {
                     return adminLevel && adminLevel > 0;
+                },
+                _computePartsLinkClass (product) {
+                    if (!this._getLinkForPartId(product)) {
+                        return 'inactive';
+                    }
                 },
                 _shareDataChanged(shareDataChangeObj) {
                     let shareData = shareDataChangeObj.base;
@@ -1057,13 +1091,33 @@ To display details specific to a kano code share.
                 },
                 _getLabelForPartId (partId) {
                     if (this.knownParts && this.knownParts[partId]) {
-                        return this.knownParts[partId];
+                        return this.knownParts[partId].label;
                     }
 
                     return partId;
                 },
+                _getLinkForPartId (partId) {
+                    if (this.knownParts &&
+                        this.knownParts[partId] &&
+                        this.knownParts[partId].link) {
+
+                        return this.knownParts[partId].link;
+                    }
+
+                    return null;
+                },
                 _anyHardwareUsed (hardware) {
                     return hardware.length > 0;
+                },
+                /** Fire an event upwards for tracking purposes */
+                _handleHardwareClick (e) {
+                    let linkElement = e.path.find(element => {
+                            return element.href !== undefined;
+                        }),
+                        link = linkElement.href;
+                    this.dispatchEvent(new CustomEvent('hardware-click', {
+                        detail: { link }
+                    }));
                 }
             });
         })();
