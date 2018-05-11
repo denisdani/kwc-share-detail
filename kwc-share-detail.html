@@ -127,9 +127,10 @@ To display details specific to a kano code share.
                 }
             }
             .featured-icon {
-                height: 44px;
-                margin-top: 40%;
-                width: 44px;
+                height: 34px;
+                width: 34px;
+                transform: translateY(5px);
+                margin-left: 6px;
             }
             .share-detail {
                 max-width: var(--content-width);
@@ -431,14 +432,6 @@ To display details specific to a kano code share.
                     </div>
                 </div>
                 <div class="content">
-                    <div class="featured" hidden$="[[!featured]]">
-                        <iron-image
-                            class="featured-icon"
-                            src$="[[_featuredIconUrl]]"
-                            sizing="contain"
-                            preload fade>
-                        </iron-image>
-                    </div>
                     <div id="share-container">
                         <slot name="player::before"></slot>
                         <kwc-share-player share="[[shareData]]"
@@ -467,6 +460,14 @@ To display details specific to a kano code share.
                             <h3 class="title">
                                 <slot name="title-icon"></slot>
                                 [[shareData.title]]
+                                <span class="featured" hidden$="[[!featured]]">
+                                    <iron-image
+                                        class="featured-icon"
+                                        src$="[[_featuredIconUrl]]"
+                                        sizing="contain"
+                                        preload fade>
+                                    </iron-image>
+                                </span>
                             </h3>
                             <h4 class="attribution">by
                                 <a class="author"
@@ -494,7 +495,7 @@ To display details specific to a kano code share.
                                     </div>
                                     <kwc-drop-down id="more-actions-menu" caret-position="center">
                                         <template is="dom-if" if="[[_showFeaturedButton(shareData, currentUser.admin_level)]]">
-                                            <kwc-drop-down-item icon="kwc-ui-icons:rosette" on-tap="_onFeatureTapped">Staff pick</kwc-drop-down-item>
+                                            <kwc-drop-down-item icon="kwc-ui-icons:rosette" on-tap="_onFeatureTapped">[[_computeFeatureButtonText(featured)]]</kwc-drop-down-item>
                                         </template>
                                         <template is="dom-if" if="[[_displayMetaActions]]">
                                             <kwc-drop-down-item icon="kwc-ui-icons:rubbish-bin" on-tap="_onDeleteTapped">Delete</kwc-drop-down-item>
@@ -503,9 +504,9 @@ To display details specific to a kano code share.
                                 </kwc-share-action>
                             </div>
                             <div class="stats">
-                                <span>[[likes.length]] Likes</span>
-                                <span>[[comments.count]] Comments</span>
-                                <span>[[shareData.views_count]] Views</span>
+                                <span hidden$="[[!likes.length]]">[[likes.length]] Likes</span>
+                                <span hidden$="[[!comments.count]]">[[comments.count]] Comments</span>
+                                <span hidden$="[[!shareData.views_count]]">[[shareData.views_count]] Views</span>
                             </div>
                         </div>
                     </div>
@@ -814,6 +815,9 @@ To display details specific to a kano code share.
                                 },
                                 'gyro-accelerometer': {
                                     label: 'Tilt sensor'
+                                },
+                                'microphone': {
+                                    label: 'Microphone'
                                 }
                             };
                         }
@@ -900,6 +904,26 @@ To display details specific to a kano code share.
                 _computedLikeButtonText (liked) {
                     return liked ? "Liked" : "Like";
                 },
+                _computeFeatureButtonText (featured) {
+                    return featured ? 'Un-staff pick' : 'Staff pick';
+                },
+                _getLabelForPartId (partId) {
+                    if (this.knownParts && this.knownParts[partId]) {
+                        return this.knownParts[partId].label;
+                    }
+
+                    return partId;
+                },
+                _getLinkForPartId (partId) {
+                    if (this.knownParts &&
+                        this.knownParts[partId] &&
+                        this.knownParts[partId].link) {
+
+                        return this.knownParts[partId].link;
+                    }
+
+                    return null;
+                },
                 _computeNavItemClass(section, id) {
                     let baseClass = 'nav-item',
                         activeClass = section === id ? 'active' : 'inactive';
@@ -975,6 +999,15 @@ To display details specific to a kano code share.
                 },
                 _showMoreActions (shareData, userAdminLevel, displayMetaActions) {
                     return this._showFeaturedButton(shareData, userAdminLevel) || displayMetaActions;
+                },
+                /**
+                 * Check if any hardware was used in the current creation.
+                 *
+                 * @param {Array} hardware As returned from the API.
+                 * @returns {Boolean} When more than one hardware flag is present.
+                 */
+                _anyHardwareUsed (hardware) {
+                    return hardware && hardware.length > 0;
                 },
                 _onDeleteTapped () {
                     this.dispatchEvent(new CustomEvent('action-click', {
@@ -1088,26 +1121,6 @@ To display details specific to a kano code share.
                     this.dispatchEvent(new CustomEvent('view-user', {
                         detail: e.detail
                     }));
-                },
-                _getLabelForPartId (partId) {
-                    if (this.knownParts && this.knownParts[partId]) {
-                        return this.knownParts[partId].label;
-                    }
-
-                    return partId;
-                },
-                _getLinkForPartId (partId) {
-                    if (this.knownParts &&
-                        this.knownParts[partId] &&
-                        this.knownParts[partId].link) {
-
-                        return this.knownParts[partId].link;
-                    }
-
-                    return null;
-                },
-                _anyHardwareUsed (hardware) {
-                    return hardware.length > 0;
                 },
                 /** Fire an event upwards for tracking purposes */
                 _handleHardwareClick (e) {
