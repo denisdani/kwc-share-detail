@@ -11,8 +11,8 @@
     "kwc-share-player": "git@github.com:KanoComponents/kwc-share-player",
     "kwc-social-comments": "git@github.com:KanoComponents/kwc-social-comments#v1.x",
     "kwc-style": "git@github.com:KanoComponents/kwc-style#v1.x",
-    "kwc-share-card": "git@github.com:KanoComponents/kwc-share-card#>=2.0.0",
-    "kwc-drop-down": "git@github.com:KanoComponents/kwc-drop-down#master",
+    "kwc-share-card": "git@github.com:KanoComponents/kwc-share-card#^2.0.0",
+    "kwc-drop-down": "git@github.com:KanoComponents/kwc-drop-down#^1.1.0",
     "paper-spinner": "^2.0.0"
   },
   "devDependencies": {
