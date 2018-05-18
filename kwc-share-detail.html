@@ -488,11 +488,11 @@ To display details specific to a kano code share.
                                 <template is="dom-if" if="[[_showCodeButton(shareData)]]">
                                     <kwc-share-action class="view-code" icon-id="kwc-social-icons:code" on-tap="_toggleCodeView">View&nbsp;code</kwc-share-action>
                                 </template>
-                                <kwc-share-action id="more-actions-button" on-tap="_onMoreActionsTapped" hidden$="[[!_showMoreActions(shareData, currentUser.admin_level, _displayMetaActions)]]">
+                                <kwc-share-action id="more-actions-button" on-tap="_onMoreActionsTapped" active="[[dropDownOpened]]" hidden$="[[!_showMoreActions(shareData, currentUser.admin_level, _displayMetaActions)]]">
                                     <div class="ellipsis">
                                         <iron-icon icon="kwc-ui-icons:ellipsis"></iron-icon>
                                     </div>
-                                    <kwc-drop-down id="more-actions-menu" caret-position="center">
+                                    <kwc-drop-down id="more-actions-menu" caret-position="center" opened="{{dropDownOpened}}">
                                         <template is="dom-if" if="[[_showFeaturedButton(shareData, currentUser.admin_level)]]">
                                             <kwc-drop-down-item icon="kwc-ui-icons:rosette" on-tap="_onFeatureTapped">[[_computeFeatureButtonText(featured)]]</kwc-drop-down-item>
                                         </template>
@@ -537,7 +537,7 @@ To display details specific to a kano code share.
                     </div>
                 </div>
                 <div class="supplementary-details">
-                    <template is="dom-if" if="[[related]]">
+                    <template is="dom-if" if="[[_showRelatedShares(related)]]">
                         <div class="related-shares">
                             <div class="sidebar-section-header">More from [[shareData.username]]</div>
                             <div class="related-shares-list">
@@ -999,6 +999,9 @@ To display details specific to a kano code share.
                 _showMoreActions (shareData, userAdminLevel, displayMetaActions) {
                     return this._showFeaturedButton(shareData, userAdminLevel) || displayMetaActions;
                 },
+                _showRelatedShares (related) {
+                    return related && related.length > 0;
+                },
                 /**
                  * Check if any hardware was used in the current creation.
                  *
@@ -1056,7 +1059,6 @@ To display details specific to a kano code share.
                 },
                 _onMoreActionsTapped (e) {
                     this.$['more-actions-menu'].toggle();
-                    this.$['more-actions-button'].toggleActive();
                 },
                 _toggleCodeView() {
                     let newValue = !this.displayCode;
