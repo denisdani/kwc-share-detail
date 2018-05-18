@@ -126,12 +126,6 @@ To display details specific to a kano code share.
                     max-height: calc(100% - 100px);
                 }
             }
-            .featured-icon {
-                height: 34px;
-                width: 34px;
-                transform: translateY(5px);
-                margin-left: 6px;
-            }
             .share-detail {
                 max-width: var(--content-width);
                 position: relative;
@@ -157,10 +151,24 @@ To display details specific to a kano code share.
                 overflow: hidden;
                 width: 48px;
             }
+            .detail {
+                width: 100%;
+            }
             .title {
                 font-size: 24px;
                 line-height: 28px;
                 margin: 0;
+                display: block;
+                @apply --layout-horizontal;
+            }
+            .title .text {
+                @apply --layout-flex-auto;
+            }
+            .title .featured-icon {
+                @apply --layout-end;
+                height: 28px;
+                width: 28px;
+                margin-left: 6px;
             }
             .title ::slotted(iron-icon) {
                 height: 28px;
@@ -242,6 +250,12 @@ To display details specific to a kano code share.
             }
             #more-actions-menu kwc-drop-down-item {
                 min-width: 150px;
+            }
+            kwc-drop-down-item.feature {
+                --kwc-drop-down-item-icon-hover-color: var(--color-kano-orange);
+            }
+            kwc-drop-down-item.delete {
+                --kwc-drop-down-item-icon-hover-color: var(--color-dodger-blue);
             }
             .social-actions {
                 @apply --layout-horizontal;
@@ -340,9 +354,14 @@ To display details specific to a kano code share.
                 min-width: 250px;
             }
             .related-shares-cover {
+                border: 1px solid var(--color-porcelain);
                 width: 114px;
-                max-height: 57px;
+                height: 82px;
                 margin: 5px;
+                --kwc-share-cover-spritesheet: {
+                    width: 160px;
+                    transform: translateX(-40px);
+                }
             }
             :host([tombstone]) .avatar,
             :host([tombstone]) .avatar-wrapper {
@@ -414,7 +433,6 @@ To display details specific to a kano code share.
                 }
                 .supplementary-details {
                     @apply --layout-flex-4;
-                    border-left: 1px solid var(--color-porcelain);
                     color: var(--color-grey);
                     padding: 32px 40px;
                 }
@@ -458,15 +476,15 @@ To display details specific to a kano code share.
                         <div class="detail">
                             <h3 class="title">
                                 <slot name="title-icon"></slot>
-                                [[shareData.title]]
-                                <span class="featured" hidden$="[[!featured]]">
-                                    <iron-image
-                                        class="featured-icon"
-                                        src$="[[_featuredIconUrl]]"
-                                        sizing="contain"
-                                        preload fade>
-                                    </iron-image>
-                                </span>
+                                <div class="text">[[shareData.title]]</div>
+                                <iron-image
+                                    class="featured-icon"
+                                    src$="[[_featuredIconUrl]]"
+                                    sizing="contain"
+                                    hidden$="[[!featured]]"
+                                    preload
+                                    fade>
+                                </iron-image>
                             </h3>
                             <h4 class="attribution">by
                                 <a class="author"
@@ -494,10 +512,10 @@ To display details specific to a kano code share.
                                     </div>
                                     <kwc-drop-down id="more-actions-menu" caret-position="center" opened="{{dropDownOpened}}">
                                         <template is="dom-if" if="[[_showFeaturedButton(shareData, currentUser.admin_level)]]">
-                                            <kwc-drop-down-item icon="kwc-ui-icons:rosette" on-tap="_onFeatureTapped">[[_computeFeatureButtonText(featured)]]</kwc-drop-down-item>
+                                            <kwc-drop-down-item class="feature" icon="kwc-ui-icons:rosette" on-tap="_onFeatureTapped">[[_computeFeatureButtonText(featured)]]</kwc-drop-down-item>
                                         </template>
                                         <template is="dom-if" if="[[_displayMetaActions]]">
-                                            <kwc-drop-down-item icon="kwc-ui-icons:rubbish-bin" on-tap="_onDeleteTapped">Delete</kwc-drop-down-item>
+                                            <kwc-drop-down-item class="delete" icon="kwc-ui-icons:rubbish-bin" on-tap="_onDeleteTapped">Delete</kwc-drop-down-item>
                                         </template>
                                     </kwc-drop-down>
                                 </kwc-share-action>
