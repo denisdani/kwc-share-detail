@@ -1076,6 +1076,11 @@ To display details specific to a kano code share.
                     }));
                 },
                 _onMoreActionsTapped (e) {
+                    /* The drop-down attaches a click event to window which may happen faster than
+                       this gets propagated and will close the modal immediately. Stopping propagation
+                       here prevents that. */
+                    e.stopPropagation();
+
                     this.$['more-actions-menu'].toggle();
                 },
                 _toggleCodeView() {
