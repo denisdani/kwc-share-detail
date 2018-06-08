@@ -31,4 +31,5 @@ modulizer --out . \
 --dependency-mapping kwc-follow-item,@kano/kwc-follow-item,3.0.0-beta.6 \
 --dependency-mapping kwc-notifications-icon,@kano/kwc-notifications-icon,3.0.0-beta.2 \
 --dependency-mapping kwc-auth,@kano/kwc-auth,3.0.0-beta.3 \
---dependency-mapping kwc-drop-down,@kano/kwc-drop-down,3.0.0-beta.2
+--dependency-mapping kwc-drop-down,@kano/kwc-drop-down,3.0.0-beta.2 \
+--dependency-mapping kwc-share-player,@kano/kwc-share-player,3.0.0-beta.1
