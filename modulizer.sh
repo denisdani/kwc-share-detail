@@ -1,0 +1,34 @@
+modulizer --out . \
+--npm-name @kano/kwc-share-detail \
+--npm-version 3.0.0-beta.1 \
+--import-style name \
+--dependency-mapping kano-shared-storage-client,kano-shared-storage-client,1.0.0 \
+--dependency-mapping web-components,@kano/web-components,3.0.0-beta.2 \
+--dependency-mapping polymer-sortablejs,@kano/polymer-sortablejs,3.0.0-beta.2 \
+--dependency-mapping x-carousel,@kano/x-carousel,3.0.0-beta.2 \
+--dependency-mapping kwc-color-picker,@kano/kwc-color-picker,3.0.0-beta.4 \
+--dependency-mapping kwc-color-wheel,@kano/kwc-color-wheel,3.0.0-beta.2 \
+--dependency-mapping flow-down,flow-down,1.0.2 \
+--dependency-mapping kwc-file-picker,@kano/kwc-file-picker,3.0.0-beta.2 \
+--dependency-mapping kwc-behaviours,@kano/kwc-behaviors,3.0.0-beta.4 \
+--dependency-mapping challenge-engine,challenge-engine,1.0.0 \
+--dependency-mapping kwc-icons,@kano/kwc-icons,3.0.0-beta.2 \
+--dependency-mapping kwc-style,@kano/kwc-style,3.0.0-beta.2 \
+--dependency-mapping socket.io-client,socket.io-client,1.4.8 \
+--dependency-mapping interact,interactjs,1.3.4 \
+--dependency-mapping js-beautify,js-beautify,1.7.5 \
+--dependency-mapping omggif,omggif,1.0.9 \
+--dependency-mapping kwc-paper-tooltip,@kano/kwc-paper-tooltip,3.0.0-beta.2 \
+--dependency-mapping kwc-button,@kano/kwc-button,3.0.0-beta.2 \
+--dependency-mapping kwc-badge,@kano/kwc-badge,3.0.0-beta.2 \
+--dependency-mapping kwc-badge-listing,@kano/kwc-badge-listing,3.0.0-beta.2 \
+--dependency-mapping kwc-password-settings,@kano/kwc-password-settings,3.0.0-beta.3 \
+--dependency-mapping kwc-animations,@kano/kwc-animations,3.0.0-beta.1 \
+--dependency-mapping kwc-social-comments,@kano/kwc-social-comments,3.0.0-beta.1 \
+--dependency-mapping kwc-lightboard-preview,@kano/kwc-lightboard-preview,3.0.0-beta.1 \
+--dependency-mapping kwc-share-card,@kano/kwc-share-card,3.0.0-beta.2 \
+--dependency-mapping kwc-user-about,@kano/kwc-user-about,3.0.0-beta.1 \
+--dependency-mapping kwc-follow-item,@kano/kwc-follow-item,3.0.0-beta.6 \
+--dependency-mapping kwc-notifications-icon,@kano/kwc-notifications-icon,3.0.0-beta.2 \
+--dependency-mapping kwc-auth,@kano/kwc-auth,3.0.0-beta.3 \
+--dependency-mapping kwc-drop-down,@kano/kwc-drop-down,3.0.0-beta.2
