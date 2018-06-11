@@ -887,9 +887,7 @@ To display details specific to a kano code share.
                     if (this.featuredIconUrl) {
                         return this.featuredIconUrl;
                     }
-                    return (KwcShareDetail && KwcShareDetail.assets)
-                        ? KwcShareDetail.assets.featured
-                        : ''; //Valid URI
+                    return KwcShareDetail.assets.featured || ''; //Valid URI
                 },
                 _computeFeatureClass (featured) {
                     let baseClass = 'action-button feature',

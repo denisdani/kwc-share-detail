@@ -1,6 +1,6 @@
 modulizer --out . \
 --npm-name @kano/kwc-share-detail \
---npm-version 3.0.0-beta.1 \
+--npm-version 3.0.0-beta.2 \
 --import-style name \
 --dependency-mapping kano-shared-storage-client,kano-shared-storage-client,1.0.0 \
 --dependency-mapping web-components,@kano/web-components,3.0.0-beta.2 \
