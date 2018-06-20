@@ -1,6 +1,6 @@
 modulizer --out . \
 --npm-name @kano/kwc-share-detail \
---npm-version 3.0.0-beta.4 \
+--npm-version 3.0.0-beta.5 \
 --import-style name \
 --dependency-mapping kano-shared-storage-client,kano-shared-storage-client,^1.0.0 \
 --dependency-mapping web-components,@kano/web-components,^3.0.0-beta.2 \
@@ -18,7 +18,7 @@ modulizer --out . \
 --dependency-mapping kwc-badge-listing,@kano/kwc-badge-listing,^3.0.0-beta.2 \
 --dependency-mapping kwc-password-settings,@kano/kwc-password-settings,^3.0.0-beta.4 \
 --dependency-mapping kwc-animations,@kano/kwc-animations,^3.0.0-beta.1 \
---dependency-mapping kwc-social-comments,@kano/kwc-social-comments,^3.0.0-beta.2 \
+--dependency-mapping kwc-social-comments,@kano/kwc-social-comments,^3.0.0-beta.3 \
 --dependency-mapping kwc-lightboard-preview,@kano/kwc-lightboard-preview,^3.0.0-beta.2 \
 --dependency-mapping kwc-share-card,@kano/kwc-share-card,^3.0.0-beta.2 \
 --dependency-mapping kwc-user-about,@kano/kwc-user-about,^3.0.0-beta.4 \
