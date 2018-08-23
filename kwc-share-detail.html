@@ -73,6 +73,9 @@ To display details specific to a kano code share.
                 opacity: 0;
             }
             #share-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
                 animation: fade-in 200ms linear;
                 z-index: 10;
             }
@@ -116,14 +119,14 @@ To display details specific to a kano code share.
             @media all and (max-width: 680px) {
                 .share-content .content .featured,
                 #share-container>* {
-                    max-height: calc(100% - 120px);
+                    max-height: calc(100% - 60px);
                     padding: 0 20px;
                 }
             }
             @media all and (min-width: 681px) {
                 .share-content .content .featured,
                 #share-container>* {
-                    max-height: calc(100% - 100px);
+                    max-height: calc(100% - 50px);
                 }
             }
             .share-detail {
