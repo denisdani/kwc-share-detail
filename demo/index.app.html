@@ -7,19 +7,30 @@
 
     <title>kwc-share-detail demo</title>
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
 
-    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
-    <link rel="import" href="../../kwc-button/kwc-button.html">
-    <link rel="import" href="../../kwc-animations/kwc-particle-burst.html">
-    <link rel="import" href="../../kwc-icons/kwc-icons.html">
-    <link rel="import" href="../kwc-share-detail.html">
-    <link rel="import" href="../../kwc-style/kwc-style.html">
+    <script type="module" src="../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+    <script type="module" src="../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
+    <script type="module" src="../../../@polymer/iron-flex-layout/iron-flex-layout.js"></script>
+    <script type="module" src="../../../@kano/kwc-button/kwc-button.js"></script>
+    <script type="module" src="../../../@kano/kwc-animations/kwc-particle-burst.js"></script>
+    <script type="module" src="../../../@kano/kwc-icons/kwc-icons.js"></script>
+    <script type="module" src="../kwc-share-detail.js"></script>
+    <script type="module" src="../../../@kano/kwc-style/kwc-style.js"></script>
 
 
-    <custom-style>
+    <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
         <style is="custom-style" include="demo-pages-shared-styles"></style>
         <style>
             .share-detail {
@@ -73,11 +84,17 @@
                 padding-left: 10px;
             }
         </style>
-    </custom-style>
+    </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
 </head>
 
 <body>
-    <div class="vertical-section-container share-detail centered">
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="vertical-section-container share-detail centered">
         <h3>Basic kwc-share-detail demo</h3>
         <demo-snippet>
             <template>
@@ -93,16 +110,16 @@
                         detail.currentUser = USER;
                         detail.featured = SHAREDATA.featured;
                         detail.addEventListener('view-user', function(e){
-                            alert(`View user ${e.detail.id}`);
+                            alert(\`View user \${e.detail.id}\`);
                         });
                         detail.addEventListener('action-click', function(e){
-                            alert(`Someone clicked on ${e.detail.action}`);
+                            alert(\`Someone clicked on \${e.detail.action}\`);
                         });
                         detail.addEventListener('social-share', function(e){
-                            alert(`Someone clicked on ${e.detail.action}`);
+                            alert(\`Someone clicked on \${e.detail.action}\`);
                         });
                     });
-                </script>
+                &lt;/script>
             </template>
         </demo-snippet>
         <h3>Hardware list demo</h3>
@@ -142,16 +159,16 @@
                         detail.currentUser = USER;
                         detail.featured = SHAREDATA.featured;
                         detail.addEventListener('view-user', function(e){
-                            alert(`View user ${e.detail.id}`);
+                            alert(\`View user \${e.detail.id}\`);
                         });
                         detail.addEventListener('action-click', function(e){
-                            alert(`Someone clicked on ${e.detail.action}`);
+                            alert(\`Someone clicked on \${e.detail.action}\`);
                         });
                         detail.addEventListener('social-share', function(e){
-                            alert(`Someone clicked on ${e.detail.action}`);
+                            alert(\`Someone clicked on \${e.detail.action}\`);
                         });
                     });
-                </script>
+                &lt;/script>
             </template>
         </demo-snippet>
         <h3>CAll To Action demo</h3>
@@ -160,9 +177,7 @@
                     <kwc-share-detail id="share-detail-cta">
                         <div slot="player::before" class="cta">
                             <div class="cta-text">Why learn code?</div>
-                            <kwc-button class="cta-button"
-                                        size="small"
-                                        on-tap="_handleCTATap">
+                            <kwc-button class="cta-button" size="small" on-tap="_handleCTATap">
                                 Start
                             </kwc-button>
                         </div>
@@ -191,124 +206,127 @@
                         detail.currentUser = USER;
                         detail.featured = SHAREDATA.featured;
                         detail.addEventListener('view-user', function(e){
-                            alert(`View user ${e.detail.id}`);
+                            alert(\`View user \${e.detail.id}\`);
                         });
                         detail.addEventListener('action-click', function(e){
-                            alert(`Someone clicked on ${e.detail.action}`);
+                            alert(\`Someone clicked on \${e.detail.action}\`);
                         });
                         detail.addEventListener('social-share', function(e){
-                            alert(`Someone clicked on ${e.detail.action}`);
+                            alert(\`Someone clicked on \${e.detail.action}\`);
                         });
                     });
-                </script>
+                &lt;/script>
             </template>
         </demo-snippet>
-    </div>
-    <script>
-        function _computeHardware (share) {
-            if (!share || !share.hardware || !share.hardware.length) {
-                return null;
+    </div>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>rt '../kwc-share-detail.js';
+import '@kano/kwc-style/kwc-style.js';
+function _computeHardware (share) {
+    if (!share || !share.hardware || !share.hardware.length) {
+        return null;
+    }
+    let labelMapping = {
+        'gyro-accelerometer': 'Tilt Sensor',
+        'lightboard': 'Pixel Kit',
+        'microphone': 'Microphone',
+        'motion-sensor': 'Motion Sensor',
+        'speaker': 'Speaker'
+    };
+    let linkMapping = {
+        'gyro-accelerometer': '#',
+        'lightboard': 'https://kano.me/store/row/products/pixel-kit',
+        'microphone': '#',
+        'motion-sensor': 'https://kano.me/store/row/products/motion-sensor-kit',
+        'speaker': '#'
+    };
+    return share.hardware.map(item => {
+            return {
+                label: labelMapping[item.product],
+                id: item.product,
+                link: linkMapping[item.product]
             }
-            let labelMapping = {
-                'gyro-accelerometer': 'Tilt Sensor',
-                'lightboard': 'Pixel Kit',
-                'microphone': 'Microphone',
-                'motion-sensor': 'Motion Sensor',
-                'speaker': 'Speaker'
-            };
-            let linkMapping = {
-                'gyro-accelerometer': '#',
-                'lightboard': 'https://kano.me/store/row/products/pixel-kit',
-                'microphone': '#',
-                'motion-sensor': 'https://kano.me/store/row/products/motion-sensor-kit',
-                'speaker': '#'
-            };
-            return share.hardware.map(item => {
-                    return {
-                        label: labelMapping[item.product],
-                        id: item.product,
-                        link: linkMapping[item.product]
-                    }
-            });
-        }
-        const COMMENTS = {
-            "entries": [{
-                "id": "597705341ad1b7228593511c",
-                "author": {
-                    "id": "59402bb7c511000a713e2d45",
-                    "username": "jonas12345",
-                    "joined": "2017-06-13T18:15:19.035Z"
-                },
-                "text": "This is a another really long comment, This is a another really long comment, This is a another really long comment, This is a another really long comment, This is a another really long comment, ",
-                "date_created": "2017-07-25T08:45:40.812Z",
-                "flags": []
-            }, {
-                "id": "597703d71ad1b72285935108",
-                "author": {
-                    "id": "59402bb7c511000a713e2d45",
-                    "username": "jonas12345",
-                    "admin_level": 0,
-                    "joined": "2017-06-13T18:15:19.035Z"
-                },
-                "text": "fun with comments",
-                "date_created": "2017-07-25T08:39:51.349Z",
-                "flags": []
-            }, {
-                "id": "597703d71ad1b72285935108",
-                "author": {
-                    "id": "59402bb7c511000a713e2d45",
-                    "username": "jonas12345",
-                    "admin_level": 0,
-                    "joined": "2017-06-13T18:15:19.035Z"
-                },
-                "text": "@codebadger omg stop! That's SUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUPER annoying!",
-                "date_created": "2017-07-25T08:39:51.349Z",
-                "flags": []
-            },{
-                "id": "597703a994e3ff22866cd79c",
-                "author": {
-                    "id": "59402bb7c511000a713e2d45",
-                    "username": "jonas12345",
-                    "admin_level": 0,
-                    "joined": "2017-06-13T18:15:19.035Z"
-                },
-                "text": "testing comments",
-                "date_created": "2017-07-25T08:39:05.119Z",
-                "flags": []
-            }],
-            "page": null,
-            "limit": 3,
-            "count": 3
+    });
+}
+const COMMENTS = {
+    "entries": [{
+        "id": "597705341ad1b7228593511c",
+        "author": {
+            "id": "59402bb7c511000a713e2d45",
+            "username": "jonas12345",
+            "joined": "2017-06-13T18:15:19.035Z"
         },
-        SHAREDATA = {
-            "id": "595a6c169f797577bd72bd70",
-            "app": "make-apps",
-            "attachments": {
-                "attachment_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/attachments/595a6c169f797577bd72bd70.html",
-                "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595a6c169f797577bd72bd70.png",
-                "lightboard_spritesheet_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/lightboard-spritesheets/595a6c169f797577bd72bd70.png",
-                "workspace_info_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/workspace-info/595a6c169f797577bd72bd70.json"
-            },
-            "slug": "mr-jump-man_1",
-            "hardware": [
-                {
-                    "product": "lightboard"
-                },
-                {
-                    "product": "motion-sensor"
-                }
-            ],
-            "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595a6c169f797577bd72bd70.png",
-            "attachment_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/attachments/595a6c169f797577bd72bd70.html",
-            "workspace_info_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/workspace-info/595a6c169f797577bd72bd70.json"
-        }
-        USER = {
-            "username": "nectarsoft",
-            "id": "5970adcc1ad1b72285933ef5",
-            "avatar": "https://s3.amazonaws.com/kano-avatars/default-avatar.svg"
+        "text": "This is a another really long comment, This is a another really long comment, This is a another really long comment, This is a another really long comment, This is a another really long comment, ",
+        "date_created": "2017-07-25T08:45:40.812Z",
+        "flags": []
+    }, {
+        "id": "597703d71ad1b72285935108",
+        "author": {
+            "id": "59402bb7c511000a713e2d45",
+            "username": "jonas12345",
+            "admin_level": 0,
+            "joined": "2017-06-13T18:15:19.035Z"
         },
-        HARDWARE = _computeHardware(SHAREDATA);
-    </script>
+        "text": "fun with comments",
+        "date_created": "2017-07-25T08:39:51.349Z",
+        "flags": []
+    }, {
+        "id": "597703d71ad1b72285935108",
+        "author": {
+            "id": "59402bb7c511000a713e2d45",
+            "username": "jonas12345",
+            "admin_level": 0,
+            "joined": "2017-06-13T18:15:19.035Z"
+        },
+        "text": "@codebadger omg stop! That's SUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUPER annoying!",
+        "date_created": "2017-07-25T08:39:51.349Z",
+        "flags": []
+    },{
+        "id": "597703a994e3ff22866cd79c",
+        "author": {
+            "id": "59402bb7c511000a713e2d45",
+            "username": "jonas12345",
+            "admin_level": 0,
+            "joined": "2017-06-13T18:15:19.035Z"
+        },
+        "text": "testing comments",
+        "date_created": "2017-07-25T08:39:05.119Z",
+        "flags": []
+    }],
+    "page": null,
+    "limit": 3,
+    "count": 3
+},
+SHAREDATA = {
+    "id": "595a6c169f797577bd72bd70",
+    "app": "make-apps",
+    "attachments": {
+        "attachment_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/attachments/595a6c169f797577bd72bd70.html",
+        "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595a6c169f797577bd72bd70.png",
+        "lightboard_spritesheet_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/lightboard-spritesheets/595a6c169f797577bd72bd70.png",
+        "workspace_info_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/workspace-info/595a6c169f797577bd72bd70.json"
+    },
+    "slug": "mr-jump-man_1",
+    "hardware": [
+        {
+            "product": "lightboard"
+        },
+        {
+            "product": "motion-sensor"
+        }
+    ],
+    "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/595a6c169f797577bd72bd70.png",
+    "attachment_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/attachments/595a6c169f797577bd72bd70.html",
+    "workspace_info_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/workspace-info/595a6c169f797577bd72bd70.json"
+}
+USER = {
+    "username": "nectarsoft",
+    "id": "5970adcc1ad1b72285933ef5",
+    "avatar": "https://s3.amazonaws.com/kano-avatars/default-avatar.svg"
+},
+HARDWARE = _computeHardware(SHAREDATA);
+</script>
 </body>
 
 </html>
