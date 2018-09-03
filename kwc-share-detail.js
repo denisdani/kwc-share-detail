@@ -44,7 +44,7 @@ Polymer({
                 background-color: white;
                 border-radius: 0 0 3px 3px;
                 display: block;
-                overflow: hidden;
+                overflow: auto;
                 font-family: var(--font-body);
                 @apply --kw-share-detail;
             }
