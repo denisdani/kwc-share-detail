@@ -528,7 +528,7 @@ Polymer({
                                  is available -->
                         <iron-pages id="social-sections" selected="[[_section]]" attr-for-selected="section-name" fallback-selection="comments">
                             <div section-name="comments" class="social-section">
-                                <kwc-social-comments id="comments" comments="[[comments.entries]]" default-avatar="[[_defaultCommentAvatarUrl]]" next-page="[[comments.page]]" item-id="[[shareData.id]]" tombstone\$="[[!shareData]]" user="[[currentUser]]" loader-status="[[commentLoaderStatus]]" on-delete-comment="_handleDeleteComment" on-load-comment="_handleLoadComment" on-post-comment="_handlePostComment" on-flag-comment="_handleFlagComment" on-view-user="_handleViewUser">
+                                <kwc-social-comments id="comments" comments="[[comments.entries]]" default-avatar="[[_defaultCommentAvatarUrl]]" next-page="[[comments.page]]" item-id="[[shareData.id]]" tombstone\$="[[!shareData]]" user="[[currentUser]]" loader-status="[[commentLoaderStatus]]" comment-flags="[[commentFlags]]" on-delete-comment="_handleDeleteComment" on-load-comment="_handleLoadComment" on-post-comment="_handlePostComment" on-flag-comment="_handleFlagComment" on-view-user="_handleViewUser">
                                                      </kwc-social-comments>
                             </div>
                         </iron-pages>
@@ -591,49 +591,49 @@ Polymer({
   is: 'kwc-share-detail',
 
   properties: {
-      /**
+    /**
        * The current share data to display.
        * @type {Object}
        */
-      shareData: {
-          type: Object
-      },
-      /**
+    shareData: {
+      type: Object
+    },
+    /**
        * Flag to indicate whether the code display div should be shown.
        * @type {Boolean}
        */
-      displayCode: {
-          type: Boolean,
-          value: false
-      },
-      /**
+    displayCode: {
+      type: Boolean,
+      value: false
+    },
+    /**
        * Flag to indicate whether the code can be remixed.
        * Used to decide whether to displat the REMIX button
        * @type {Boolean}
        */
-      canRemix: {
-          type: Boolean,
-          value: false
-      },
-      /**
+    canRemix: {
+      type: Boolean,
+      value: false
+    },
+    /**
        * Flag to indicate that the current share attachment is loaded.
        * @type {Boolean}
        */
-      loaded: {
-          type: Boolean,
-          value: false,
-          notify: true
-      },
-      /**
+    loaded: {
+      type: Boolean,
+      value: false,
+      notify: true
+    },
+    /**
        * Computed property that gives a url for the avatar to show for the
        * share author.
        * @type {String}
        */
-      _avatarUrl: {
-          type: String,
-          computed: '_computeAvatarUrl(shareData)'
-      },
-      /**
+    _avatarUrl: {
+      type: String,
+      computed: '_computeAvatarUrl(shareData)'
+    },
+    /**
        * A comments object. Expects a property called `entries` that is to
        * be passed to the `kwc-social-comments` component and a count property of the
        * number of comments ojects in the `entries` array.
@@ -657,162 +657,184 @@ Polymer({
        * ```
        * @type {Object}
        */
-      comments: {
-          type: Object,
-          value: () => {
-              return {};
-          }
-      },
-      /**
+    comments: {
+      type: Object,
+      value: () => {
+        return {};
+      }
+    },
+    /**
        * A computed flag (based on the comments.page property) to indicate
        * the social comments component whether there are more comments to load.
        * @type {Boolean}
        */
-      commentLoaderStatus: {
-          type: String,
-          computed: "_computeLoaderStatus(comments.*)"
-      },
-      /**
+    commentLoaderStatus: {
+      type: String,
+      computed: '_computeLoaderStatus(comments.*)'
+    },
+    /**
+       * Login in users flags on comments and shares.
+       * {
+       *    shares: [],
+       *    comments: [],
+       * }
+       * @type {Object}
+       */
+    flags: {
+      type: Object,
+      value: () => {
+        return {};
+      }
+    },
+    /**
+       * From flags, but checks if flags exist
+       * @type {Array}
+       */
+    commentFlags: {
+      type: Array,
+      computed: '_computeCommentFlags(flags.*)'
+    },
+    /**
        * A url to use as the default avatar for the comments component to use
        * when a comment author does not have one set.
        * @type {String}
        */
-      _defaultCommentAvatarUrl: {
-          type: String,
-          value: () => {
-              return assets.avatar;
-          }
-      },
-      /**
+    _defaultCommentAvatarUrl: {
+      type: String,
+      value: () => {
+        return assets.avatar;
+      }
+    },
+    /**
        * Convenience flag to indicate whether the controls for the
        * share – delete button etc – should be displayed
        * @type {Boolean}
        */
-      _displayMetaActions: {
-          type: Boolean,
-          computed: '_computeMetaActionDisplay(_sharedByUser, _userIsAdmin)'
-      },
-      /**
+    _displayMetaActions: {
+      type: Boolean,
+      computed: '_computeMetaActionDisplay(_sharedByUser, _userIsAdmin)'
+    },
+    /**
        * Flag whether the share is featured on not.
        * @type {Boolean}
        */
-      featured: {
-          type: Boolean,
-          value: false,
-          reflectToAtrribute: true
-      },
-      /**
+    featured: {
+      type: Boolean,
+      value: false,
+      reflectToAtrribute: true
+    },
+    /**
        * Allow the icon to display for a featured share to be set from
        * outside the component
        * @type {String}
        */
-      featuredIconUrl: {
-          type: String,
-          value: null
-      },
-      /**
+    featuredIconUrl: {
+      type: String,
+      value: null
+    },
+    /**
        * Use the `featuredIconUrl` or a default icon url.
        * @type {String}
        */
-      _featuredIconUrl: {
-          type: String,
-          computed: '_computeFeaturedIconUrl(featuredIconUrl)'
-      },
-      /**
+    _featuredIconUrl: {
+      type: String,
+      computed: '_computeFeaturedIconUrl(featuredIconUrl)'
+    },
+    /**
        * Currently authenticated user. An object with the user data
        * @type {Object}
        */
-      currentUser: {
-          type: Object,
-          value: () => {
-              return {};
-          }
-      },
-      /**
+    currentUser: {
+      type: Object,
+      value: () => {
+        return {};
+      }
+    },
+    /**
        * A selector for the subpage to show in the social nav. Currently only
        * one option, but set up to accept remix tab when implemented.
        * @type {String}
        */
-      _section: {
-          type: String,
-          value: "comments"
-      },
-      /**
+    _section: {
+      type: String,
+      value: 'comments'
+    },
+    /**
        * A list of like objects used to calculate the number of likes for the share
        * and whether the current user has liked this particular share.
        * @type {Array}
        */
-      likes: {
-          type: Array,
-          value: () => {
-              return [];
-          }
-      },
-      /**
+    likes: {
+      type: Array,
+      value: () => {
+        return [];
+      }
+    },
+    /**
        * Computed property that watches the liked list and returns true is
        * it contains a like with the current user id.
        * @type {Boolean}
        */
-      liked: {
-          type: Boolean,
-          computed: '_computeLiked(likes.*, currentUser)'
-      },
-      /**
+    liked: {
+      type: Boolean,
+      computed: '_computeLiked(likes.*, currentUser)'
+    },
+    /**
        * Property to indicate whether we are currently submiting a like request.
        * @type {Boolean}
        */
-      submitingLike: {
-          type: Boolean,
-          value: false
-      },
-      /**
+    submitingLike: {
+      type: Boolean,
+      value: false
+    },
+    /**
        * Flag to indicate if the current share is authored by the current authenticated
        * user. This can inform the UI what should be hidden or shown accordingly.
        * @type {Boolean}
        */
-      _sharedByUser: {
-          type: Boolean,
-          computed: '_computeSharedByUser(shareData, currentUser)'
-      },
-      /**
+    _sharedByUser: {
+      type: Boolean,
+      computed: '_computeSharedByUser(shareData, currentUser)'
+    },
+    /**
        * Convenience flag to indicate whether the current user
        * is an admin
        * @type {Boolean}
        */
-      _userIsAdmin: {
-          type: Boolean,
-          computed: '_computeUserIsAdmin(currentUser.admin_level)'
-      },
-      /**
+    _userIsAdmin: {
+      type: Boolean,
+      computed: '_computeUserIsAdmin(currentUser.admin_level)'
+    },
+    /**
        * A map of part ids to labels and links.
        *
        * @type {Object}
        */
-      knownParts: {
-          type: Object,
-          value: () => {
-              return {
-                  'motion-sensor': {
-                      label: 'Motion sensor',
-                      link: 'https://kano.me/store/products/motion-sensor-kit'
-                  },
-                  'lightboard': {
-                      label: 'Pixel kit',
-                      link: 'https://kano.me/store/products/pixel-kit'
-                  },
-                  'speaker': {
-                      label: 'Speaker'
-                  },
-                  'gyro-accelerometer': {
-                      label: 'Tilt sensor'
-                  },
-                  'microphone': {
-                      label: 'Microphone'
-                  }
-              };
+    knownParts: {
+      type: Object,
+      value: () => {
+        return {
+          'motion-sensor': {
+            label: 'Motion sensor',
+            link: 'https://kano.me/store/products/motion-sensor-kit'
+          },
+          'lightboard': {
+            label: 'Pixel kit',
+            link: 'https://kano.me/store/products/pixel-kit'
+          },
+          'speaker': {
+            label: 'Speaker'
+          },
+          'gyro-accelerometer': {
+            label: 'Tilt sensor'
+          },
+          'microphone': {
+            label: 'Microphone'
           }
-      },
-      /** An array of related shares (four is the recommended number).
+        };
+      }
+    },
+    /** An array of related shares (four is the recommended number).
        *
        *  Expected format of each entry:
        *
@@ -828,107 +850,114 @@ Polymer({
        *
        * @type {Array}
        */
-      related: {
-          type: Array
-      }
+    related: {
+      type: Array
+    }
   },
 
   observers: [
-      '_shareDataChanged(shareData.*)'
+    '_shareDataChanged(shareData.*)'
   ],
 
   /** Computed values*/
   _computeAvatarUrl(shareData) {
-      if (shareData) {
-          if (shareData.userAvatar) {
-              return shareData.userAvatar;
-          } else {
-              return assets.avatar;
-          }
+    if (shareData) {
+      if (shareData.userAvatar) {
+        return shareData.userAvatar;
       } else {
-          /** No share provided, don't set the avatar */
-          return ''; //Valid URI
+        return assets.avatar;
       }
+    } else {
+      /** No share provided, don't set the avatar */
+      return ''; //Valid URI
+    }
   },
 
   _computeLoaderStatus(commentChangeObj){
-      let comments = commentChangeObj.base;
-      if (comments){
-          return comments.page ? "on" : "off";
-      } else {
-          return "off";
-      }
+    const comments = commentChangeObj.base;
+    if (comments){
+      return comments.page ? 'on' : 'off';
+    } else {
+      return 'off';
+    }
+  },
+
+  _computeCommentFlags () {
+    if (!this.flags) {
+      return [];
+    }
+    return this.flags.comments;
   },
 
   _computeFeaturedIconUrl() {
-      if (this.featuredIconUrl) {
-          return this.featuredIconUrl;
-      }
-      return assets.featured || ''; //Valid URI
+    if (this.featuredIconUrl) {
+      return this.featuredIconUrl;
+    }
+    return assets.featured || ''; //Valid URI
   },
 
   _computeFeatureClass (featured) {
-      let baseClass = 'action-button feature',
-          activeClass = featured ? 'featured' : 'default';
-      return `${baseClass} ${activeClass}`;
+    const baseClass = 'action-button feature';
+    const activeClass = featured ? 'featured' : 'default';
+    return `${baseClass} ${activeClass}`;
   },
 
   _computeSharedByUser (shareData, currentUser) {
-      if (!shareData || !currentUser) {
-          return false;
-      }
-      return shareData.userId === currentUser.id;
+    if (!shareData || !currentUser) {
+      return false;
+    }
+    return shareData.userId === currentUser.id;
   },
 
   _computeLiked (likeChangeObj, currentUser) {
-      let likes = likeChangeObj.base;
-      if (likes && likes.length && currentUser) {
-          let liked = likes.some((like) => {
-              return like.user === currentUser.id;
-          });
-          return liked;
-      } else {
-          return false;
-      }
+    const likes = likeChangeObj.base;
+    if (likes && likes.length && currentUser) {
+      const liked = likes.some((like) => {
+        return like.user === currentUser.id;
+      });
+      return liked;
+    } else {
+      return false;
+    }
   },
 
   _computeLikeClass (liked) {
-      let baseClass = 'action-button like',
-          activeClass = liked ? 'liked' : 'not-liked';
-      return `${baseClass} ${activeClass}`;
+    const baseClass = 'action-button like';
+    const activeClass = liked ? 'liked' : 'not-liked';
+    return `${baseClass} ${activeClass}`;
   },
 
   _computedLikeButtonText (liked) {
-      return liked ? "Liked" : "Like";
+    return liked ? 'Liked' : 'Like';
   },
 
   _computeFeatureButtonText (featured) {
-      return featured ? 'Un-staff pick' : 'Staff pick';
+    return featured ? 'Un-staff pick' : 'Staff pick';
   },
 
   _getLabelForPartId (partId) {
-      if (this.knownParts && this.knownParts[partId]) {
-          return this.knownParts[partId].label;
-      }
+    if (this.knownParts && this.knownParts[partId]) {
+      return this.knownParts[partId].label;
+    }
 
-      return partId;
+    return partId;
   },
 
   _getLinkForPartId (partId) {
-      if (this.knownParts &&
+    if (this.knownParts &&
           this.knownParts[partId] &&
           this.knownParts[partId].link) {
 
-          return this.knownParts[partId].link;
-      }
+      return this.knownParts[partId].link;
+    }
 
-      return null;
+    return null;
   },
 
   _computeNavItemClass(section, id) {
-      let baseClass = 'nav-item',
-          activeClass = section === id ? 'active' : 'inactive';
-      return `${baseClass} ${activeClass}`;
+    const baseClass = 'nav-item';
+    const activeClass = section === id ? 'active' : 'inactive';
+    return `${baseClass} ${activeClass}`;
   },
 
   /**
@@ -939,7 +968,7 @@ Polymer({
    * @returns {Boolean}
    */
   _computeMetaActionDisplay(sharedByUser, userIsAdmin) {
-      return sharedByUser || userIsAdmin;
+    return sharedByUser || userIsAdmin;
   },
 
   /**
@@ -948,39 +977,39 @@ Polymer({
    * @returns {Boolean}
    */
   _computeUserIsAdmin(adminLevel) {
-      return adminLevel && adminLevel > 0;
+    return adminLevel && adminLevel > 0;
   },
 
   _computePartsLinkClass (product) {
-      if (!this._getLinkForPartId(product)) {
-          return 'inactive';
-      }
+    if (!this._getLinkForPartId(product)) {
+      return 'inactive';
+    }
   },
 
   _shareDataChanged(shareDataChangeObj) {
-      let shareData = shareDataChangeObj.base;
-      if (shareData && shareData.id){
-          return this.toggleClass('loaded', true);
-      }
+    const shareData = shareDataChangeObj.base;
+    if (shareData && shareData.id){
+      return this.toggleClass('loaded', true);
+    }
   },
 
   _showComments() {
-      this.set('_section', 'comments');
+    this.set('_section', 'comments');
   },
 
   _showLikes() {
-      this.set('_section', 'likes');
+    this.set('_section', 'likes');
   },
 
   _showCodeButton (shareData) {
-      let attachmentExt;
-      if (shareData && shareData.attachment_url) {
-          attachmentExt = shareData.attachment_url.split('.').pop();
-          if (['html', 'draw', 'lightcode'].indexOf(attachmentExt) !== -1) {
-              return true;
-          }
+    let attachmentExt;
+    if (shareData && shareData.attachment_url) {
+      attachmentExt = shareData.attachment_url.split('.').pop();
+      if (['html', 'draw', 'lightcode'].indexOf(attachmentExt) !== -1) {
+        return true;
       }
-      return false;
+    }
+    return false;
   },
 
   /**
@@ -990,11 +1019,11 @@ Polymer({
    * @return {Boolean}
    */
   _showRemixButton (share, canRemix) {
-      if (share && canRemix){
-          return true;
-      } else {
-          return false;
-      }
+    if (share && canRemix){
+      return true;
+    } else {
+      return false;
+    }
   },
 
   /**
@@ -1005,15 +1034,15 @@ Polymer({
    * @return {Boolean}
    */
   _showFeaturedButton (share, isAdmin){
-      return share && isAdmin;
+    return share && isAdmin;
   },
 
   _showMoreActions (shareData, userAdminLevel, displayMetaActions) {
-      return this._showFeaturedButton(shareData, userAdminLevel) || displayMetaActions;
+    return this._showFeaturedButton(shareData, userAdminLevel) || displayMetaActions;
   },
 
   _showRelatedShares (related) {
-      return related && related.length > 0;
+    return related && related.length > 0;
   },
 
   /**
@@ -1023,149 +1052,153 @@ Polymer({
    * @returns {Boolean} When more than one hardware flag is present.
    */
   _anyHardwareUsed (hardware) {
-      return hardware && hardware.length > 0;
+    return hardware && hardware.length > 0;
   },
 
   _onDeleteTapped () {
-      this.dispatchEvent(new CustomEvent('action-click', {
-          detail: {
-              action: 'delete',
-              id: this.shareData ? this.shareData.id : null,
-              slug: this.shareData ? this.shareData.slug : null
-          }
-      }));
+    this.dispatchEvent(new CustomEvent('action-click', {
+      detail: {
+        action: 'delete',
+        id: this.shareData ? this.shareData.id : null,
+        slug: this.shareData ? this.shareData.slug : null
+      }
+    }));
   },
 
   /** Event listeners */
   _onFeatureTapped () {
-      this.dispatchEvent(new CustomEvent('action-click', {
-          detail: {
-              action: 'feature',
-              feature: !this.shareData.featured,
-              id: this.shareData.id
-          }
-      }));
+    this.dispatchEvent(new CustomEvent('action-click', {
+      detail: {
+        action: 'feature',
+        feature: !this.shareData.featured,
+        id: this.shareData.id
+      }
+    }));
   },
 
   _onLikeTapped () {
-      if (this._sharedByUser || this.submitingLike) {
-          return;
+    if (this._sharedByUser || this.submitingLike) {
+      return;
+    }
+    this.dispatchEvent(new CustomEvent('action-click', {
+      detail: {
+        action: 'like',
+        liked: !this.liked,
+        shareId: this.shareData ? this.shareData.id : null,
+        shareUserId: this.shareData ? this.shareData.userId : null,
+        userId: this.currentUser ? this.currentUser.id : null
       }
-      this.dispatchEvent(new CustomEvent('action-click', {
-          detail: {
-              action: "like",
-              liked: !this.liked,
-              shareId: this.shareData ? this.shareData.id : null,
-              shareUserId: this.shareData ? this.shareData.userId : null,
-              userId: this.currentUser ? this.currentUser.id : null
-          }
-      }));
+    }));
   },
 
   _onRemixTapped () {
-      let item = this.shareData;
-      if (!item){return;}
+    const item = this.shareData;
+    if (!item) {
+      return;
+    }
 
-      this.dispatchEvent(new CustomEvent('action-click', {
-          detail:{
-              action: "remix",
-              shareId: item.id,
-              shareSlug: item.slug,
-              shareType: item.app
-          }
-      }));
+    this.dispatchEvent(new CustomEvent('action-click', {
+      detail: {
+        action: 'remix',
+        shareId: item.id,
+        shareSlug: item.slug,
+        shareType: item.app
+      }
+    }));
   },
 
   _onMoreActionsTapped (e) {
-      /* The drop-down attaches a click event to window which may happen faster than
-         this gets propagated and will close the modal immediately. Stopping propagation
+    /* The drop-down attaches a click event to window which may happen faster than
+         his gets propagated and will close the modal immediately. Stopping propagation
          here prevents that. */
-      e.stopPropagation();
+    e.stopPropagation();
 
-      this.$['more-actions-menu'].toggle();
+    this.$['more-actions-menu'].toggle();
   },
 
   _toggleCodeView() {
-      let newValue = !this.displayCode;
-      this.set('displayCode', newValue);
+    const newValue = !this.displayCode;
+    this.set('displayCode', newValue);
   },
 
   _onUserTapped() {
-      let share = this.shareData;
-      if (!share){return;}
-      this.dispatchEvent(new CustomEvent('view-user', {
-          detail: {
-              id: this.shareData.userId,
-              username: this.shareData.username
-          }
-      }));
+    const share = this.shareData;
+    if (!share){
+      return;
+    }
+    this.dispatchEvent(new CustomEvent('view-user', {
+      detail: {
+        id: this.shareData.userId,
+        username: this.shareData.username
+      }
+    }));
   },
 
   _onEmailTapped() {
-      this.dispatchEvent(new CustomEvent('social-share', {
-          detail: {
-              action: 'email',
-              share: this.shareData
-          }
-      }));
+    this.dispatchEvent(new CustomEvent('social-share', {
+      detail: {
+        action: 'email',
+        share: this.shareData
+      }
+    }));
   },
 
   _onFacebookTapped() {
-      this.dispatchEvent(new CustomEvent('social-share', {
-          detail: {
-              action: 'facebook',
-              share: this.shareData
-          }
-      }));
+    this.dispatchEvent(new CustomEvent('social-share', {
+      detail: {
+        action: 'facebook',
+        share: this.shareData
+      }
+    }));
   },
 
   _onTwitterTapped() {
-      this.dispatchEvent(new CustomEvent('social-share', {
-          detail: {
-              action: 'twitter',
-              share: this.shareData
-          }
-      }));
+    this.dispatchEvent(new CustomEvent('social-share', {
+      detail: {
+        action: 'twitter',
+        share: this.shareData
+      }
+    }));
   },
 
   _handleDeleteComment (e) {
-      this.dispatchEvent(new CustomEvent('delete-comment', {
-          detail: e.detail
-      }));
+    this.dispatchEvent(new CustomEvent('delete-comment', {
+      detail: e.detail
+    }));
   },
 
   _handlePostComment (e) {
-      this.dispatchEvent(new CustomEvent('post-comment', {
-          detail: e.detail
-      }));
+    this.dispatchEvent(new CustomEvent('post-comment', {
+      detail: e.detail
+    }));
   },
 
   _handleLoadComment (e) {
-      this.dispatchEvent(new CustomEvent('load-comment', {
-          detail: e.detail
-      }));
+    this.dispatchEvent(new CustomEvent('load-comment', {
+      detail: e.detail
+    }));
   },
 
   _handleFlagComment (e) {
-      this.dispatchEvent(new CustomEvent('flag-comment', {
-          detail: e.detail
-      }));
+    this.dispatchEvent(new CustomEvent('flag-comment', {
+      detail: e.detail
+    }));
   },
 
   _handleViewUser (e) {
-      this.dispatchEvent(new CustomEvent('view-user', {
-          detail: e.detail
-      }));
+    this.dispatchEvent(new CustomEvent('view-user', {
+      detail: e.detail
+    }));
   },
 
   /** Fire an event upwards for tracking purposes */
   _handleHardwareClick (e) {
-      let linkElement = e.path.find(element => {
-              return element.href !== undefined;
-          }),
-          link = linkElement.href;
-      this.dispatchEvent(new CustomEvent('hardware-click', {
-          detail: { link }
-      }));
+    const linkElement = e.path.find(element => {
+        return element.href !== undefined;
+      }),
+      link = linkElement.href;
+    this.dispatchEvent(new CustomEvent('hardware-click', {
+      detail: { link }
+    }));
   }
 });
