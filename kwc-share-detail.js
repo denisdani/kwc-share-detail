@@ -528,7 +528,7 @@ Polymer({
                                  is available -->
                         <iron-pages id="social-sections" selected="[[_section]]" attr-for-selected="section-name" fallback-selection="comments">
                             <div section-name="comments" class="social-section">
-                                <kwc-social-comments id="comments" comments="[[comments.entries]]" default-avatar="[[_defaultCommentAvatarUrl]]" next-page="[[comments.page]]" item-id="[[shareData.id]]" tombstone\$="[[!shareData]]" user="[[currentUser]]" loader-status="[[commentLoaderStatus]]" comment-flags="[[commentFlags]]" on-delete-comment="_handleDeleteComment" on-load-comment="_handleLoadComment" on-post-comment="_handlePostComment" on-flag-comment="_handleFlagComment" on-view-user="_handleViewUser">
+                                <kwc-social-comments id="comments" comments="[[comments.entries]]" default-avatar="[[_defaultCommentAvatarUrl]]" next-page="[[comments.page]]" item-id="[[shareData.id]]" tombstone\$="[[!shareData]]" user="[[currentUser]]" loader-status="[[commentLoaderStatus]]" comment-flags="[[commentFlags]]" on-delete-comment="_handleDeleteComment" on-load-comment="_handleLoadComment" on-post-comment="_handlePostComment" on-flag-comment="_handleFlagComment" on-unflag-comment="_handleUnflagComment" on-view-user="_handleViewUser">
                                                      </kwc-social-comments>
                             </div>
                         </iron-pages>
@@ -1181,6 +1181,12 @@ Polymer({
 
   _handleFlagComment (e) {
     this.dispatchEvent(new CustomEvent('flag-comment', {
+      detail: e.detail
+    }));
+  },
+
+  _handleUnflagComment (e) {
+    this.dispatchEvent(new CustomEvent('unflag-comment', {
       detail: e.detail
     }));
   },
