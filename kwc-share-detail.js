@@ -30,7 +30,7 @@ import { assets } from './assets.js';
 import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 Polymer({
-  _template: html`
+    _template: html`
         <style>
             @keyframes fade-in {
                 from {
@@ -170,6 +170,7 @@ Polymer({
             }
             .title .text {
                 @apply --layout-flex-auto;
+                color: #333;
             }
             .title .featured-icon {
                 @apply --layout-end;
@@ -185,9 +186,9 @@ Polymer({
             .attribution {
                 font-weight: normal;
                 margin: 0;
+                color: #9FA4A8;
             }
             .author {
-                color: var(--color-carnation);
                 cursor: pointer;
                 font-weight: bold;
             }
@@ -433,15 +434,16 @@ Polymer({
                 }
                 .share-detail {
                     @apply --layout-horizontal;
+                    max-width: 888px;
                 }
                 .main-details {
                     @apply --layout-flex-8;
-                    padding: 32px 40px 32px 8px;
+                    padding: 32px 44px 32px 8px;
                 }
                 .supplementary-details {
                     @apply --layout-flex-4;
                     color: var(--color-grey);
-                    padding: 32px 40px;
+                    padding: 32px 40px 32px 44px;
                 }
             }
         </style>
@@ -489,17 +491,17 @@ Polymer({
                             <p class="description">[[shareData.description]]</p>
                             <div class="actions">
                                 <template is="dom-if" if="[[!_sharedByUser]]">
-                                    <kwc-share-action class="like" icon-id="kwc-ui-icons:like" on-tap="_onLikeTapped" active="[[liked]]">
+                                    <kwc-share-action class="like" icon="kwc-ui-icons:like" on-tap="_onLikeTapped" active="[[liked]]">
                                         [[_computedLikeButtonText(liked)]]
                                         <paper-spinner-lite active="[[submitingLike]]">
                                         </paper-spinner-lite>
                                     </kwc-share-action>
                                 </template>
                                 <template is="dom-if" if="[[_showRemixButton(shareData, canRemix)]]">
-                                    <kwc-share-action class="remix" icon-id="kwc-social-icons:remix" on-tap="_onRemixTapped">Remix</kwc-share-action>
+                                    <kwc-share-action class="remix" icon="kwc-social-icons:remix" on-tap="_onRemixTapped">Remix</kwc-share-action>
                                 </template>
                                 <template is="dom-if" if="[[_showCodeButton(shareData)]]">
-                                    <kwc-share-action class="view-code" icon-id="kwc-social-icons:code" on-tap="_toggleCodeView">View&nbsp;code</kwc-share-action>
+                                    <kwc-share-action class="view-code" icon="kwc-social-icons:code" on-tap="_toggleCodeView">View&nbsp;code</kwc-share-action>
                                 </template>
                                 <kwc-share-action id="more-actions-button" on-tap="_onMoreActionsTapped" active="[[dropDownOpened]]" hidden\$="[[!_showMoreActions(shareData, currentUser.admin_level, _displayMetaActions)]]">
                                     <div class="ellipsis">
@@ -588,623 +590,623 @@ Polymer({
         </div>
 `,
 
-  is: 'kwc-share-detail',
+    is: 'kwc-share-detail',
 
-  properties: {
-    /**
-       * The current share data to display.
-       * @type {Object}
-       */
-    shareData: {
-      type: Object
+    properties: {
+        /**
+           * The current share data to display.
+           * @type {Object}
+           */
+        shareData: {
+            type: Object
+        },
+        /**
+           * Flag to indicate whether the code display div should be shown.
+           * @type {Boolean}
+           */
+        displayCode: {
+            type: Boolean,
+            value: false
+        },
+        /**
+           * Flag to indicate whether the code can be remixed.
+           * Used to decide whether to displat the REMIX button
+           * @type {Boolean}
+           */
+        canRemix: {
+            type: Boolean,
+            value: false
+        },
+        /**
+           * Flag to indicate that the current share attachment is loaded.
+           * @type {Boolean}
+           */
+        loaded: {
+            type: Boolean,
+            value: false,
+            notify: true
+        },
+        /**
+           * Computed property that gives a url for the avatar to show for the
+           * share author.
+           * @type {String}
+           */
+        _avatarUrl: {
+            type: String,
+            computed: '_computeAvatarUrl(shareData)'
+        },
+        /**
+           * A comments object. Expects a property called `entries` that is to
+           * be passed to the `kwc-social-comments` component and a count property of the
+           * number of comments ojects in the `entries` array.
+           * ```js
+           * {
+           *     "type": "object",
+           *     "properties": {
+           *         "entries": {
+           *             "type": "object",
+           *             "properties": // See https://components.kano.me/#/elements/kwc-social-comments
+           *         },
+           *         "count": {
+           *             "type": "number"
+           *         },
+           *         "page": {
+           *             "type": "number"
+           *         }
+           *     },
+           *     "required" : ["entries", "count"]
+           * }
+           * ```
+           * @type {Object}
+           */
+        comments: {
+            type: Object,
+            value: () => {
+                return {};
+            }
+        },
+        /**
+           * A computed flag (based on the comments.page property) to indicate
+           * the social comments component whether there are more comments to load.
+           * @type {Boolean}
+           */
+        commentLoaderStatus: {
+            type: String,
+            computed: '_computeLoaderStatus(comments.*)'
+        },
+        /**
+           * Login in users flags on comments and shares.
+           * {
+           *    shares: [],
+           *    comments: [],
+           * }
+           * @type {Object}
+           */
+        flags: {
+            type: Object,
+            value: () => {
+                return {};
+            }
+        },
+        /**
+           * From flags, but checks if flags exist
+           * @type {Array}
+           */
+        commentFlags: {
+            type: Array,
+            computed: '_computeCommentFlags(flags.*)'
+        },
+        /**
+           * A url to use as the default avatar for the comments component to use
+           * when a comment author does not have one set.
+           * @type {String}
+           */
+        _defaultCommentAvatarUrl: {
+            type: String,
+            value: () => {
+                return assets.avatar;
+            }
+        },
+        /**
+           * Convenience flag to indicate whether the controls for the
+           * share – delete button etc – should be displayed
+           * @type {Boolean}
+           */
+        _displayMetaActions: {
+            type: Boolean,
+            computed: '_computeMetaActionDisplay(_sharedByUser, _userIsAdmin)'
+        },
+        /**
+           * Flag whether the share is featured on not.
+           * @type {Boolean}
+           */
+        featured: {
+            type: Boolean,
+            value: false,
+            reflectToAtrribute: true
+        },
+        /**
+           * Allow the icon to display for a featured share to be set from
+           * outside the component
+           * @type {String}
+           */
+        featuredIconUrl: {
+            type: String,
+            value: null
+        },
+        /**
+           * Use the `featuredIconUrl` or a default icon url.
+           * @type {String}
+           */
+        _featuredIconUrl: {
+            type: String,
+            computed: '_computeFeaturedIconUrl(featuredIconUrl)'
+        },
+        /**
+           * Currently authenticated user. An object with the user data
+           * @type {Object}
+           */
+        currentUser: {
+            type: Object,
+            value: () => {
+                return {};
+            }
+        },
+        /**
+           * A selector for the subpage to show in the social nav. Currently only
+           * one option, but set up to accept remix tab when implemented.
+           * @type {String}
+           */
+        _section: {
+            type: String,
+            value: 'comments'
+        },
+        /**
+           * A list of like objects used to calculate the number of likes for the share
+           * and whether the current user has liked this particular share.
+           * @type {Array}
+           */
+        likes: {
+            type: Array,
+            value: () => {
+                return [];
+            }
+        },
+        /**
+           * Computed property that watches the liked list and returns true is
+           * it contains a like with the current user id.
+           * @type {Boolean}
+           */
+        liked: {
+            type: Boolean,
+            computed: '_computeLiked(likes.*, currentUser)'
+        },
+        /**
+           * Property to indicate whether we are currently submiting a like request.
+           * @type {Boolean}
+           */
+        submitingLike: {
+            type: Boolean,
+            value: false
+        },
+        /**
+           * Flag to indicate if the current share is authored by the current authenticated
+           * user. This can inform the UI what should be hidden or shown accordingly.
+           * @type {Boolean}
+           */
+        _sharedByUser: {
+            type: Boolean,
+            computed: '_computeSharedByUser(shareData, currentUser)'
+        },
+        /**
+           * Convenience flag to indicate whether the current user
+           * is an admin
+           * @type {Boolean}
+           */
+        _userIsAdmin: {
+            type: Boolean,
+            computed: '_computeUserIsAdmin(currentUser.admin_level)'
+        },
+        /**
+           * A map of part ids to labels and links.
+           *
+           * @type {Object}
+           */
+        knownParts: {
+            type: Object,
+            value: () => {
+                return {
+                    'motion-sensor': {
+                        label: 'Motion sensor',
+                        link: 'https://kano.me/store/products/motion-sensor-kit'
+                    },
+                    'lightboard': {
+                        label: 'Pixel kit',
+                        link: 'https://kano.me/store/products/pixel-kit'
+                    },
+                    'speaker': {
+                        label: 'Speaker'
+                    },
+                    'gyro-accelerometer': {
+                        label: 'Tilt sensor'
+                    },
+                    'microphone': {
+                        label: 'Microphone'
+                    }
+                };
+            }
+        },
+        /** An array of related shares (four is the recommended number).
+           *
+           *  Expected format of each entry:
+           *
+           *  {
+           *      targetUrl: String,
+           *
+           *      imageUrl: String,
+           *      spritesheetUrl: String
+           *  }
+           *
+           *  For entries with both imageUrl and spritesheetUrl,
+           *  the later takes priority.
+           *
+           * @type {Array}
+           */
+        related: {
+            type: Array
+        }
     },
-    /**
-       * Flag to indicate whether the code display div should be shown.
-       * @type {Boolean}
-       */
-    displayCode: {
-      type: Boolean,
-      value: false
+
+    observers: [
+        '_shareDataChanged(shareData.*)'
+    ],
+
+    /** Computed values*/
+    _computeAvatarUrl(shareData) {
+        if (shareData) {
+            if (shareData.userAvatar) {
+                return shareData.userAvatar;
+            } else {
+                return assets.avatar;
+            }
+        } else {
+            /** No share provided, don't set the avatar */
+            return ''; //Valid URI
+        }
     },
-    /**
-       * Flag to indicate whether the code can be remixed.
-       * Used to decide whether to displat the REMIX button
-       * @type {Boolean}
-       */
-    canRemix: {
-      type: Boolean,
-      value: false
+
+    _computeLoaderStatus(commentChangeObj) {
+        const comments = commentChangeObj.base;
+        if (comments) {
+            return comments.page ? 'on' : 'off';
+        } else {
+            return 'off';
+        }
     },
-    /**
-       * Flag to indicate that the current share attachment is loaded.
-       * @type {Boolean}
-       */
-    loaded: {
-      type: Boolean,
-      value: false,
-      notify: true
+
+    _computeCommentFlags() {
+        if (!this.flags) {
+            return [];
+        }
+        return this.flags.comments;
     },
-    /**
-       * Computed property that gives a url for the avatar to show for the
-       * share author.
-       * @type {String}
-       */
-    _avatarUrl: {
-      type: String,
-      computed: '_computeAvatarUrl(shareData)'
+
+    _computeFeaturedIconUrl() {
+        if (this.featuredIconUrl) {
+            return this.featuredIconUrl;
+        }
+        return assets.featured || ''; //Valid URI
     },
-    /**
-       * A comments object. Expects a property called `entries` that is to
-       * be passed to the `kwc-social-comments` component and a count property of the
-       * number of comments ojects in the `entries` array.
-       * ```js
-       * {
-       *     "type": "object",
-       *     "properties": {
-       *         "entries": {
-       *             "type": "object",
-       *             "properties": // See https://components.kano.me/#/elements/kwc-social-comments
-       *         },
-       *         "count": {
-       *             "type": "number"
-       *         },
-       *         "page": {
-       *             "type": "number"
-       *         }
-       *     },
-       *     "required" : ["entries", "count"]
-       * }
-       * ```
-       * @type {Object}
-       */
-    comments: {
-      type: Object,
-      value: () => {
-        return {};
-      }
+
+    _computeFeatureClass(featured) {
+        const baseClass = 'action-button feature';
+        const activeClass = featured ? 'featured' : 'default';
+        return `${baseClass} ${activeClass}`;
     },
-    /**
-       * A computed flag (based on the comments.page property) to indicate
-       * the social comments component whether there are more comments to load.
-       * @type {Boolean}
-       */
-    commentLoaderStatus: {
-      type: String,
-      computed: '_computeLoaderStatus(comments.*)'
+
+    _computeSharedByUser(shareData, currentUser) {
+        if (!shareData || !currentUser) {
+            return false;
+        }
+        return shareData.userId === currentUser.id;
     },
-    /**
-       * Login in users flags on comments and shares.
-       * {
-       *    shares: [],
-       *    comments: [],
-       * }
-       * @type {Object}
-       */
-    flags: {
-      type: Object,
-      value: () => {
-        return {};
-      }
+
+    _computeLiked(likeChangeObj, currentUser) {
+        const likes = likeChangeObj.base;
+        if (likes && likes.length && currentUser) {
+            const liked = likes.some((like) => {
+                return like.user === currentUser.id;
+            });
+            return liked;
+        } else {
+            return false;
+        }
     },
-    /**
-       * From flags, but checks if flags exist
-       * @type {Array}
-       */
-    commentFlags: {
-      type: Array,
-      computed: '_computeCommentFlags(flags.*)'
+
+    _computeLikeClass(liked) {
+        const baseClass = 'action-button like';
+        const activeClass = liked ? 'liked' : 'not-liked';
+        return `${baseClass} ${activeClass}`;
     },
-    /**
-       * A url to use as the default avatar for the comments component to use
-       * when a comment author does not have one set.
-       * @type {String}
-       */
-    _defaultCommentAvatarUrl: {
-      type: String,
-      value: () => {
-        return assets.avatar;
-      }
+
+    _computedLikeButtonText(liked) {
+        return liked ? 'Liked' : 'Like';
     },
-    /**
-       * Convenience flag to indicate whether the controls for the
-       * share – delete button etc – should be displayed
-       * @type {Boolean}
-       */
-    _displayMetaActions: {
-      type: Boolean,
-      computed: '_computeMetaActionDisplay(_sharedByUser, _userIsAdmin)'
+
+    _computeFeatureButtonText(featured) {
+        return featured ? 'Un-staff pick' : 'Staff pick';
     },
-    /**
-       * Flag whether the share is featured on not.
-       * @type {Boolean}
-       */
-    featured: {
-      type: Boolean,
-      value: false,
-      reflectToAtrribute: true
+
+    _getLabelForPartId(partId) {
+        if (this.knownParts && this.knownParts[partId]) {
+            return this.knownParts[partId].label;
+        }
+
+        return partId;
     },
-    /**
-       * Allow the icon to display for a featured share to be set from
-       * outside the component
-       * @type {String}
-       */
-    featuredIconUrl: {
-      type: String,
-      value: null
+
+    _getLinkForPartId(partId) {
+        if (this.knownParts &&
+            this.knownParts[partId] &&
+            this.knownParts[partId].link) {
+
+            return this.knownParts[partId].link;
+        }
+
+        return null;
     },
-    /**
-       * Use the `featuredIconUrl` or a default icon url.
-       * @type {String}
-       */
-    _featuredIconUrl: {
-      type: String,
-      computed: '_computeFeaturedIconUrl(featuredIconUrl)'
+
+    _computeNavItemClass(section, id) {
+        const baseClass = 'nav-item';
+        const activeClass = section === id ? 'active' : 'inactive';
+        return `${baseClass} ${activeClass}`;
     },
+
     /**
-       * Currently authenticated user. An object with the user data
-       * @type {Object}
-       */
-    currentUser: {
-      type: Object,
-      value: () => {
-        return {};
-      }
+     * Compute whether share controls – delete button etc – should
+     * display
+     * @param {Boolean} sharedByUser
+     * @param {Boolean} userIsAdmin
+     * @returns {Boolean}
+     */
+    _computeMetaActionDisplay(sharedByUser, userIsAdmin) {
+        return sharedByUser || userIsAdmin;
     },
+
     /**
-       * A selector for the subpage to show in the social nav. Currently only
-       * one option, but set up to accept remix tab when implemented.
-       * @type {String}
-       */
-    _section: {
-      type: String,
-      value: 'comments'
+     * Compute whether the current user is an adminstrator
+     * @param {Number} adminLevel
+     * @returns {Boolean}
+     */
+    _computeUserIsAdmin(adminLevel) {
+        return adminLevel && adminLevel > 0;
     },
+
+    _computePartsLinkClass(product) {
+        if (!this._getLinkForPartId(product)) {
+            return 'inactive';
+        }
+    },
+
+    _shareDataChanged(shareDataChangeObj) {
+        const shareData = shareDataChangeObj.base;
+        if (shareData && shareData.id) {
+            return this.toggleClass('loaded', true);
+        }
+    },
+
+    _showComments() {
+        this.set('_section', 'comments');
+    },
+
+    _showLikes() {
+        this.set('_section', 'likes');
+    },
+
+    _showCodeButton(shareData) {
+        let attachmentExt;
+        if (shareData && shareData.attachment_url) {
+            attachmentExt = shareData.attachment_url.split('.').pop();
+            if (['html', 'draw', 'lightcode'].indexOf(attachmentExt) !== -1) {
+                return true;
+            }
+        }
+        return false;
+    },
+
     /**
-       * A list of like objects used to calculate the number of likes for the share
-       * and whether the current user has liked this particular share.
-       * @type {Array}
-       */
-    likes: {
-      type: Array,
-      value: () => {
-        return [];
-      }
+     * Check whether this share can be remixed (or not)
+     * @param {Object} share Current share data
+     * @param {Boolean} canRemix Flag this share can be remixed
+     * @return {Boolean}
+     */
+    _showRemixButton(share, canRemix) {
+        if (share && canRemix) {
+            return true;
+        } else {
+            return false;
+        }
     },
+
     /**
-       * Computed property that watches the liked list and returns true is
-       * it contains a like with the current user id.
-       * @type {Boolean}
-       */
-    liked: {
-      type: Boolean,
-      computed: '_computeLiked(likes.*, currentUser)'
+     * Check whether the current user is admin. Used to hide or show the
+     * fetured button.
+     * @param {Object} share Current share data
+     * @param {Boolean} isAdmin Flag this user as admin
+     * @return {Boolean}
+     */
+    _showFeaturedButton(share, isAdmin) {
+        return share && isAdmin;
     },
+
+    _showMoreActions(shareData, userAdminLevel, displayMetaActions) {
+        return this._showFeaturedButton(shareData, userAdminLevel) || displayMetaActions;
+    },
+
+    _showRelatedShares(related) {
+        return related && related.length > 0;
+    },
+
     /**
-       * Property to indicate whether we are currently submiting a like request.
-       * @type {Boolean}
-       */
-    submitingLike: {
-      type: Boolean,
-      value: false
+     * Check if any hardware was used in the current creation.
+     *
+     * @param {Array} hardware As returned from the API.
+     * @returns {Boolean} When more than one hardware flag is present.
+     */
+    _anyHardwareUsed(hardware) {
+        return hardware && hardware.length > 0;
     },
-    /**
-       * Flag to indicate if the current share is authored by the current authenticated
-       * user. This can inform the UI what should be hidden or shown accordingly.
-       * @type {Boolean}
-       */
-    _sharedByUser: {
-      type: Boolean,
-      computed: '_computeSharedByUser(shareData, currentUser)'
+
+    _onDeleteTapped() {
+        this.dispatchEvent(new CustomEvent('action-click', {
+            detail: {
+                action: 'delete',
+                id: this.shareData ? this.shareData.id : null,
+                slug: this.shareData ? this.shareData.slug : null
+            }
+        }));
     },
-    /**
-       * Convenience flag to indicate whether the current user
-       * is an admin
-       * @type {Boolean}
-       */
-    _userIsAdmin: {
-      type: Boolean,
-      computed: '_computeUserIsAdmin(currentUser.admin_level)'
+
+    /** Event listeners */
+    _onFeatureTapped() {
+        this.dispatchEvent(new CustomEvent('action-click', {
+            detail: {
+                action: 'feature',
+                feature: !this.shareData.featured,
+                id: this.shareData.id
+            }
+        }));
     },
-    /**
-       * A map of part ids to labels and links.
-       *
-       * @type {Object}
-       */
-    knownParts: {
-      type: Object,
-      value: () => {
-        return {
-          'motion-sensor': {
-            label: 'Motion sensor',
-            link: 'https://kano.me/store/products/motion-sensor-kit'
-          },
-          'lightboard': {
-            label: 'Pixel kit',
-            link: 'https://kano.me/store/products/pixel-kit'
-          },
-          'speaker': {
-            label: 'Speaker'
-          },
-          'gyro-accelerometer': {
-            label: 'Tilt sensor'
-          },
-          'microphone': {
-            label: 'Microphone'
-          }
-        };
-      }
+
+    _onLikeTapped() {
+        if (this._sharedByUser || this.submitingLike) {
+            return;
+        }
+        this.dispatchEvent(new CustomEvent('action-click', {
+            detail: {
+                action: 'like',
+                liked: !this.liked,
+                shareId: this.shareData ? this.shareData.id : null,
+                shareUserId: this.shareData ? this.shareData.userId : null,
+                userId: this.currentUser ? this.currentUser.id : null
+            }
+        }));
     },
-    /** An array of related shares (four is the recommended number).
-       *
-       *  Expected format of each entry:
-       *
-       *  {
-       *      targetUrl: String,
-       *
-       *      imageUrl: String,
-       *      spritesheetUrl: String
-       *  }
-       *
-       *  For entries with both imageUrl and spritesheetUrl,
-       *  the later takes priority.
-       *
-       * @type {Array}
-       */
-    related: {
-      type: Array
+
+    _onRemixTapped() {
+        const item = this.shareData;
+        if (!item) {
+            return;
+        }
+
+        this.dispatchEvent(new CustomEvent('action-click', {
+            detail: {
+                action: 'remix',
+                shareId: item.id,
+                shareSlug: item.slug,
+                shareType: item.app
+            }
+        }));
+    },
+
+    _onMoreActionsTapped(e) {
+        /* The drop-down attaches a click event to window which may happen faster than
+             his gets propagated and will close the modal immediately. Stopping propagation
+             here prevents that. */
+        e.stopPropagation();
+
+        this.$['more-actions-menu'].toggle();
+    },
+
+    _toggleCodeView() {
+        const newValue = !this.displayCode;
+        this.set('displayCode', newValue);
+    },
+
+    _onUserTapped() {
+        const share = this.shareData;
+        if (!share) {
+            return;
+        }
+        this.dispatchEvent(new CustomEvent('view-user', {
+            detail: {
+                id: this.shareData.userId,
+                username: this.shareData.username
+            }
+        }));
+    },
+
+    _onEmailTapped() {
+        this.dispatchEvent(new CustomEvent('social-share', {
+            detail: {
+                action: 'email',
+                share: this.shareData
+            }
+        }));
+    },
+
+    _onFacebookTapped() {
+        this.dispatchEvent(new CustomEvent('social-share', {
+            detail: {
+                action: 'facebook',
+                share: this.shareData
+            }
+        }));
+    },
+
+    _onTwitterTapped() {
+        this.dispatchEvent(new CustomEvent('social-share', {
+            detail: {
+                action: 'twitter',
+                share: this.shareData
+            }
+        }));
+    },
+
+    _handleDeleteComment(e) {
+        this.dispatchEvent(new CustomEvent('delete-comment', {
+            detail: e.detail
+        }));
+    },
+
+    _handlePostComment(e) {
+        this.dispatchEvent(new CustomEvent('post-comment', {
+            detail: e.detail
+        }));
+    },
+
+    _handleLoadComment(e) {
+        this.dispatchEvent(new CustomEvent('load-comment', {
+            detail: e.detail
+        }));
+    },
+
+    _handleFlagComment(e) {
+        this.dispatchEvent(new CustomEvent('flag-comment', {
+            detail: e.detail
+        }));
+    },
+
+    _handleUnflagComment(e) {
+        this.dispatchEvent(new CustomEvent('unflag-comment', {
+            detail: e.detail
+        }));
+    },
+
+    _handleViewUser(e) {
+        this.dispatchEvent(new CustomEvent('view-user', {
+            detail: e.detail
+        }));
+    },
+
+    /** Fire an event upwards for tracking purposes */
+    _handleHardwareClick(e) {
+        const linkElement = e.path.find(element => {
+            return element.href !== undefined;
+        }),
+            link = linkElement.href;
+        this.dispatchEvent(new CustomEvent('hardware-click', {
+            detail: { link }
+        }));
     }
-  },
-
-  observers: [
-    '_shareDataChanged(shareData.*)'
-  ],
-
-  /** Computed values*/
-  _computeAvatarUrl(shareData) {
-    if (shareData) {
-      if (shareData.userAvatar) {
-        return shareData.userAvatar;
-      } else {
-        return assets.avatar;
-      }
-    } else {
-      /** No share provided, don't set the avatar */
-      return ''; //Valid URI
-    }
-  },
-
-  _computeLoaderStatus(commentChangeObj){
-    const comments = commentChangeObj.base;
-    if (comments){
-      return comments.page ? 'on' : 'off';
-    } else {
-      return 'off';
-    }
-  },
-
-  _computeCommentFlags () {
-    if (!this.flags) {
-      return [];
-    }
-    return this.flags.comments;
-  },
-
-  _computeFeaturedIconUrl() {
-    if (this.featuredIconUrl) {
-      return this.featuredIconUrl;
-    }
-    return assets.featured || ''; //Valid URI
-  },
-
-  _computeFeatureClass (featured) {
-    const baseClass = 'action-button feature';
-    const activeClass = featured ? 'featured' : 'default';
-    return `${baseClass} ${activeClass}`;
-  },
-
-  _computeSharedByUser (shareData, currentUser) {
-    if (!shareData || !currentUser) {
-      return false;
-    }
-    return shareData.userId === currentUser.id;
-  },
-
-  _computeLiked (likeChangeObj, currentUser) {
-    const likes = likeChangeObj.base;
-    if (likes && likes.length && currentUser) {
-      const liked = likes.some((like) => {
-        return like.user === currentUser.id;
-      });
-      return liked;
-    } else {
-      return false;
-    }
-  },
-
-  _computeLikeClass (liked) {
-    const baseClass = 'action-button like';
-    const activeClass = liked ? 'liked' : 'not-liked';
-    return `${baseClass} ${activeClass}`;
-  },
-
-  _computedLikeButtonText (liked) {
-    return liked ? 'Liked' : 'Like';
-  },
-
-  _computeFeatureButtonText (featured) {
-    return featured ? 'Un-staff pick' : 'Staff pick';
-  },
-
-  _getLabelForPartId (partId) {
-    if (this.knownParts && this.knownParts[partId]) {
-      return this.knownParts[partId].label;
-    }
-
-    return partId;
-  },
-
-  _getLinkForPartId (partId) {
-    if (this.knownParts &&
-          this.knownParts[partId] &&
-          this.knownParts[partId].link) {
-
-      return this.knownParts[partId].link;
-    }
-
-    return null;
-  },
-
-  _computeNavItemClass(section, id) {
-    const baseClass = 'nav-item';
-    const activeClass = section === id ? 'active' : 'inactive';
-    return `${baseClass} ${activeClass}`;
-  },
-
-  /**
-   * Compute whether share controls – delete button etc – should
-   * display
-   * @param {Boolean} sharedByUser
-   * @param {Boolean} userIsAdmin
-   * @returns {Boolean}
-   */
-  _computeMetaActionDisplay(sharedByUser, userIsAdmin) {
-    return sharedByUser || userIsAdmin;
-  },
-
-  /**
-   * Compute whether the current user is an adminstrator
-   * @param {Number} adminLevel
-   * @returns {Boolean}
-   */
-  _computeUserIsAdmin(adminLevel) {
-    return adminLevel && adminLevel > 0;
-  },
-
-  _computePartsLinkClass (product) {
-    if (!this._getLinkForPartId(product)) {
-      return 'inactive';
-    }
-  },
-
-  _shareDataChanged(shareDataChangeObj) {
-    const shareData = shareDataChangeObj.base;
-    if (shareData && shareData.id){
-      return this.toggleClass('loaded', true);
-    }
-  },
-
-  _showComments() {
-    this.set('_section', 'comments');
-  },
-
-  _showLikes() {
-    this.set('_section', 'likes');
-  },
-
-  _showCodeButton (shareData) {
-    let attachmentExt;
-    if (shareData && shareData.attachment_url) {
-      attachmentExt = shareData.attachment_url.split('.').pop();
-      if (['html', 'draw', 'lightcode'].indexOf(attachmentExt) !== -1) {
-        return true;
-      }
-    }
-    return false;
-  },
-
-  /**
-   * Check whether this share can be remixed (or not)
-   * @param {Object} share Current share data
-   * @param {Boolean} canRemix Flag this share can be remixed
-   * @return {Boolean}
-   */
-  _showRemixButton (share, canRemix) {
-    if (share && canRemix){
-      return true;
-    } else {
-      return false;
-    }
-  },
-
-  /**
-   * Check whether the current user is admin. Used to hide or show the
-   * fetured button.
-   * @param {Object} share Current share data
-   * @param {Boolean} isAdmin Flag this user as admin
-   * @return {Boolean}
-   */
-  _showFeaturedButton (share, isAdmin){
-    return share && isAdmin;
-  },
-
-  _showMoreActions (shareData, userAdminLevel, displayMetaActions) {
-    return this._showFeaturedButton(shareData, userAdminLevel) || displayMetaActions;
-  },
-
-  _showRelatedShares (related) {
-    return related && related.length > 0;
-  },
-
-  /**
-   * Check if any hardware was used in the current creation.
-   *
-   * @param {Array} hardware As returned from the API.
-   * @returns {Boolean} When more than one hardware flag is present.
-   */
-  _anyHardwareUsed (hardware) {
-    return hardware && hardware.length > 0;
-  },
-
-  _onDeleteTapped () {
-    this.dispatchEvent(new CustomEvent('action-click', {
-      detail: {
-        action: 'delete',
-        id: this.shareData ? this.shareData.id : null,
-        slug: this.shareData ? this.shareData.slug : null
-      }
-    }));
-  },
-
-  /** Event listeners */
-  _onFeatureTapped () {
-    this.dispatchEvent(new CustomEvent('action-click', {
-      detail: {
-        action: 'feature',
-        feature: !this.shareData.featured,
-        id: this.shareData.id
-      }
-    }));
-  },
-
-  _onLikeTapped () {
-    if (this._sharedByUser || this.submitingLike) {
-      return;
-    }
-    this.dispatchEvent(new CustomEvent('action-click', {
-      detail: {
-        action: 'like',
-        liked: !this.liked,
-        shareId: this.shareData ? this.shareData.id : null,
-        shareUserId: this.shareData ? this.shareData.userId : null,
-        userId: this.currentUser ? this.currentUser.id : null
-      }
-    }));
-  },
-
-  _onRemixTapped () {
-    const item = this.shareData;
-    if (!item) {
-      return;
-    }
-
-    this.dispatchEvent(new CustomEvent('action-click', {
-      detail: {
-        action: 'remix',
-        shareId: item.id,
-        shareSlug: item.slug,
-        shareType: item.app
-      }
-    }));
-  },
-
-  _onMoreActionsTapped (e) {
-    /* The drop-down attaches a click event to window which may happen faster than
-         his gets propagated and will close the modal immediately. Stopping propagation
-         here prevents that. */
-    e.stopPropagation();
-
-    this.$['more-actions-menu'].toggle();
-  },
-
-  _toggleCodeView() {
-    const newValue = !this.displayCode;
-    this.set('displayCode', newValue);
-  },
-
-  _onUserTapped() {
-    const share = this.shareData;
-    if (!share){
-      return;
-    }
-    this.dispatchEvent(new CustomEvent('view-user', {
-      detail: {
-        id: this.shareData.userId,
-        username: this.shareData.username
-      }
-    }));
-  },
-
-  _onEmailTapped() {
-    this.dispatchEvent(new CustomEvent('social-share', {
-      detail: {
-        action: 'email',
-        share: this.shareData
-      }
-    }));
-  },
-
-  _onFacebookTapped() {
-    this.dispatchEvent(new CustomEvent('social-share', {
-      detail: {
-        action: 'facebook',
-        share: this.shareData
-      }
-    }));
-  },
-
-  _onTwitterTapped() {
-    this.dispatchEvent(new CustomEvent('social-share', {
-      detail: {
-        action: 'twitter',
-        share: this.shareData
-      }
-    }));
-  },
-
-  _handleDeleteComment (e) {
-    this.dispatchEvent(new CustomEvent('delete-comment', {
-      detail: e.detail
-    }));
-  },
-
-  _handlePostComment (e) {
-    this.dispatchEvent(new CustomEvent('post-comment', {
-      detail: e.detail
-    }));
-  },
-
-  _handleLoadComment (e) {
-    this.dispatchEvent(new CustomEvent('load-comment', {
-      detail: e.detail
-    }));
-  },
-
-  _handleFlagComment (e) {
-    this.dispatchEvent(new CustomEvent('flag-comment', {
-      detail: e.detail
-    }));
-  },
-
-  _handleUnflagComment (e) {
-    this.dispatchEvent(new CustomEvent('unflag-comment', {
-      detail: e.detail
-    }));
-  },
-
-  _handleViewUser (e) {
-    this.dispatchEvent(new CustomEvent('view-user', {
-      detail: e.detail
-    }));
-  },
-
-  /** Fire an event upwards for tracking purposes */
-  _handleHardwareClick (e) {
-    const linkElement = e.path.find(element => {
-        return element.href !== undefined;
-      }),
-      link = linkElement.href;
-    this.dispatchEvent(new CustomEvent('hardware-click', {
-      detail: { link }
-    }));
-  }
 });
