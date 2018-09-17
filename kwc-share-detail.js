@@ -265,6 +265,12 @@ Polymer({
             kwc-drop-down-item.delete {
                 --kwc-drop-down-item-icon-hover-color: var(--color-dodger-blue);
             }
+            kwc-drop-down-item.flag {
+                --kwc-drop-down-item-icon-hover-color: var(--color-carnation);
+            }
+            kwc-drop-down-item.flagged {
+                --kwc-drop-down-item-icon-color: var(--color-carnation);
+            }
             .social-actions {
                 @apply --layout-horizontal;
                 @apply --layout-start-justified;
@@ -490,20 +496,20 @@ Polymer({
                             </h4>
                             <p class="description">[[shareData.description]]</p>
                             <div class="actions">
-                                <template is="dom-if" if="[[!_sharedByUser]]">
-                                    <kwc-share-action class="like" icon="kwc-ui-icons:like" on-tap="_onLikeTapped" active="[[liked]]">
-                                        [[_computedLikeButtonText(liked)]]
-                                        <paper-spinner-lite active="[[submitingLike]]">
-                                        </paper-spinner-lite>
-                                    </kwc-share-action>
+                            <template is="dom-if" if="[[!_sharedByUser]]">
+                                <kwc-share-action class="like" icon-id="kwc-ui-icons:like" on-tap="_onLikeTapped" active="[[liked]]">
+                                    [[_computedLikeButtonText(liked)]]
+                                    <paper-spinner-lite active="[[submitingLike]]">
+                                    </paper-spinner-lite>
+                                </kwc-share-action>
                                 </template>
                                 <template is="dom-if" if="[[_showRemixButton(shareData, canRemix)]]">
-                                    <kwc-share-action class="remix" icon="kwc-social-icons:remix" on-tap="_onRemixTapped">Remix</kwc-share-action>
+                                    <kwc-share-action class="remix" icon-id="kwc-social-icons:remix" on-tap="_onRemixTapped">Remix</kwc-share-action>
                                 </template>
                                 <template is="dom-if" if="[[_showCodeButton(shareData)]]">
-                                    <kwc-share-action class="view-code" icon="kwc-social-icons:code" on-tap="_toggleCodeView">View&nbsp;code</kwc-share-action>
+                                    <kwc-share-action class="view-code" icon-id="kwc-social-icons:code" on-tap="_toggleCodeView">View&nbsp;code</kwc-share-action>
                                 </template>
-                                <kwc-share-action id="more-actions-button" on-tap="_onMoreActionsTapped" active="[[dropDownOpened]]" hidden\$="[[!_showMoreActions(shareData, currentUser.admin_level, _displayMetaActions)]]">
+                                <kwc-share-action id="more-actions-button" on-tap="_onMoreActionsTapped" active="[[dropDownOpened]]">
                                     <div class="ellipsis">
                                         <iron-icon icon="kwc-ui-icons:ellipsis"></iron-icon>
                                     </div>
@@ -514,6 +520,7 @@ Polymer({
                                         <template is="dom-if" if="[[_displayMetaActions]]">
                                             <kwc-drop-down-item class="delete" icon="kwc-ui-icons:rubbish-bin" on-tap="_onDeleteTapped">Delete</kwc-drop-down-item>
                                         </template>
+                                        <kwc-drop-down-item id="drop-down-flag" class\$="flag [[_computeFlagStatus(flags.*)]]" icon="kwc-social-icons:flag" on-tap="_onFlagTapped"></kwc-drop-down-item>
                                     </kwc-drop-down>
                                 </kwc-share-action>
                             </div>
@@ -686,7 +693,8 @@ Polymer({
             type: Object,
             value: () => {
                 return {};
-            }
+            },
+            observer: 'updateFlagButton'
         },
         /**
            * From flags, but checks if flags exist
@@ -884,6 +892,27 @@ Polymer({
         }
     },
 
+    _computeFlagged(flags) {
+        if (!flags || !flags.shares || flags.shares.length === 0) {
+            return false;
+        }
+        return flags.shares.some(flag => {
+          return flag === this.shareData.id;
+        });
+    },
+
+    updateFlagButton() {
+        const text = this._computeFlagged(this.flags) ? 'Unflag' : 'Flag';
+        this.$['drop-down-flag'].innerText = text;
+    },
+
+  _computeFlagStatus () {
+        if (!this.flags || !this.flags.shares || this.flags.shares.length === 0) {
+            return 'unflagged';
+        }
+        return this._computeFlagged(this.flags) ? 'flagged' : 'unflagged';
+    },
+
     _computeCommentFlags() {
         if (!this.flags) {
             return [];
@@ -1057,6 +1086,7 @@ Polymer({
         return hardware && hardware.length > 0;
     },
 
+    /** Event listeners */
     _onDeleteTapped() {
         this.dispatchEvent(new CustomEvent('action-click', {
             detail: {
@@ -1067,7 +1097,6 @@ Polymer({
         }));
     },
 
-    /** Event listeners */
     _onFeatureTapped() {
         this.dispatchEvent(new CustomEvent('action-click', {
             detail: {
@@ -1105,6 +1134,20 @@ Polymer({
                 shareId: item.id,
                 shareSlug: item.slug,
                 shareType: item.app
+            }
+        }));
+    },
+
+    _onFlagTapped (e) {
+        const flagged = this._computeFlagged(this.flags);
+        const activeClass = flagged ? 'unflagged' : 'flagged';
+        e.path[2].setAttribute('class', `flag ${activeClass}`);
+        e.path[2].innerText = flagged ? 'Flag' : 'Unflag';
+        this.dispatchEvent(new CustomEvent('action-click', {
+            detail: {
+               action: 'flag',
+               id: this.shareData ? this.shareData.id : null,
+               flag: flagged
             }
         }));
     },

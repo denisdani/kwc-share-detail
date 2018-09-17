@@ -794,8 +794,8 @@
   resolved "https://registry.yarnpkg.com/@webcomponents/webcomponentsjs/-/webcomponentsjs-2.0.0-beta.2.tgz#d9844a0bcfc5feeae94a71f45e33e32b1bd29c19"
 
 "@webcomponents/webcomponentsjs@^2.0.0":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@webcomponents/webcomponentsjs/-/webcomponentsjs-2.1.1.tgz#2884f5a878d0823dd6b3a15a06fb0382c3012d88"
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@webcomponents/webcomponentsjs/-/webcomponentsjs-2.1.2.tgz#55902f200bbebbeb56247e48afd580c0083d245c"
 
 abbrev@1:
   version "1.1.1"
