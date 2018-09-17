@@ -1138,11 +1138,12 @@ Polymer({
         }));
     },
 
-    _onFlagTapped (e) {
+    _onFlagTapped () {
         const flagged = this._computeFlagged(this.flags);
         const activeClass = flagged ? 'unflagged' : 'flagged';
-        e.path[2].setAttribute('class', `flag ${activeClass}`);
-        e.path[2].innerText = flagged ? 'Flag' : 'Unflag';
+        const flagButton = this.$['drop-down-flag'];
+        flagButton.setAttribute('class', `flag ${activeClass}`);
+        flagButton.innerText = flagged ? 'Flag' : 'Unflag';
         this.dispatchEvent(new CustomEvent('action-click', {
             detail: {
                action: 'flag',
