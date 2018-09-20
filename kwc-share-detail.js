@@ -572,7 +572,7 @@ Polymer({
                             </ul>
                         </div>
                     </template>
-                    <div class="social">
+                    <div class="social" hidden$="[[hideSocial]]">
                         <div class="sidebar-section-header">Share</div>
                         <ul class="social-actions">
                             <li class="social-action">
@@ -862,6 +862,10 @@ Polymer({
            */
         related: {
             type: Array
+        },
+        hideSocial: {
+            type: Boolean,
+            value: false
         }
     },
 
