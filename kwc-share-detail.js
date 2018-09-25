@@ -497,7 +497,7 @@ Polymer({
                             <p class="description">[[shareData.description]]</p>
                             <div class="actions">
                             <template is="dom-if" if="[[!_sharedByUser]]">
-                                <kwc-share-action class="like" icon-id="kwc-ui-icons:like" on-tap="_onLikeTapped" active="[[liked]]">
+                                <kwc-share-action class="like" icon="kwc-ui-icons:like" on-tap="_onLikeTapped" active="[[liked]]">
                                     [[_computedLikeButtonText(liked)]]
                                     <paper-spinner-lite active="[[submitingLike]]">
                                     </paper-spinner-lite>
@@ -945,15 +945,22 @@ Polymer({
     },
 
     _computeLiked(likeChangeObj, currentUser) {
-        const likes = likeChangeObj.base;
-        if (likes && likes.length && currentUser) {
-            const liked = likes.some((like) => {
-                return like.user === currentUser.id;
-            });
-            return liked;
-        } else {
-            return false;
+        if (!likeChangeObj || !currentUser) {
+            return;
         }
+        if (Array.isArray(likeChangeObj.base)) {
+            const likes = likeChangeObj.base;
+            if (likes && likes.length && currentUser) {
+                const liked = likes.some((like) => {
+                    return like.user === currentUser.id;
+                });
+                return liked;
+            }
+        } else if (likeChangeObj.base.userLikes.length > 0 && this.shareData.id) {
+            const likes = likeChangeObj.base.userLikes;
+            return likes.indexOf(this.shareData.id) > 0;
+        }
+        return false;
     },
 
     _computeLikeClass(liked) {
@@ -1161,6 +1168,7 @@ Polymer({
         /* The drop-down attaches a click event to window which may happen faster than
              his gets propagated and will close the modal immediately. Stopping propagation
              here prevents that. */
+        e.preventDefault();
         e.stopPropagation();
 
         this.$['more-actions-menu'].toggle();
