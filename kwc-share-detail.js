@@ -956,7 +956,7 @@ Polymer({
                 });
                 return liked;
             }
-        } else if (likeChangeObj.base.userLikes.length > 0 && this.shareData.id) {
+        } else if (likeChangeObj.base.userLikes.length > 0 && this.shareData && this.shareData.id) {
             const likes = likeChangeObj.base.userLikes;
             return likes.indexOf(this.shareData.id) > 0;
         }
