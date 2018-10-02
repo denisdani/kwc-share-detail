@@ -211,7 +211,7 @@ Polymer({
                 @apply --layout-horizontal;
                 @apply --layout-start-justified;
                 @apply --layout-wrap;
-                margin-top: 15px;
+                margin-top: 5px;
             }
             .actions kwc-share-action {
                 margin: 5px 0px;
@@ -241,6 +241,9 @@ Polymer({
             }
             kwc-share-action.view-code {
                 --kwc-share-action-icon-hover-color: var(--color-dodger-blue);
+            }
+            #more-actions-button {
+                margin-left: auto;
             }
             #more-actions-button .ellipsis {
                 width: 21px;
@@ -353,8 +356,9 @@ Polymer({
                 margin-bottom: 30px;
             }
             .stats {
-                margin: 10px 0px 25px 0px;
+                margin: 8px 0px 21px 0px;
                 color: var(--color-grey);
+                font-size: 13px;
             }
             .stats span {
                 margin-right: 15px;
@@ -504,7 +508,7 @@ Polymer({
                                 </kwc-share-action>
                                 </template>
                                 <template is="dom-if" if="[[_showRemixButton(shareData, canRemix)]]">
-                                    <kwc-share-action class="remix" icon-id="kwc-social-icons:remix" on-tap="_onRemixTapped">Remix</kwc-share-action>
+                                    <kwc-share-action class="remix" icon="kwc-ui-icons:remix" on-tap="_onRemixTapped">Remix</kwc-share-action>
                                 </template>
                                 <template is="dom-if" if="[[_showCodeButton(shareData)]]">
                                     <kwc-share-action class="view-code" icon-id="kwc-social-icons:code" on-tap="_toggleCodeView">View&nbsp;code</kwc-share-action>
@@ -901,7 +905,7 @@ Polymer({
             return false;
         }
         return flags.shares.some(flag => {
-          return flag === this.shareData.id;
+            return flag === this.shareData.id;
         });
     },
 
@@ -910,7 +914,7 @@ Polymer({
         this.$['drop-down-flag'].innerText = text;
     },
 
-  _computeFlagStatus () {
+    _computeFlagStatus() {
         if (!this.flags || !this.flags.shares || this.flags.shares.length === 0) {
             return 'unflagged';
         }
@@ -1149,7 +1153,7 @@ Polymer({
         }));
     },
 
-    _onFlagTapped () {
+    _onFlagTapped() {
         const flagged = this._computeFlagged(this.flags);
         const activeClass = flagged ? 'unflagged' : 'flagged';
         const flagButton = this.$['drop-down-flag'];
@@ -1157,9 +1161,9 @@ Polymer({
         flagButton.innerText = flagged ? 'Flag' : 'Unflag';
         this.dispatchEvent(new CustomEvent('action-click', {
             detail: {
-               action: 'flag',
-               id: this.shareData ? this.shareData.id : null,
-               flag: flagged
+                action: 'flag',
+                id: this.shareData ? this.shareData.id : null,
+                flag: flagged
             }
         }));
     },
