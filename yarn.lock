@@ -4,7 +4,7 @@
 
 "@kano/code@git+ssh://git@github.com:KanoComputing/code.git#^1.0.0-alpha.122":
   version "3.0.0-beta.2"
-  resolved "git+ssh://git@github.com:KanoComputing/code.git#7c89927b885094c29a5648cbeb2f6684c1f15bd1"
+  resolved "git+ssh://git@github.com:KanoComputing/code.git#292ce4e048badbbd51e55e15d006be39d4a6e04c"
   dependencies:
     "@kano/common" "^1.0.2"
     "@kano/kwc-behaviors" "^3.0.0-beta.4"
@@ -198,9 +198,9 @@
     "@polymer/polymer" "^3.0.0"
     "@polymer/prism-element" "^3.0.0-pre.18"
 
-"@kano/kwc-social-comments@^3.0.0-beta.7":
-  version "3.0.0-beta.7"
-  resolved "https://registry.yarnpkg.com/@kano/kwc-social-comments/-/kwc-social-comments-3.0.0-beta.7.tgz#8f6c52c9e359ef906ed6eb9097150cfe9d95a7e3"
+"@kano/kwc-social-comments@^3.0.0-beta.8":
+  version "3.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@kano/kwc-social-comments/-/kwc-social-comments-3.0.0-beta.8.tgz#abdabf3b5578b3fefb97d8f027f404c5acc62e99"
   dependencies:
     "@kano/kwc-button" "^3.0.0-beta.3"
     "@kano/kwc-icons" "^3.0.0-beta.2"
