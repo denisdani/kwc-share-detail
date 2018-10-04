@@ -198,9 +198,9 @@
     "@polymer/polymer" "^3.0.0"
     "@polymer/prism-element" "^3.0.0-pre.18"
 
-"@kano/kwc-social-comments@^3.0.0-beta.8":
-  version "3.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/@kano/kwc-social-comments/-/kwc-social-comments-3.0.0-beta.8.tgz#abdabf3b5578b3fefb97d8f027f404c5acc62e99"
+"@kano/kwc-social-comments@^3.0.0-beta.9":
+  version "3.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/@kano/kwc-social-comments/-/kwc-social-comments-3.0.0-beta.9.tgz#06a13b7524567829000502ce47d502d63a61b4aa"
   dependencies:
     "@kano/kwc-button" "^3.0.0-beta.3"
     "@kano/kwc-icons" "^3.0.0-beta.2"
