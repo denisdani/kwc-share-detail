@@ -413,6 +413,9 @@ Polymer({
             :host([tombstone]) .social {
                 opacity: 0.3;
             }
+            .no-margin {
+                margin: 0;
+            }
             @media all and (max-width: 780px) {
                 .share-detail {
                     @apply --layout-vertical;
@@ -524,7 +527,7 @@ Polymer({
                                         <template is="dom-if" if="[[_displayMetaActions]]">
                                             <kwc-drop-down-item class="delete" icon="kwc-ui-icons:rubbish-bin" on-tap="_onDeleteTapped">Delete</kwc-drop-down-item>
                                         </template>
-                                        <kwc-drop-down-item id="drop-down-flag" class\$="flag [[_computeFlagStatus(flags.*)]]" icon="kwc-social-icons:flag" on-tap="_onFlagTapped"></kwc-drop-down-item>
+                                        <kwc-drop-down-item id="drop-down-flag" class\$="flag no-margin [[_computeFlagStatus(flags.*)]]" icon="kwc-social-icons:flag" on-tap="_onFlagTapped"></kwc-drop-down-item>
                                     </kwc-drop-down>
                                 </kwc-share-action>
                             </div>
